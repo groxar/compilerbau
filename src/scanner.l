@@ -4,6 +4,16 @@
 
 %{
 	#include "parser.h"
+
+    //Track line and column numbers
+    #define YY_USER_INIT { myColCnt = 0; }
+    #define YY_USER_ACTION {                    \
+    yylloc.first_line = yylineno;                \
+    yylloc.last_line = yylineno;                 \
+    yylloc.first_column = myColCnt;              \
+    yylloc.last_column = myColCnt + yyleng - 1;  \
+    myColCnt += yyleng; }
+    int myColCnt;
 %}
 
 /* 
@@ -16,9 +26,16 @@
 %option yylineno
 
 /* finish after scanning the provided file */
-%option noyywrap		
+%option noyywrap
+
+/* Scanner: Error on unmatched input */
+/* %option warn nodefault */
+
+/* Flex: report on the scanner generator */
+%option verbose
 
 %%
+"\n" { myColCnt = 0 ;}
 do {return DO;}
 while {return WHILE;}
 if {return IF;}
