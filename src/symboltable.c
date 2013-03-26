@@ -19,29 +19,29 @@ typedef struct scope_list{
 } scope_list_t;
 
 typedef struct symbol {
-union {
-    
-    struct var {
-        int type;
-        int address;
-        char* name;
-    }var_t;  
+	union {
 
-    struct func {
-        int type;
-        int address;
-        char* name;
-        scope_list_t* scope;
-        scope_list_t* scope_para;
-    }func_t;	
+		struct var {
+			int type;
+			int address;
+			char* name;
+		}var_t;
 
-};
+		struct func {
+			int type;
+			int address;
+			char* name;
+			scope_list_t* scope;
+			scope_list_t* scope_para;
+		}func_t;
+
+	};
 }symbol_t;
 
 scope_list_t global = {};
 
 int insertVariable(char* name){
-    symbol_t.var myVar = {INTEGER, nextRegister, name};
+    symbol_t myVar = {INTEGER, nextRegister, name};
     scope_list_t* newElement;
     
     malloc(newElement, sizeof(scope_list_t));
@@ -49,8 +49,7 @@ int insertVariable(char* name){
 
     scope_list_t myList;
     myList = global.next;
-    while(myList != 0)
-    {
+    while(myList != 0){
         myList = myList.next;
     }
     // does something
