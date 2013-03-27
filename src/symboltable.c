@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #ifndef SYMBOLTABLE_H_
 #define SYMBOLTABLE_H_
 
@@ -38,8 +36,8 @@ typedef struct symbol {
 	};
 }symbol_t;
 
-scope_list_t global = {};
-scope_list_t function_scope = NULL;
+scope_list_t global_scope = {};
+scope_list_t function_scope = 0;
 
 
 
@@ -55,8 +53,13 @@ int insertVariable(char* name){
     while(globalList != 0){
         globalList = globalList.next;
     }
-    // does something
-    globalList.next = newElement;
+
+    // noch unfertig
+    if(function_scope != 0){
+    	globalList.next = newElement;
+    }else{
+
+    }
 
 }
 
@@ -65,9 +68,24 @@ int insertFunction(symbol_t* function);
 symbol_t* getSymbol(char* name);
 
 //globe-switch
-void beginFunction(void);
-void endFunction(void);
+void beginFunction(void){
+	scope_list_t* func_pointer;
+	scope_list_t* temp_pointer;
 
+	func_pointer = malloc(sizeof(scope_list_t));
+	temp_pointer = global_scope.next;
+	while(temp_pointer.next != 0){
+		temp_pointer = temp_pointer.next;
+	}
+	temp_pointer.next = func_pointer;
+
+	//Scope auf Funktion setzen
+	function_scope = func_pointer;
+}
+
+void endFunction(void){
+	function_scope = 0;
+}
 
 
 #endif
