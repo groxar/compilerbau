@@ -48,18 +48,22 @@ int insertVariable(char* name){
     malloc(newElement, sizeof(scope_list_t));
     newElement.sym = myVar;
 
-    scope_list_t globalList;
-    globalList = global.next;
-    while(globalList != 0){
-        globalList = globalList.next;
+    scope_list_t global_list;
+    global_list = global.next;
+    while(global_list != 0){
+        global_list = global_list.next;
     }
 
     // noch unfertig
     if(function_scope != 0){
-    	globalList.next = newElement;
+    	global_list.next = newElement;
+
     }else{
 
     }
+    // Pointer auf Scopelist setzen und Variable in die Scopelist einfügen
+    // Testen
+
 
 }
 
