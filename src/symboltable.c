@@ -9,7 +9,7 @@ enum type {
 
 int nextRegister = 0; //Datentyp checken
 
-typedef struct symbol symbol_t;
+typedef struct symbol symbol_t; //symbol_t bekannt machen
 
 typedef struct scope_list{
     symbol_t* sym;
@@ -49,28 +49,46 @@ int insertVariable(char* name){
     newElement.sym = myVar;
 
     scope_list_t global_list;
-    global_list = global_list.next;
+    global_list = global_scope.next;
     while(global_list != 0){
         global_list = global_list.next;
-    }
+    } //am Ende von global_list angekommen
 
     // noch unfertig
-    if(function_scope != 0){
+    if(function_scope != 0){ //füge Variable in den Scope der Funktion ein
     	global_list.next = newElement;
 
-    }else{
+    }else{ //Füge Variable in den globalen Scope ein
+    	global_scope.next = newElement;
 
     }
-    // Pointer auf Scopelist setzen und Variable in die Scopelist einfügen
-    //Pointer auf neue Variable per return zurückgeben
-    // Testen
+
+    // ToDo: Pointer auf Scopelist setzen und Variable in die Scopelist einfügen
+
+    return newElement; //Pointer auf neue Variable zurückgeben
+
+    // ToDo: Testen
 
 
 }
 
-int insertFunction(symbol_t* function);
+int insertFunction(symbol_t* function){
+	//ToDo
+}
 
-symbol_t* getSymbol(char* name);
+
+symbol_t* getSymbol(char* name){
+	// ToDo
+	/* zuerst Scope der Funktion checken und nur wenn wir nicht in einer Funktion
+	 * sind oder es das Symbol dort nicht gibt den globalen Scope checken
+	 *  (--> lokal überschreibt global)
+	 */
+	if(function_scope != 0){ //Scope der Funktion
+
+	}else{ //globaler Scope
+
+	}
+}
 
 //globe-switch
 void beginFunction(void){
