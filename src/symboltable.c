@@ -7,7 +7,7 @@ enum type {
 };		
 
 
-int nextRegister = 0; //datentyp checken
+int nextRegister = 0; //Datentyp checken
 
 typedef struct symbol symbol_t;
 
@@ -49,7 +49,7 @@ int insertVariable(char* name){
     newElement.sym = myVar;
 
     scope_list_t global_list;
-    global_list = global.next;
+    global_list = global_list.next;
     while(global_list != 0){
         global_list = global_list.next;
     }
@@ -62,6 +62,7 @@ int insertVariable(char* name){
 
     }
     // Pointer auf Scopelist setzen und Variable in die Scopelist einfügen
+    //Pointer auf neue Variable per return zurückgeben
     // Testen
 
 
