@@ -1,119 +1,82 @@
 #ifndef SYMBOLTABLE_H_
 #define SYMBOLTABLE_H_
 
-/* Daran kann man sich orientieren:
- * http://www.gnu.org/software/bison/manual/html_node/Mfcalc-Symbol-Table.html
- */
+#include "stdlib.h"
+#include "string.h"
 
-enum type {
+
+//ENUMS
+enum var_type {
     INTEGER, VOID
-};		
+};
+enum type{
+    FUNC, VAR
+};
 
+//TYPEDEFS
+typedef struct func func_t;
+typedef struct scope_list scope_list_t;
 
-int nextRegister = 0; //Datentyp checken
-
-typedef struct symbol symbol_t; //symbol_t bekannt machen
+typedef struct func{
+    int           n_para;
+    scope_list_t* scope;
+}func_t;
 
 typedef struct scope_list{
-    symbol_t* sym;
-    struct scope_list* next;
-} scope_list_t;
+    int   type;
+    int   var_type;//return type || variable type
+    char* name;
+    int   address;
 
-typedef struct symbol {
-	union {
+    union {
+        int     value;
+        func_t* func_ptr;
+    } var;
 
-		struct var {
-			int type;
-			int address;
-			char* name;
-		}var_t;
+    scope_list_t* next;
+}scope_list_t;
 
-		struct func {
-			int type;
-			int address;
-			char* name;
-			scope_list_t* scope;
-			scope_list_t* scope_para;
-		}func_t;
-
-	};
-}symbol_t;
-
-scope_list_t global_scope = {};
-scope_list_t function_scope = 0;
+scope_list_t*  global_scope = (scope_list_t*) 0;
+scope_list_t*  func_scope   = (scope_list_t*) 0;
+scope_list_t** crnt_scope   = &global_scope;
+scope_list_t** crnt_pos     = &global_scope;
+int            next_address = 0;
 
 
-
-int insertVariable(int type,char* name){
-    symbol_t myVar = {INTEGER, nextRegister, name};
-    scope_list_t* newElement;
+//lookup fehlt einfügen nach implementierung von lookup
+int insertSymbol(int _type, int _var_type, char* _name,int _value )
+{
+    scope_list_t* new_variable = malloc(sizeof(scope_list_t));
+    int name_length = strlen(_name);
     
-    malloc(newElement, sizeof(scope_list_t));
-    newElement.sym = myVar;
+    new_variable->type     = _type;
+    new_variable->var_type = _var_type;
+    new_variable->name     = malloc(name_length);
+    new_variable->address  = next_address;
+    new_variable->next     = (scope_list_t*) 0;
+    if(_type == VAR)
+        new_variable->var.value     = _value; 
+    else
+        new_variable->var.func_ptr  = (func_t*) _value;
+ 
+    strcpy(new_variable->name, _name);
 
-    scope_list_t *current_scope;
-
-    if(function_scope == 0){ //füge Variable in den Scope der Funktion ein
-    	current_scope = global_scope;
-
-    }else{ //Füge Variable in den globalen Scope ein
-    	current_scope = function_scope;
-
-    }
-
-    current_scope = current_scope.next;
-    do {
-        current_scope = current_scope.next;
-    }while(current_scope != 0); //am Ende von global_list angekommen
-
-
-
-   //Pointer auf Scopelist setzen und Variable in die Scopelist einfügen
-
-    return newElement; //Pointer auf neue Variable zurückgeben
-
-    // ToDo: Testen
-
-
+    *crnt_pos = new_variable;
+    crnt_pos  = &((**crnt_pos).next);
+    next_address += sizeof(int);
+    return 0;
 }
 
-int insertFunction(symbol_t* function){
-	//ToDo
+//lookup fehlt
+int beginFunction(int _ret_val, char*_name, int _n_para)
+{
+    func_t* new_function = malloc(sizeof(func_t));
+    new_function->n_para = _n_para;
+
+    insertSymbol(FUNC, _ret_val, _name, (int)new_function);
+
+    crnt_scope = &(new_function->scope);
+    crnt_scope = &(new_function->scope);
 }
-
-
-symbol_t* getSymbol(char* name){
-	// ToDo
-	/* zuerst Scope der Funktion checken und nur wenn wir nicht in einer Funktion
-	 * sind oder es das Symbol dort nicht gibt den globalen Scope checken
-	 *  (--> lokal überschreibt global)
-	 */
-	if(function_scope != 0){ //Scope der Funktion
-
-	}else{ //globaler Scope
-
-	}
-}
-
-//globe-switch
-void beginFunction(void){
-	scope_list_t* func_pointer;
-	scope_list_t* temp_pointer;
-
-	func_pointer = malloc(sizeof(scope_list_t));
-	temp_pointer = global_scope.next;
-	while(temp_pointer.next != 0){
-		temp_pointer = temp_pointer.next;
-	}
-	temp_pointer.next = func_pointer;
-
-	//Scope auf Funktion setzen
-	function_scope = func_pointer;
-}
-
-void endFunction(void){
-	function_scope = 0;
-}
-
 
 #endif
