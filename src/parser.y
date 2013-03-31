@@ -5,6 +5,8 @@
 %{	
 	// Project-specific includes
 	#include "diag.h"
+    #include "string.h"
+    #include "stdio.h"
     #include "symboltable.h"
 %}
 
@@ -109,7 +111,7 @@ variable_declaration
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INTEGER,$1,0,sizeof(int) * $3); }
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INTEGER,$1,0,sizeof(int) * atoi($3)); }
      | ID { insertSymbol(VAR,INTEGER,$1,0,sizeof(int)); }
      ;
 
@@ -206,7 +208,6 @@ function_call_parameters
      : function_call_parameters COMMA expression
      | expression
      ;
-
 %%
 
 void yyerror (const char *msg)

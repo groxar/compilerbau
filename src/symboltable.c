@@ -2,10 +2,10 @@
 #include "string.h"
 #include "symboltable.h"
 
-scope_list_t*  global_scope = (scope_list_t*) 0;
-scope_list_t** crnt_scope   = &global_scope;
-scope_list_t** crnt_pos     = &global_scope;
-int            next_address = 0;
+static scope_list_t*  global_scope = (scope_list_t*) 0;
+static scope_list_t** crnt_scope   = &global_scope;
+static scope_list_t** crnt_pos     = &global_scope;
+static int            next_address = 0;
 
 scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
@@ -56,6 +56,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     new_variable->name     = (char*) malloc(name_length + 1);
     new_variable->address  = next_address;
     new_variable->next     = (scope_list_t*) 0;
+
     if(_type == VAR)
         new_variable->var.value     = _value;
     else

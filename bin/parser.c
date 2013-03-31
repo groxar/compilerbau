@@ -70,11 +70,13 @@
 	
 	// Project-specific includes
 	#include "diag.h"
+    #include "string.h"
+    #include "stdio.h"
     #include "symboltable.h"
 
 
 /* Line 268 of yacc.c  */
-#line 78 "bin/parser.c"
+#line 80 "bin/parser.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -148,7 +150,7 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 11 "src/parser.y"
+#line 13 "src/parser.y"
 
   int n;
   char* id;
@@ -156,7 +158,7 @@ typedef union YYSTYPE
 
 
 /* Line 293 of yacc.c  */
-#line 160 "bin/parser.c"
+#line 162 "bin/parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -180,13 +182,13 @@ typedef struct YYLTYPE
 /* Copy the second part of user declarations.  */
 
 /* Line 343 of yacc.c  */
-#line 16 "src/parser.y"
+#line 18 "src/parser.y"
 
     int n_para;
 
 
 /* Line 343 of yacc.c  */
-#line 190 "bin/parser.c"
+#line 192 "bin/parser.c"
 
 #ifdef short
 # undef short
@@ -506,13 +508,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    86,    86,    90,    91,    95,    96,    97,    98,   102,
-     103,   107,   108,   112,   113,   117,   118,   122,   123,   127,
-     131,   132,   136,   139,   141,   145,   146,   147,   148,   149,
-     150,   151,   152,   156,   160,   161,   165,   166,   170,   171,
-     172,   173,   174,   175,   176,   177,   178,   179,   180,   181,
-     182,   183,   184,   185,   186,   187,   188,   189,   190,   191,
-     192,   196,   197,   201,   202,   206,   207
+       0,    88,    88,    92,    93,    97,    98,    99,   100,   104,
+     105,   109,   110,   114,   115,   119,   120,   124,   125,   129,
+     133,   134,   138,   141,   143,   147,   148,   149,   150,   151,
+     152,   153,   154,   158,   162,   163,   167,   168,   172,   173,
+     174,   175,   176,   177,   178,   179,   180,   181,   182,   183,
+     184,   185,   186,   187,   188,   189,   190,   191,   192,   193,
+     194,   198,   199,   203,   204,   208,   209
 };
 #endif
 
@@ -1436,13 +1438,13 @@ yyparse ()
 /* User initialization code.  */
 
 /* Line 1590 of yacc.c  */
-#line 31 "src/parser.y"
+#line 33 "src/parser.y"
 {
 	yydebug = 1;
 }
 
 /* Line 1590 of yacc.c  */
-#line 1446 "bin/parser.c"
+#line 1448 "bin/parser.c"
 
   goto yysetstate;
 
@@ -1629,63 +1631,63 @@ yyreduce:
         case 13:
 
 /* Line 1806 of yacc.c  */
-#line 112 "src/parser.y"
-    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (4)].id),0,sizeof(int) * (yyvsp[(3) - (4)].n)); }
+#line 114 "src/parser.y"
+    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (4)].id),0,sizeof(int) * atoi((yyvsp[(3) - (4)].n))); }
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 113 "src/parser.y"
+#line 115 "src/parser.y"
     { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (1)].id),0,sizeof(int)); }
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 117 "src/parser.y"
+#line 119 "src/parser.y"
     { endFunction(); }
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 118 "src/parser.y"
+#line 120 "src/parser.y"
     { endFunction(); }
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 122 "src/parser.y"
+#line 124 "src/parser.y"
     { endFunction(); }
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 123 "src/parser.y"
+#line 125 "src/parser.y"
     { endFunction(); }
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 127 "src/parser.y"
+#line 129 "src/parser.y"
     {n_para = 0; beginFunction(INTEGER,(yyvsp[(2) - (3)].id));}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 131 "src/parser.y"
+#line 133 "src/parser.y"
     { n_para++; }
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1689 "bin/parser.c"
+#line 1691 "bin/parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1923,7 +1925,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 210 "src/parser.y"
+#line 211 "src/parser.y"
 
 
 void yyerror (const char *msg)
