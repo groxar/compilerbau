@@ -21,6 +21,13 @@ scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
     return sym;
 }
 
+void freeScope(scope_list_t* _scope)
+{
+    if(_scope->next != 0)
+        freeScope(_scope->next);
+    free(_scope);
+}
+
 scope_list_t* getSymbol(char* _name)
 {
     scope_list_t* result;
@@ -65,27 +72,42 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 //lookup fehlt
 //error code
 //0 success
-//-1 function with this name exists
+//-1 symbole with this name exists
 //-2 currently not in global scope
-int beginFunction(int _ret_val, char*_name, int _n_para)
+int beginFunction(int _ret_val, char*_name)
 {
     if(*crnt_scope != global_scope)
         return -2;
     
-    if(getSymbolInScope(*crnt_scope,_name != 0))
-        return -1;
+    scope_list_t* sym = getSymbolInScope(global_scope,_name);
+    func_t* function;
 
-    func_t* new_function = (func_t*) malloc(sizeof(func_t));
-    new_function->n_para = _n_para;
-
-    int result = insertSymbol(FUNC, _ret_val, _name, (int) new_function,sizeof(func_t*));//!!long || int (depends on architecture)
-    if(result!=0)
-        return result;
-
-    crnt_scope = &(new_function->scope);
-    crnt_pos = &(new_function->scope);
+    if(sym == 0)
+    {
+        function = (func_t*) malloc(sizeof(func_t));
+        function->n_para = 0;
+         int result = insertSymbol(FUNC, _ret_val, _name, (int) function,sizeof(func_t*));//!!long || int (depends on architecture)
+        if(result!=0)
+            return result;
+    }
+    else
+    {
+        function = sym->var.func_ptr;
+        function->n_para = 0;
+        freeScope(function->scope);
+    }
+    crnt_scope = &(function->scope);
+    crnt_pos = &(function->scope);
 
     return 0;
+}
+
+
+
+void setN_Para(char* _name, int _n_para)
+{
+    scope_list_t* sym = getSymbolInScope(global_scope,_name);
+    sym->var.func_ptr->n_para = _n_para;
 }
 
 void endFunction()

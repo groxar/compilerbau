@@ -43,7 +43,9 @@ scope_list_t* getSymbol( char* _name);
 
 int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size);
 
-int beginFunction(int _ret_val, char* _name, int _n_para);
+int beginFunction(int _ret_val, char* _name);
+
+void setN_Para(char* _name, int _n_para);
 
 void endFunction();
 #endif

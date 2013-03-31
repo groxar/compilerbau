@@ -114,13 +114,17 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE { beginFunction(INTEGER,$2,0);}BRACE_OPEN stmt_list BRACE_CLOSE
-     | type ID PARA_OPEN { beginFunction(INTEGER,$2,0); } function_parameter_list PARA_CLOSE BRACE_OPEN { (getSymbol($2))->var.func_ptr->n_para = n_para; } stmt_list BRACE_CLOSE { endFunction(); }
+     : function_begin PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { endFunction(); }
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { endFunction(); }
      ;
 
 function_declaration
-     : type ID PARA_OPEN PARA_CLOSE
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE
+     : function_begin PARA_CLOSE { endFunction(); }
+     | function_begin function_parameter_list PARA_CLOSE { endFunction(); }
+     ;
+
+function_begin
+     : type ID PARA_OPEN {n_para = 0; beginFunction(INTEGER,$2);}
      ;
 
 function_parameter_list
