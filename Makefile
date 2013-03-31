@@ -12,9 +12,9 @@ SPLINT = splint
 VALGRIND = valgrind
 
 # Compiler Flags
-STANDARDS = -std=gnu99
+STANDARDS = -m32 -std=gnu99 
 INCLUDES = -I$(SRCDIR) -I$(OBJDIR) -I$(SRCDIR)/include
-CFLAGS = -O0 -Wall -Wextra -pedantic -g $(INCLUDES) $(STANDARDS) -Wno-unused-parameter
+CFLAGS = -O0 -Wall -Wextra -pedantic -g $(INCLUDES) $(STANDARDS) -Wno-unused-parameter 
 CFLAGS_GEN = -O2 -g -I$(OBJDIR) -w $(INCLUDES) $(STANDARDS)
 
 .PHONY: all check test
