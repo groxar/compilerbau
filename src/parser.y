@@ -110,7 +110,7 @@ identifier_declaration
 
 function_definition
      : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN { openFunction(); } stmt_list BRACE_CLOSE { closeFunction(); }
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN /*{ beginFunction(); }*/ stmt_list BRACE_CLOSE /*{ endFunction(); }*/
      ;
 
 function_declaration
@@ -173,13 +173,13 @@ expression
      | expression SHIFT_LEFT expression
      | expression SHIFT_RIGHT expression
      | expression MUL expression
-     | expression MOD experssion
+     | expression MOD expression
      | expression DIV expression  
      | MINUS expression %prec UNARY_MINUS
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
      | PARA_OPEN expression PARA_CLOSE
-     | function_call { $$ = sa_FunctionCall($1 , @1); } //$$ == yylval->symbol
+     | function_call /*{ $$ = sa_FunctionCall($1 , @1); } //$$ == yylval->symbol*/
      | primary
      ;
 
