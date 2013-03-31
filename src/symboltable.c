@@ -7,7 +7,7 @@ scope_list_t** crnt_scope   = &global_scope;
 scope_list_t** crnt_pos     = &global_scope;
 int            next_address = 0;
 
-scope_list_t* getSymbol(scope_list_t* _scope, char* _name)
+scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
     scope_list_t* sym = _scope;
 
@@ -21,13 +21,24 @@ scope_list_t* getSymbol(scope_list_t* _scope, char* _name)
     return sym;
 }
 
+scope_list_t* getSymbol(char* _name)
+{
+    scope_list_t* result;
+
+    result = getSymbolInScope(*crnt_scope,_name);
+
+    if(result == 0 && *crnt_scope != global_scope)
+        result = getSymbolInScope(global_scope,_name);
+
+    return result;
+}
 //lookup fehlt einfügen nach implementierung von lookup
 //error code:
 //0 success
 //-1 symbol with this name exists
-int insertSymbol(int _type, int _var_type, char* _name, int _value)
+int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 {
-    if(getSymbol(*crnt_scope,_name) != 0)
+    if(getSymbolInScope(*crnt_scope,_name) != 0)
         return -1;
 
     scope_list_t* new_variable = (scope_list_t*) malloc(sizeof(scope_list_t));
@@ -47,7 +58,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value)
 
     *crnt_pos = new_variable;
     crnt_pos  = &((**crnt_pos).next);
-    next_address += sizeof(int);
+    next_address += _size;
     return 0;
 }
 
@@ -61,13 +72,15 @@ int beginFunction(int _ret_val, char*_name, int _n_para)
     if(*crnt_scope != global_scope)
         return -2;
     
-    if(getSymbol(*crnt_scope,_name != 0))
+    if(getSymbolInScope(*crnt_scope,_name != 0))
         return -1;
 
     func_t* new_function = (func_t*) malloc(sizeof(func_t));
     new_function->n_para = _n_para;
 
-    insertSymbol(FUNC, _ret_val, _name, (int) new_function);//!!long || int (depends on architecture)
+    int result = insertSymbol(FUNC, _ret_val, _name, (int) new_function,sizeof(func_t*));//!!long || int (depends on architecture)
+    if(result!=0)
+        return result;
 
     crnt_scope = &(new_function->scope);
     crnt_pos = &(new_function->scope);

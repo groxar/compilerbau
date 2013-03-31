@@ -9,9 +9,13 @@
 %}
 
 %union {
-  int i;
-  char *id;
+  int n;
+  char* id;
 }
+
+%{
+    int n_para;
+%}
  
 // Verbose error messages
 %error-verbose
@@ -73,7 +77,8 @@
 %left BRACKET_OPEN BRACKET_CLOSE
 
 
-
+%type<id> ID
+%type<n> NUM
 
 %%
 
@@ -100,17 +105,17 @@ type
 
 variable_declaration
      : variable_declaration COMMA identifier_declaration
-     | type identifier_declaration {/* struct symbol_t a; a.type = VARIABLE; a.genauer_type = INT; insertVariable();*/ }
+     | type identifier_declaration 
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE
-     | ID
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INTEGER,$1,0,sizeof(int) * $3); }
+     | ID { insertSymbol(VAR,INTEGER,$1,0,sizeof(int)); }
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN /*{ beginFunction(); }*/ stmt_list BRACE_CLOSE /*{ endFunction(); }*/
+     : type ID PARA_OPEN PARA_CLOSE { beginFunction(INTEGER,$2,0);}BRACE_OPEN stmt_list BRACE_CLOSE
+     | type ID PARA_OPEN { beginFunction(INTEGER,$2,0); } function_parameter_list PARA_CLOSE BRACE_OPEN { (getSymbol($2))->var.func_ptr->n_para = n_para; } stmt_list BRACE_CLOSE { endFunction(); }
      ;
 
 function_declaration
@@ -119,12 +124,12 @@ function_declaration
      ;
 
 function_parameter_list
-     : function_parameter
+     : function_parameter { n_para++; }
      | function_parameter_list COMMA function_parameter
      ;
 	
 function_parameter
-     : type identifier_declaration
+     : type identifier_declaration 
      ;
 									
 stmt_list

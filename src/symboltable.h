@@ -3,7 +3,7 @@
 
 //ENUMS
 enum var_type {
-    INTEGER, VOID
+    INTEGER, VAR_VOID
 };
 enum type{
     FUNC, VAR
@@ -33,14 +33,15 @@ typedef struct scope_list{
 }scope_list_t;
 
 //global variables
-extern scope_list_t* global_scope;
+/* extern scope_list_t* global_scope;
 extern scope_list_t** crnt_scope;
 extern scope_list_t** crnt_pos;
+*/
 
 //Functions
-scope_list_t* getSymbol(scope_list_t* _scope, char* _name);
+scope_list_t* getSymbol( char* _name);
 
-int insertSymbol(int _type, int _var_type, char* _name, int _value);
+int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size);
 
 int beginFunction(int _ret_val, char* _name, int _n_para);
 
