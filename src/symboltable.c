@@ -9,6 +9,8 @@ static int            next_address = 0;
 
 scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
+    //liefert ein Symbol aus einem spezifischen Scope
+
     scope_list_t* sym = _scope;
 
     while(sym != 0 )//ich hätte die schleife in einer zeile machen könne *böses grinsen*
@@ -23,6 +25,9 @@ scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 
 void freeScope(scope_list_t* _scope)
 {
+    //gibt Speicherplätze der Symbole frei
+    //angefangen von dem Symbol auf dem der Parameter zeigt
+
     if(_scope->next != 0)
         freeScope(_scope->next);
     free(_scope);
@@ -30,6 +35,8 @@ void freeScope(scope_list_t* _scope)
 
 scope_list_t* getSymbol(char* _name)
 {
+    //liefert ein Symbol aus dem Funktionsscope bzw Globalenscope
+
     scope_list_t* result;
 
     result = getSymbolInScope(*crnt_scope,_name);
@@ -39,12 +46,14 @@ scope_list_t* getSymbol(char* _name)
 
     return result;
 }
-//lookup fehlt einfügen nach implementierung von lookup
+
 //error code:
 //0 success
 //-1 symbol with this name exists
 int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 {
+    //fügt ein beliebiges Symbol ein
+
     if(getSymbolInScope(*crnt_scope,_name) != 0)
         return -1;
 
@@ -64,19 +73,21 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 
     strcpy(new_variable->name, _name);
 
+    //setzt den Zurzeitigen Scope eins weiter
     *crnt_pos = new_variable;
     crnt_pos  = &((**crnt_pos).next);
+
     next_address += _size;
     return 0;
 }
 
-//lookup fehlt
-//error code
 //0 success
 //-1 symbole with this name exists
 //-2 currently not in global scope
 int beginFunction(int _ret_val, char*_name)
 {
+    //fügt eine Function in die Symboltabelle ein und ändert den zuzeitgen Scope
+
     if(*crnt_scope != global_scope)
         return -2;
     
@@ -85,6 +96,8 @@ int beginFunction(int _ret_val, char*_name)
 
     if(sym == 0)
     {
+        //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
+
         function = (func_t*) malloc(sizeof(func_t));
         function->n_para = 0;
          int result = insertSymbol(FUNC, _ret_val, _name, (int) function,sizeof(func_t*));//!!long || int (depends on architecture)
@@ -93,11 +106,15 @@ int beginFunction(int _ret_val, char*_name)
     }
     else
     {
+        //löscht Einträge und Information der alten Defitionn
+
         function = sym->var.func_ptr;
         function->n_para = 0;
         freeScope(function->scope);
         function->scope = (scope_list_t*)0;
     }
+
+    //ändert den Scope auf die Function ab
     crnt_scope = &(function->scope);
     crnt_pos = &(function->scope);
 
@@ -108,12 +125,15 @@ int beginFunction(int _ret_val, char*_name)
 
 void setN_Para(char* _name, int _n_para)
 {
+    //setzt die Anzahl von Übergabeparameter einer Funktion
+
     scope_list_t* sym = getSymbolInScope(global_scope,_name);
     sym->var.func_ptr->n_para = _n_para;
 }
 
 void endFunction()
 {
+    //setzt den zuezeitigen Scope wieder auf den Globalenscope
     scope_list_t** end_pos = &global_scope;
 
     while( *end_pos != 0)
