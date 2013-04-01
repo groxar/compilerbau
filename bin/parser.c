@@ -1632,14 +1632,14 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 114 "src/parser.y"
-    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (4)].id),0,sizeof(int) *(yyvsp[(3) - (4)].n)); }
+    { insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0,sizeof(int) *(yyvsp[(3) - (4)].n)); }
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
 #line 115 "src/parser.y"
-    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (1)].id),0,sizeof(int)); }
+    { insertSymbol(VAR,INT,(yyvsp[(1) - (1)].id),0,sizeof(int)); }
     break;
 
   case 15:
@@ -1674,7 +1674,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 129 "src/parser.y"
-    {n_para = 0; beginFunction(INTEGER,(yyvsp[(2) - (3)].id));}
+    {n_para = 0; beginFunction((yyvsp[(1) - (3)].n),(yyvsp[(2) - (3)].id));}
     break;
 
   case 20:

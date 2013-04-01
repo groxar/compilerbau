@@ -78,7 +78,7 @@
 %right UNARY_MINUS UNARY_PLUS LOGICAL_NOT
 %left BRACKET_OPEN BRACKET_CLOSE
 
-
+%type<n> type
 %type<id> ID
 %type<n> NUM
 
@@ -111,8 +111,8 @@ variable_declaration
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INTEGER,$1,0,sizeof(int) *$3); }
-     | ID { insertSymbol(VAR,INTEGER,$1,0,sizeof(int)); }
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INT,$1,0,sizeof(int) *$3); }
+     | ID { insertSymbol(VAR,INT,$1,0,sizeof(int)); }
      ;
 
 function_definition
@@ -126,7 +126,7 @@ function_declaration
      ;
 
 function_begin
-     : type ID PARA_OPEN {n_para = 0; beginFunction(INTEGER,$2);}
+     : type ID PARA_OPEN {n_para = 0; beginFunction($1,$2);}
      ;
 
 function_parameter_list

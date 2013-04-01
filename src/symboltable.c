@@ -96,6 +96,7 @@ int beginFunction(int _ret_val, char*_name)
         function = sym->var.func_ptr;
         function->n_para = 0;
         freeScope(function->scope);
+        function->scope = (scope_list_t*)0;
     }
     crnt_scope = &(function->scope);
     crnt_pos = &(function->scope);

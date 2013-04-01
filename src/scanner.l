@@ -6,7 +6,6 @@
 	#include "parser.h"
     #include "string.h"
     #include "stdlib.h"
-    #include "parser.h"
 
     //Track line and column numbers
     #define YY_USER_INIT { myColCnt = 0; }
@@ -43,8 +42,8 @@ do {return DO;}
 while {return WHILE;}
 if {return IF;}
 else {return ELSE;}
-int {return INT;}
-void {return VOID;}
+int { yylval.n = INT; return INT;}
+void {yylval.n = VOID; return VOID;}
 return {return RETURN;}
 \: {return COLON;}
 \, {return COMMA;}

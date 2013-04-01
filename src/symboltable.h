@@ -2,9 +2,6 @@
 #define SYMBOLTABLE_H_
 
 //ENUMS
-enum var_type {
-    INTEGER, VAR_VOID
-};
 enum type{
     FUNC, VAR
 };
