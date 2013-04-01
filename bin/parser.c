@@ -184,7 +184,7 @@ typedef struct YYLTYPE
 /* Line 343 of yacc.c  */
 #line 18 "src/parser.y"
 
-    int n_para;
+    static int n_para;
 
 
 /* Line 343 of yacc.c  */
@@ -1632,7 +1632,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 114 "src/parser.y"
-    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (4)].id),0,sizeof(int) * atoi((yyvsp[(3) - (4)].n))); }
+    { insertSymbol(VAR,INTEGER,(yyvsp[(1) - (4)].id),0,sizeof(int) *(yyvsp[(3) - (4)].n)); }
     break;
 
   case 14:

@@ -57,7 +57,7 @@ $(OBJDIR)/parser.c $(OBJDIR)/parser.h: $(SRCDIR)/parser.y
 	$(BISON) -v -t --locations --defines=$(OBJDIR)/parser.h \
 	  -o $(OBJDIR)/parser.c -rall --report-file=$(OBJDIR)/bison.out $<
 
-$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l
+$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(OBJDIR)/parser.h
 	$(FLEX) -o $(OBJDIR)/scanner.c $<
 
 .PHONY: clean_compiler
