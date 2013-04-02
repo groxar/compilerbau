@@ -30,6 +30,7 @@ void freeScope(scope_list_t* _scope)
 
     if(_scope->next != 0)
         freeScope(_scope->next);
+    free(_scope->name);
     free(_scope);
 }
 
