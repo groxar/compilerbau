@@ -111,7 +111,7 @@ variable_declaration
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INT,$1,0,sizeof(int) *$3); }
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INT,$1,0,sizeof(int) * $3); }
      | ID { insertSymbol(VAR,INT,$1,0,sizeof(int)); }
      ;
 

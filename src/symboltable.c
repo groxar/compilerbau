@@ -3,13 +3,13 @@
 #include "symboltable.h"
 
 static scope_list_t*  global_scope = (scope_list_t*) 0;
-static scope_list_t** crnt_scope   = &global_scope;
-static scope_list_t** crnt_pos     = &global_scope;
+static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den aktuellen scope
+static scope_list_t** crnt_pos     = &global_scope; //crnt_pos zeigt auf nächste freie Stelle
 static int            next_address = 0;
 
 scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
-    //liefert ein Symbol aus einem spezifischen Scope
+    //liefert ein Symbol aus einem spezifischen Scope, wenn nicht vorhanden return 0
 
     scope_list_t* sym = _scope;
 
@@ -38,7 +38,7 @@ scope_list_t* getSymbol(char* _name)
 {
     //liefert ein Symbol aus dem Funktionsscope bzw Globalenscope
 
-    scope_list_t* result;
+    scope_list_t* result = (scope_list_t*) 0;
 
     result = getSymbolInScope(*crnt_scope,_name);
 
@@ -67,14 +67,16 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     new_variable->address  = next_address;
     new_variable->next     = (scope_list_t*) 0;
 
+    // Da Pointer und int gleiche Byte-Zahl, benutze int im 32-Bit-System
     if(_type == VAR)
         new_variable->var.value     = _value;
     else
         new_variable->var.func_ptr  = (func_t*) _value;
 
     strcpy(new_variable->name, _name);
+    	//(*new_variable).name
 
-    //setzt den Zurzeitigen Scope eins weiter
+    //setzt den aktuellen Scope eins weiter
     *crnt_pos = new_variable;
     crnt_pos  = &((**crnt_pos).next);
 
@@ -100,14 +102,14 @@ int beginFunction(int _ret_val, char*_name)
         //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
 
         function = (func_t*) malloc(sizeof(func_t));
-        function->n_para = 0;
+        function->n_para = 0; //Parameter-Zahl auf 0 setzen
          int result = insertSymbol(FUNC, _ret_val, _name, (int) function,sizeof(func_t*));//!!long || int (depends on architecture)
-        if(result!=0)
+        if(result!=0) //falls insertSymbol fehlgeschlagen ist
             return result;
     }
     else
     {
-        //löscht Einträge und Information der alten Defitionn
+        //löscht Einträge und Information der alten Defitionn falls schon in Symboltabelle vorhanden
 
         function = sym->var.func_ptr;
         function->n_para = 0;
@@ -134,7 +136,7 @@ void setN_Para(char* _name, int _n_para)
 
 void endFunction()
 {
-    //setzt den zuezeitigen Scope wieder auf den Globalenscope
+    //setzt den aktuellen Scope wieder auf den Globalenscope
     scope_list_t** end_pos = &global_scope;
 
     while( *end_pos != 0)
