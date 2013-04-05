@@ -1632,7 +1632,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 114 "src/parser.y"
-    { insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0,sizeof(int) * (yyvsp[(3) - (4)].n)); }
+    { insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0,sizeof(int) * (yyvsp[(3) - (4)].n));printf("%d",(yyvsp[(3) - (4)].n)); }
     break;
 
   case 14:

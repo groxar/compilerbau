@@ -54,7 +54,7 @@ return {return RETURN;}
 \} {return BRACE_CLOSE;}
 \( {return PARA_OPEN;}
 \) {return PARA_CLOSE;}
-[a-z][a-zA-z0-9_]* { yylval.id = strdup(yytext); return ID;}
+[a-zA-Z][a-zA-Z_0-9]* { yylval.id = strdup(yytext); return ID;}
 0|[1-9][0-9]* { yylval.n = atoi(yytext); return NUM;}
 \=\= {return EQ;}
 \= {return ASSIGN;}

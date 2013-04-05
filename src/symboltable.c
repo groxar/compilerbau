@@ -83,7 +83,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 
     next_address += _size;
 
-    
+    printTable();    
     return 0; 
 }
 
@@ -105,6 +105,7 @@ int beginFunction(int _ret_val, char*_name)
         //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
 
         function = (func_t*) malloc(sizeof(func_t));
+        function->scope =(func_t*) 0;
         function->n_para = 0; //Parameter-Zahl auf 0 setzen
          int result = insertSymbol(FUNC, _ret_val, _name, (int) function,sizeof(func_t*));//!!long || int (depends on architecture)
         if(result!=0) //falls insertSymbol fehlgeschlagen ist
@@ -156,20 +157,20 @@ void printTable()
 {
     scope_list_t* entry = global_scope;
     scope_list_t* func_entry;
-    FILE*         file = fopen("symboltable.log","a+");
+    FILE*         file = fopen("symboltable.log","a");
 
-    fprintf(file,"\n\n\n\n\n");
+    fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS\n");
     
     while(entry != 0)
     {
-        fprintf(file,"%d,%d,%s,%d",entry->type,entry->var_type,entry->name,entry->address);
+        fprintf(file,"%d,%d,%s,%d\n",entry->type,entry->var_type,entry->name,entry->address);
 
         if(entry->type == FUNC)
         {
             func_entry = entry->var.func_ptr->scope;
             while(func_entry != 0)
             {
-                fprintf(file,"\t%d, %d, %s, %d",func_entry->type,func_entry->var_type,func_entry->name,func_entry->address);
+                fprintf(file,"\t%d, %d, %s, %d\n",func_entry->type,func_entry->var_type,func_entry->name,func_entry->address);
                 func_entry = func_entry->next;
             }
         }
