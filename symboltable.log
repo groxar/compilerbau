@@ -1,0 +1,186 @@
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 68
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 68
+	1, 262, len, 108
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 68
+	1, 262, len, 108
+	1, 262, threshold, 112
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+	1, 262, len, 156
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+	1, 262, len, 156
+	1, 262, threshold, 160
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+	1, 262, len, 156
+	1, 262, threshold, 160
+	1, 262, i, 164
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+	1, 262, len, 156
+	1, 262, threshold, 160
+	1, 262, i, 164
+	1, 262, sum, 168
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1,262,global,0
+1,262,a,4
+0,263,print,44
+	1, 262, i, 48
+0,262,scan,52
+0,263,exit,56
+	1, 262, i, 60
+0,262,func,64
+	1, 262, arr, 116
+	1, 262, len, 156
+	1, 262, threshold, 160
+	1, 262, i, 164
+	1, 262, sum, 168
+0,262,main,172
