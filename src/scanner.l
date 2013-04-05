@@ -73,3 +73,5 @@ return {return RETURN;}
 \/ {return DIV;}
 \% {return MOD;}
 \! {return LOGICAL_NOT;}
+//.*$ {}
+/\*.*\*/ {}
