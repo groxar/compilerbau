@@ -156,7 +156,7 @@ void printTable()
 {
     scope_list_t* entry = global_scope;
     scope_list_t* func_entry;
-    FILE*         file = fopen("symboltable.log","w+");
+    FILE*         file = fopen("symboltable.log","a+");
 
     fprintf(file,"\n\n\n\n\n");
     

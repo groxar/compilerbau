@@ -11,12 +11,12 @@ enum type{
 typedef struct func func_t;
 typedef struct scope_list scope_list_t;
 
-typedef struct func{
+struct func{
     int           n_para;
     scope_list_t* scope;
-}func_t;
+};
 
-typedef struct scope_list{
+struct scope_list{
     int   type;
     int   var_type;//return type || variable type
     char* name;
@@ -28,7 +28,7 @@ typedef struct scope_list{
     } var;
 
     scope_list_t* next;
-}scope_list_t;
+};
 
 //global variables
 /* extern scope_list_t* global_scope;
