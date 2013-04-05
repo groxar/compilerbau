@@ -8,6 +8,13 @@ static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den a
 static scope_list_t** crnt_pos     = &global_scope; //crnt_pos zeigt auf nächste freie Stelle
 static int            next_address = 0;
 
+void initSymboltable()
+{
+    FILE* file = fopen("symboltable.log","w");
+    fprintf(file,"Symboltable log");
+    fclose(file);
+}
+
 scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
     //liefert ein Symbol aus einem spezifischen Scope, wenn nicht vorhanden return 0
@@ -163,7 +170,7 @@ void printTable()
     
     while(entry != 0)
     {
-        fprintf(file,"%d,%d,%s,%d\n",entry->type,entry->var_type,entry->name,entry->address);
+        fprintf(file,"%d, %d, %s, %d\n",entry->type,entry->var_type,entry->name,entry->address);
 
         if(entry->type == FUNC)
         {

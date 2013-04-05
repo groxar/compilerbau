@@ -1,5 +1,4 @@
 #ifndef SYMBOLTABLE_H_
-
 #define SYMBOLTABLE_H_
 
 //ENUMS
@@ -37,6 +36,8 @@ extern scope_list_t** crnt_pos;
 */
 
 //Functions
+void initSymboltable();
+
 scope_list_t* getSymbol( char* _name);
 
 int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size);

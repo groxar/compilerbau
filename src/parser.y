@@ -32,6 +32,7 @@
 %initial-action
 {
 	yydebug = 1;
+    initSymboltable();
 };
 
 /*

@@ -508,13 +508,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    88,    88,    92,    93,    97,    98,    99,   100,   104,
-     105,   109,   110,   114,   115,   119,   120,   124,   125,   129,
-     133,   134,   138,   141,   143,   147,   148,   149,   150,   151,
-     152,   153,   154,   158,   162,   163,   167,   168,   172,   173,
-     174,   175,   176,   177,   178,   179,   180,   181,   182,   183,
-     184,   185,   186,   187,   188,   189,   190,   191,   192,   193,
-     194,   198,   199,   203,   204,   208,   209
+       0,    89,    89,    93,    94,    98,    99,   100,   101,   105,
+     106,   110,   111,   115,   116,   120,   121,   125,   126,   130,
+     134,   135,   139,   142,   144,   148,   149,   150,   151,   152,
+     153,   154,   155,   159,   163,   164,   168,   169,   173,   174,
+     175,   176,   177,   178,   179,   180,   181,   182,   183,   184,
+     185,   186,   187,   188,   189,   190,   191,   192,   193,   194,
+     195,   199,   200,   204,   205,   209,   210
 };
 #endif
 
@@ -1441,10 +1441,11 @@ yyparse ()
 #line 33 "src/parser.y"
 {
 	yydebug = 1;
+    initSymboltable();
 }
 
 /* Line 1590 of yacc.c  */
-#line 1448 "bin/parser.c"
+#line 1449 "bin/parser.c"
 
   goto yysetstate;
 
@@ -1631,63 +1632,63 @@ yyreduce:
         case 13:
 
 /* Line 1806 of yacc.c  */
-#line 114 "src/parser.y"
+#line 115 "src/parser.y"
     { insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0,sizeof(int) * (yyvsp[(3) - (4)].n));printf("%d",(yyvsp[(3) - (4)].n)); }
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 115 "src/parser.y"
+#line 116 "src/parser.y"
     { insertSymbol(VAR,INT,(yyvsp[(1) - (1)].id),0,sizeof(int)); }
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 119 "src/parser.y"
+#line 120 "src/parser.y"
     { endFunction(); }
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 120 "src/parser.y"
+#line 121 "src/parser.y"
     { endFunction(); }
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 124 "src/parser.y"
+#line 125 "src/parser.y"
     { endFunction(); }
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 125 "src/parser.y"
+#line 126 "src/parser.y"
     { endFunction(); }
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 129 "src/parser.y"
+#line 130 "src/parser.y"
     {n_para = 0; beginFunction((yyvsp[(1) - (3)].n),(yyvsp[(2) - (3)].id));}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 133 "src/parser.y"
+#line 134 "src/parser.y"
     { n_para++; }
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1691 "bin/parser.c"
+#line 1692 "bin/parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1925,7 +1926,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 211 "src/parser.y"
+#line 212 "src/parser.y"
 
 
 void yyerror (const char *msg)
