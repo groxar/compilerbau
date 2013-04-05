@@ -1,5 +1,6 @@
 #include "stdlib.h"
 #include "string.h"
+#include "stdio.h"
 #include "symboltable.h"
 
 static scope_list_t*  global_scope = (scope_list_t*) 0;
@@ -81,7 +82,9 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     crnt_pos  = &((**crnt_pos).next);
 
     next_address += _size;
-    return 0;
+
+    
+    return; 
 }
 
 //0 success
@@ -149,3 +152,30 @@ void endFunction()
 
 }
 
+void printTable()
+{
+    scope_list_t* entry = global_scope;
+    scope_list_t* func_entry;
+    FILE*         file = fopen("symboltable.log","w+");
+
+    fprintf(file,"\n\n\n\n\n");
+    
+    while(entry != 0)
+    {
+        fprintf(file,"%d,%d,%s,%d",entry->type,entry->var_type,entry->name,entry->address);
+
+        if(entry->type == FUNC)
+        {
+            func_entry = entry->var.func_ptr->scope;
+            while(func_entry != 0)
+            {
+                fprintf(file,"\t%d, %d, %s, %d",func_entry->type,func_entry->var_type,func_entry->name,func_entry->address);
+                func_entry = func_entry->next;
+            }
+        }
+        entry = entry->next;
+    }
+
+
+    fclose(file);
+}
