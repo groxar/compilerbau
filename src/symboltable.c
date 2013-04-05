@@ -84,7 +84,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     next_address += _size;
 
     
-    return; 
+    return 0; 
 }
 
 //0 success
