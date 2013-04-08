@@ -8,13 +8,25 @@ static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den a
 static scope_list_t** crnt_pos     = &global_scope; //crnt_pos zeigt auf nächste freie Stelle
 static int            next_address = 0;
 
+void initSymboltable()
+{
+    FILE* file = fopen("symboltable.log","w");
+    fprintf(file,"Symboltable log");
+    fclose(file);
+}
+/**
+ * \brief Searches for a symbol in a specified scope
+ * \param _scope The name of the scope (global or a specified funtion-scope)
+ * \param _name The name of the searched symbol
+ * \return A pointer of the symbol which was searched
+ *
+ *         It returns 0 if the searched symbol was not found
+ */
 scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
 {
-    //liefert ein Symbol aus einem spezifischen Scope, wenn nicht vorhanden return 0
-
     scope_list_t* sym = _scope;
 
-    while(sym != 0 )//ich hätte die schleife in einer zeile machen könne *böses grinsen*
+    while(sym != 0 )
     {
         if(strcmp(sym->name,_name) == 0)
             break;
@@ -24,17 +36,28 @@ scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name)
     return sym;
 }
 
+/**
+ * \brief frees allocated space of a scope
+ * It starts with the symbol the parameter is pointing to
+ * \param __scope The scope which shall be cleaned / freed
+ */
 void freeScope(scope_list_t* _scope)
 {
-    //gibt Speicherplätze der Symbole frei
-    //angefangen von dem Symbol auf dem der Parameter zeigt
-
     if(_scope->next != 0)
         freeScope(_scope->next);
     free(_scope->name);
     free(_scope);
 }
 
+/**
+ * \brief Looks up a symbol of the current (function) scope or if actual scope
+ * 		  is not a function scope or no local symbol with the specified name is
+ * 		  defined in the function scope looks up the symbol in the global scope
+ * \param _name The name of the searched symbol
+ * \return A pointer of the symbol which was searched
+ *
+ *         It returns 0 if the searched symbol was not found
+ */
 scope_list_t* getSymbol(char* _name)
 {
     //liefert ein Symbol aus dem Funktionsscope bzw Globalenscope
@@ -49,12 +72,19 @@ scope_list_t* getSymbol(char* _name)
     return result;
 }
 
-//error code:
-//0 success
-//-1 symbol with this name exists
+// ToDo: Parameter _type genauer beschreiben. Ist 0 function und 1 variable?
+/**
+ * \brief Inserts a symbol into the current scope
+ * \param _type The type of the symbol (FUNC/VAR)
+ * \param _var_type The type of the variable (if it is a variable)
+ * \param _name The name of the variable
+ * \param _value The value of the variable
+ * \param _size The size of the variable
+ * \return Returns 0 for success
+ * 		   Returns -1 if symbol with this name already exists
+ */
 int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 {
-    //fügt ein beliebiges Symbol ein
 
     if(getSymbolInScope(*crnt_scope,_name) != 0)
         return -1;
@@ -75,7 +105,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
         new_variable->var.func_ptr  = (func_t*) _value;
 
     strcpy(new_variable->name, _name);
-    	//(*new_variable).name
+    //same as (*new_variable).name
 
     //setzt den aktuellen Scope eins weiter
     *crnt_pos = new_variable;
@@ -87,13 +117,18 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     return 0; 
 }
 
-//0 success
-//-1 symbole with this name exists
-//-2 currently not in global scope
+// ToDo:_ret_val beschreiben
+/**
+ * \brief Inserts a new function into the symboltable and changes
+ * 		  the scope to functionscope of the new function
+ * \param _ret_val
+ * \param _name The name of the new function
+ * \return Returns 0 for success
+ * 		   Returns -1 if a function with this name already exists
+ * 		   Returns -2 if currently not in global scope
+ */
 int beginFunction(int _ret_val, char*_name)
 {
-    //fügt eine Function in die Symboltabelle ein und ändert den zuzeitgen Scope
-
     if(*crnt_scope != global_scope)
         return -2;
     
@@ -129,7 +164,11 @@ int beginFunction(int _ret_val, char*_name)
 }
 
 
-
+/**
+ * \brief Sets the number of parameters of a funtion
+ * \param __name The name of the function
+ * \param _n_para The number of parameters
+ */
 void setN_Para(char* _name, int _n_para)
 {
     //setzt die Anzahl von Übergabeparameter einer Funktion
@@ -137,10 +176,11 @@ void setN_Para(char* _name, int _n_para)
     scope_list_t* sym = getSymbolInScope(global_scope,_name);
     sym->var.func_ptr->n_para = _n_para;
 }
-
+/**
+ * \brief Ends the function by changing the current scope back to globalscope
+ */
 void endFunction()
 {
-    //setzt den aktuellen Scope wieder auf den Globalenscope
     scope_list_t** end_pos = &global_scope;
 
     while( *end_pos != 0)
@@ -152,7 +192,9 @@ void endFunction()
     crnt_scope = &global_scope;
 
 }
-
+/**
+ * \brief Prints the whole symboltable into a file symboltable.log for debugging
+ */
 void printTable()
 {
     scope_list_t* entry = global_scope;
@@ -163,7 +205,7 @@ void printTable()
     
     while(entry != 0)
     {
-        fprintf(file,"%d,%d,%s,%d\n",entry->type,entry->var_type,entry->name,entry->address);
+        fprintf(file,"%d, %d, %s, %d\n",entry->type,entry->var_type,entry->name,entry->address);
 
         if(entry->type == FUNC)
         {
