@@ -72,7 +72,6 @@ scope_list_t* getSymbol(char* _name)
     return result;
 }
 
-// ToDo: Parameter _type genauer beschreiben. Ist 0 function und 1 variable?
 /**
  * \brief Inserts a symbol into the current scope
  * \param _type The type of the symbol (FUNC/VAR)
@@ -121,7 +120,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 /**
  * \brief Inserts a new function into the symboltable and changes
  * 		  the scope to functionscope of the new function
- * \param _ret_val
+ * \param _ret_val The ret value INT/VOID
  * \param _name The name of the new function
  * \return Returns 0 for success
  * 		   Returns -1 if a function with this name already exists
