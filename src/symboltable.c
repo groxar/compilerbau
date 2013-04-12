@@ -142,16 +142,15 @@ int beginFunction(int _ret_val, char*_name)
         function = (func_t*) malloc(sizeof(func_t));
         function->scope =(func_t*) 0;
         function->n_para = 0; //Parameter-Zahl auf 0 setzen
-         int result = insertSymbol(FUNC, _ret_val, _name, (int) function,sizeof(func_t*));//!!long || int (depends on architecture)
+         int result = insertSymbol(FUNC, _ret_val, _name, (int) function,0);//!!long || int (depends on architecture)
         if(result!=0) //falls insertSymbol fehlgeschlagen ist
             return result;
     }
     else
     {
-        //löscht Einträge und Information der alten Defitionn falls schon in Symboltabelle vorhanden
+        //löscht alte einträge
 
         function = sym->var.func_ptr;
-        function->n_para = 0;
         freeScope(function->scope);
         function->scope = (scope_list_t*)0;
     }
@@ -160,6 +159,8 @@ int beginFunction(int _ret_val, char*_name)
     crnt_scope = &(function->scope);
     crnt_pos = &(function->scope);
 
+    if(sym!=0 && sym->var_type != _ret_val)
+        return -3;
     return 0;
 }
 
@@ -169,17 +170,22 @@ int beginFunction(int _ret_val, char*_name)
  * \param __name The name of the function
  * \param _n_para The number of parameters
  */
-void setN_Para(char* _name, int _n_para)
+int setN_Para(char* _name, int _n_para)
 {
     //setzt die Anzahl von Übergabeparameter einer Funktion
-
+    
     scope_list_t* sym = getSymbolInScope(global_scope,_name);
-    sym->var.func_ptr->n_para = _n_para;
+
+    if(sym->var.func_ptr->n_para != _n_para && sym->var.func_ptr->n_para != 0)
+        return -1;
+
+    return 0;
 }
 /**
  * \brief Ends the function by changing the current scope back to globalscope
  */
-void endFunction()
+//needs return type check
+int endFunction()
 {
     scope_list_t** end_pos = &global_scope;
 
@@ -190,7 +196,7 @@ void endFunction()
 
     crnt_pos = end_pos;
     crnt_scope = &global_scope;
-
+    return 0;
 }
 /**
  * \brief Prints the whole symboltable into a file symboltable.log for debugging

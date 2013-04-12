@@ -509,12 +509,12 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    89,    89,    93,    94,    98,    99,   100,   101,   105,
-     106,   110,   111,   115,   116,   120,   121,   125,   126,   130,
-     134,   135,   139,   142,   144,   148,   149,   150,   151,   152,
-     153,   154,   155,   159,   163,   164,   168,   169,   173,   174,
-     175,   176,   177,   178,   179,   180,   181,   182,   183,   184,
-     185,   186,   187,   188,   189,   190,   191,   192,   193,   194,
-     195,   199,   200,   204,   205,   209,   210
+     106,   110,   111,   115,   118,   122,   123,   127,   128,   132,
+     136,   137,   141,   144,   146,   150,   151,   152,   153,   154,
+     155,   156,   157,   161,   165,   166,   170,   171,   175,   176,
+     177,   178,   179,   180,   181,   182,   183,   184,   185,   186,
+     187,   188,   189,   190,   191,   192,   193,   194,   195,   196,
+     197,   201,   202,   206,   207,   211,   212
 };
 #endif
 
@@ -1629,66 +1629,82 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 13:
+        case 9:
+
+/* Line 1806 of yacc.c  */
+#line 105 "src/parser.y"
+    { (yyval.n) = INT; }
+    break;
+
+  case 10:
+
+/* Line 1806 of yacc.c  */
+#line 106 "src/parser.y"
+    { (yyval.n) = VOID; }
+    break;
+
+  case 13:
 
 /* Line 1806 of yacc.c  */
 #line 115 "src/parser.y"
-    { insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0,sizeof(int) * (yyvsp[(3) - (4)].n));printf("%d",(yyvsp[(3) - (4)].n)); }
+    { INT != VOID?
+                                                insertSymbol(VAR,INT,(yyvsp[(1) - (4)].id),0, (yyvsp[(3) - (4)].n))
+                                                : printf("Error");}
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 116 "src/parser.y"
-    { insertSymbol(VAR,INT,(yyvsp[(1) - (1)].id),0,sizeof(int)); }
+#line 118 "src/parser.y"
+    { insertSymbol(VAR,INT,(yyvsp[(1) - (1)].id),0,1); }
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 120 "src/parser.y"
+#line 122 "src/parser.y"
     { endFunction(); }
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 121 "src/parser.y"
+#line 123 "src/parser.y"
     { endFunction(); }
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 125 "src/parser.y"
+#line 127 "src/parser.y"
     { endFunction(); }
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 126 "src/parser.y"
+#line 128 "src/parser.y"
     { endFunction(); }
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 130 "src/parser.y"
+#line 132 "src/parser.y"
     {n_para = 0; beginFunction((yyvsp[(1) - (3)].n),(yyvsp[(2) - (3)].id));}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 134 "src/parser.y"
+#line 136 "src/parser.y"
     { n_para++; }
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1692 "bin/parser.c"
+#line 1708 "bin/parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1926,7 +1942,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 212 "src/parser.y"
+#line 214 "src/parser.y"
 
 
 void yyerror (const char *msg)

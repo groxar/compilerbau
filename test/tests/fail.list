@@ -1,0 +1,49 @@
+t01.c 
+    line 2
+        double initialisation with the same name;
+t02.c
+    line 1
+        definition of void variable (in this case an array)
+t03.c
+    line 2
+        function previously defined with a diffrent number of parameter
+t04.c
+    line 2
+        function previously defined with a diffrent return value
+t05.c
+    line 2
+        function was previously declared || 2 main functions
+t06.c
+    line 3
+        variable with the name already exists
+t07.c
+    line 3
+        function previously defined with a diffrent number of parameter
+t08.c
+    line 2
+        function expects a int return value
+t09.c
+    line 4
+        function does'nt have a return value
+t10.c
+    line 4
+        function does'nt have a return value
+t11.c
+    line 4
+        array needs a field value
+t12.c
+    line 4
+        array needs a field value
+
+t13.c
+    line 5
+        can't assign a variable of type int to an array
+t14.c
+    line 9
+        undefined operation int + void
+t15.c
+    line 6
+        function expects an parameter
+t16.c
+    line 7
+        function expects an int array
