@@ -71,10 +71,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inserts a symbol into the current scope.  <a href="#ac00832315497fd945a71053820476a7f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="symboltable_8h.html#a2bf28b5a7d82b5983b60c75c34c84752">beginFunction</a> (int _ret_val, char *_name)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inserts a new function into the symboltable and changes the scope to functionscope of the new function.  <a href="#a2bf28b5a7d82b5983b60c75c34c84752"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="symboltable_8h.html#a1b5126038757a6d91f54cde11d451b75">setN_Para</a> (char *_name, int _n_para)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sets the number of parameters of a funtion.  <a href="#a1b5126038757a6d91f54cde11d451b75"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="symboltable_8h.html#a7d22d0bd5a5c6b3ac5ca658836c5342f">endFunction</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Ends the function by changing the current scope back to globalscope.  <a href="#a7d22d0bd5a5c6b3ac5ca658836c5342f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="symboltable_8h.html#afa5b31d1c5c5faafb23b8d632f2b519d">setN_Para</a> (char *_name, int _n_para)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sets the number of parameters of a funtion.  <a href="#afa5b31d1c5c5faafb23b8d632f2b519d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="symboltable_8h.html#a0c1fdce75e5c3b8091e1d65306506427">endFunction</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Ends the function by changing the current scope back to globalscope.  <a href="#a0c1fdce75e5c3b8091e1d65306506427"></a><br/></td></tr>
 </table>
 <hr/><h2>Typedef Documentation</h2>
 <a class="anchor" id="ab8b4faca73f54c3c73fdab4bc5c5250b"></a><!-- doxytag: member="symboltable.h::func_t" ref="ab8b4faca73f54c3c73fdab4bc5c5250b" args="" -->
@@ -168,7 +168,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Inserts a new function into the symboltable and changes the scope to functionscope of the new function. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>_ret_val</em>&nbsp;</td><td></td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>_ret_val</em>&nbsp;</td><td>The ret value INT/VOID </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>_name</em>&nbsp;</td><td>The name of the new function </td></tr>
   </table>
   </dd>
@@ -178,16 +178,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><p>!long || int (depends on architecture) </p>
 </p>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00130">130</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00129">129</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7d22d0bd5a5c6b3ac5ca658836c5342f"></a><!-- doxytag: member="symboltable.h::endFunction" ref="a7d22d0bd5a5c6b3ac5ca658836c5342f" args="()" -->
+<a class="anchor" id="a0c1fdce75e5c3b8091e1d65306506427"></a><!-- doxytag: member="symboltable.h::endFunction" ref="a0c1fdce75e5c3b8091e1d65306506427" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void endFunction </td>
+          <td class="memname">int endFunction </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -199,7 +199,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Ends the function by changing the current scope back to globalscope. </p>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00182">182</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00187">187</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
@@ -308,16 +308,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Returns 0 for success Returns -1 if symbol with this name already exists </dd></dl>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00086">86</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00085">85</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1b5126038757a6d91f54cde11d451b75"></a><!-- doxytag: member="symboltable.h::setN_Para" ref="a1b5126038757a6d91f54cde11d451b75" args="(char *_name, int _n_para)" -->
+<a class="anchor" id="afa5b31d1c5c5faafb23b8d632f2b519d"></a><!-- doxytag: member="symboltable.h::setN_Para" ref="afa5b31d1c5c5faafb23b8d632f2b519d" args="(char *_name, int _n_para)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void setN_Para </td>
+          <td class="memname">int setN_Para </td>
           <td>(</td>
           <td class="paramtype">char *&nbsp;</td>
           <td class="paramname"> <em>_name</em>, </td>
@@ -365,7 +365,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 5 17:20:05 2013 for DHBW Compiler by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 12 13:58:25 2013 for DHBW Compiler by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
