@@ -105,18 +105,20 @@ program_element
      ;
 									
 type
-     : INT
-     | VOID
+     : INT { $$ = INT; }
+     | VOID { $$ = VOID; }
      ;
 
 variable_declaration
      : variable_declaration COMMA identifier_declaration
-     | type identifier_declaration 
+     | type identifier_declaration
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,INT,$1,0,sizeof(int) * $3);printf("%d",$3); }
-     | ID { insertSymbol(VAR,INT,$1,0,sizeof(int)); }
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { INT != VOID?
+                                                insertSymbol(VAR,INT,$1,0, $3)
+                                                : printf("Error");}
+     | ID { insertSymbol(VAR,INT,$1,0,1); }
      ;
 
 function_definition
