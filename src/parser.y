@@ -82,6 +82,8 @@
 %type<n> type
 %type<id> ID
 %type<n> NUM
+%type<n> variable_declaration
+%type<n> identifier_declaration
 
 %%
 
@@ -107,15 +109,16 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA identifier_declaration
-     | type identifier_declaration
+     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,$1,$3,0,$5); $$ = $1; } 
+     | variable_declaration COMMA ID { insertSymbol(VAR,$1,$3,0,1); $$ = $1; }
+     | identifier_declaration {$$ = $1}
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { INT != VOID?
-                                                insertSymbol(VAR,INT,$1,0, $3)
-                                                : printf("Error");}
-     | ID { insertSymbol(VAR,INT,$1,0,1); }
+     : type ID BRACKET_OPEN NUM BRACKET_CLOSE { $1 != VOID?
+                                                insertSymbol(VAR,$1,$2,0, $4)
+                                                : printf("Error"); $$ = $1; }
+     | type ID { insertSymbol(VAR,$1,$2,0,1); $$ = $1; }
      ;
 
 function_definition
@@ -138,7 +141,7 @@ function_parameter_list
      ;
 	
 function_parameter
-     : type identifier_declaration 
+     : identifier_declaration 
      ;
 									
 stmt_list
