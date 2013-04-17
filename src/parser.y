@@ -13,6 +13,8 @@
 %union {
   int n;
   char* id;
+  int regCnr;
+  int lblCnr;
 }
 
 %{
@@ -82,6 +84,7 @@
 %type<n> type
 %type<id> ID
 %type<n> NUM
+%type<regCnr> expression
 
 %%
 
@@ -170,23 +173,23 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression
-     | expression LOGICAL_OR expression
-     | expression LOGICAL_AND expression
-     | LOGICAL_NOT expression
-     | expression EQ expression
-     | expression NE expression
-     | expression LS expression 
-     | expression LSEQ expression 
-     | expression GTEQ expression 
-     | expression GT expression
-     | expression PLUS expression
-     | expression MINUS expression
+     : expression ASSIGN expression {$$=$3; doAssign($1, $3);}
+     | expression LOGICAL_OR expression {$$=doEval(LOGICAL_OR, $1, $3);}
+     | expression LOGICAL_AND expression {$$=doEval(LOGICAL_AND, $1, $3);}
+     | LOGICAL_NOT expression {$$=doEval(LOGICAL_NOT, $2, 0);}
+     | expression EQ expression {$$=doEval(EQ, $1, $3);}
+     | expression NE expression {$$=doEval(NE, $1, $3);}
+     | expression LS expression  {$$=doEval(LS, $1, $3);}
+     | expression LSEQ expression  {$$=doEval(LSEQ, $1, $3);}
+     | expression GTEQ expression  {$$=doEval(GTEQ, $1, $3);}
+     | expression GT expression {$$=doEval(GT, $1, $3);}
+     | expression PLUS expression  {$$=doEval(PLUS, $1, $3);}
+     | expression MINUS expression  {$$=doEval(MINUS, $1, $3);}
      | expression SHIFT_LEFT expression
      | expression SHIFT_RIGHT expression
-     | expression MUL expression
-     | expression MOD expression
-     | expression DIV expression  
+     | expression MUL expression  {$$=doEval(MUL, $1, $3);}
+     | expression MOD expression  {$$=doEval(MOD, $1, $3);}
+     | expression DIV expression   {$$=doEval(DIV, $1, $3);}
      | MINUS expression %prec UNARY_MINUS
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
