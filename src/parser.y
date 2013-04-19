@@ -212,23 +212,23 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression {$$=$3; doAssign($1, $3);}
-     | expression LOGICAL_OR expression {$$=doEval(LOGICAL_OR, $1, $3);}
-     | expression LOGICAL_AND expression {$$=doEval(LOGICAL_AND, $1, $3);}
-     | LOGICAL_NOT expression {$$=doEval(LOGICAL_NOT, $2, 0);}
-     | expression EQ expression {$$=doEval(EQ, $1, $3);}
-     | expression NE expression {$$=doEval(NE, $1, $3);}
-     | expression LS expression  {$$=doEval(LS, $1, $3);}
-     | expression LSEQ expression  {$$=doEval(LSEQ, $1, $3);}
-     | expression GTEQ expression  {$$=doEval(GTEQ, $1, $3);}
-     | expression GT expression {$$=doEval(GT, $1, $3);}
-     | expression PLUS expression  {$$=doEval(PLUS, $1, $3);}
-     | expression MINUS expression  {$$=doEval(MINUS, $1, $3);}
+     : expression ASSIGN expression {$$=$3; generateIRCode($1, $3, 0, 0);}
+     | expression LOGICAL_OR expression {$$=generateIRCode(LOGICAL_OR, $1, $3, 0);}
+     | expression LOGICAL_AND expression {$$=generateIRCode(LOGICAL_AND, $1, $3, 0);}
+     | LOGICAL_NOT expression {$$=generateIRCode(LOGICAL_NOT, $2, 0);}
+     | expression EQ expression {$$=generateIRCode(EQ, $1, $3, 0);}
+     | expression NE expression {$$=generateIRCode(NE, $1, $3, 0);}
+     | expression LS expression  {$$=generateIRCode(LS, $1, $3, 0);}
+     | expression LSEQ expression  {$$=generateIRCode(LSEQ, $1, $3, 0);}
+     | expression GTEQ expression  {$$=generateIRCode(GTEQ, $1, $3, 0);}
+     | expression GT expression {$$=generateIRCode(GT, $1, $3, 0);}
+     | expression PLUS expression  {$$=generateIRCode(PLUS, $1, $3, 0);}
+     | expression MINUS expression  {$$=generateIRCode(MINUS, $1, $3, 0);}
      | expression SHIFT_LEFT expression
      | expression SHIFT_RIGHT expression
-     | expression MUL expression  {$$=doEval(MUL, $1, $3);}
-     | expression MOD expression  {$$=doEval(MOD, $1, $3);}
-     | expression DIV expression   {$$=doEval(DIV, $1, $3);}
+     | expression MUL expression  {$$=generateIRCode(MUL, $1, $3, 0);}
+     | expression MOD expression  {$$=generateIRCode(MOD, $1, $3, 0);}
+     | expression DIV expression   {$$=generateIRCode(DIV, $1, $3, 0);}
      | MINUS expression %prec UNARY_MINUS
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE

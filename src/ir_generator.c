@@ -3,7 +3,7 @@
 int reg_counter = 0;
 int lbl_counter = 0;
 
-void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam, jump){
+void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam){
 	switch(op){
 		case OP_ASSIGN:
 
@@ -13,6 +13,7 @@ void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam, jump){
 		case OP_MUL:
 		case OP_DIV:
 		case OP_MINUS:
+			doEval(op, firstParam, secondParam);
 			break;
 		case OP_IFEQ:
 		case OP_IFNE:
@@ -53,6 +54,8 @@ void doAssign(firstParam, secondParam){
 
 }
 
+
+//arithmetische Ausdrücke handhaben
 void doEval(opcode, firstParam, secondParam){
 	//hier wird eine neue temp variable erstellt
 	//malloc(größe von symbol)

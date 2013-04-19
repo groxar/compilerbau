@@ -32,3 +32,6 @@ typedef struct symbol {
     }is;
     struct symbol *next;		//points to the next list element
 } symbol;
+
+void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam, jump);
+
