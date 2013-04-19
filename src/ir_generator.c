@@ -4,7 +4,7 @@
 int reg_counter = 0;
 int lbl_counter = 0;
 
-void generateIRCode(enum opcodes op, scope_list_t firstParam, scope_list_t secondParam, scope_list_t thirdParam, jump){
+void generateIRCode(enum opcodes op, scope_list_t firstParam, scope_list_t secondParam, scope_list_t thirdParam){
 	switch(op){
 		case ASSIGN:
 
@@ -15,6 +15,8 @@ void generateIRCode(enum opcodes op, scope_list_t firstParam, scope_list_t secon
 		case DIV:
 		case UNARY_MINUS:
 		case UNARY_PLUS:
+
+			doEval(op, firstParam, secondParam);
 			break;
 		case EQ:
 		case NE:
@@ -55,6 +57,8 @@ void doAssign(firstParam, secondParam){
 
 }
 
+
+//arithmetische Ausdrücke handhaben
 void doEval(opcode, firstParam, secondParam){
 	//hier wird eine neue temp variable erstellt
 	scope_list_t *result;
