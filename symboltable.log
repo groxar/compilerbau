@@ -1,22 +1,169 @@
 Symboltable log
 
 TYP, VAR_TYPE, NAME, ADDRESS
-0, 262, main, 0
+1, 262, global, 0
 
 
 TYP, VAR_TYPE, NAME, ADDRESS
-0, 262, main, 0
-	1, 262, i, 0
+1, 262, global, 0
+1, 262, a, 1
 
 
 TYP, VAR_TYPE, NAME, ADDRESS
-0, 262, main, 0
-	1, 262, i, 0
-	1, 262, b, 1
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
 
 
 TYP, VAR_TYPE, NAME, ADDRESS
-0, 262, main, 0
-	1, 262, i, 0
-	1, 262, b, 1
-	1, 262, a, 2
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 13
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 13
+	1, 262, len, 23
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 13
+	1, 262, len, 23
+	1, 262, threshold, 24
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+	1, 262, len, 35
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+	1, 262, len, 35
+	1, 262, threshold, 36
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+	1, 262, len, 35
+	1, 262, threshold, 36
+	1, 262, i, 37
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+	1, 262, len, 35
+	1, 262, threshold, 36
+	1, 262, i, 37
+	1, 262, sum, 38

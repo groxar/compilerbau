@@ -1,18 +1,18 @@
 enum opcodes {
-	ASSIGN,
-	PLUS,
-	MINUS,
-	MUL,
-	DIV,
-	MOD,
-	UNARY_MINUS,
-	UNARY_PLUS,
-	EQ,
-	NE,
-	GT,
-	GTEQ,
-	LS,
-	LSEQ,
+	OP_ASSIGN,
+	OP_PLUS,
+	OP_MINUS,
+	OP_MUL,
+	OP_DIV,
+	OP_MOD,
+	OP_UNARY_MINUS,
+	OP_UNARY_PLUS,
+	OP_EQ,
+	OP_NE,
+	OP_GT,
+	OP_GTEQ,
+	OP_LS,
+	OP_LSEQ,
 	OP_GOTO,
 	OP_RETURN,
 	OP_RETURN_OPNULL,
@@ -20,20 +20,10 @@ enum opcodes {
 	OP_CALL_TWO,
 	OP_ARRAY_LD,
 	OP_ARRAY_ST,
-	LOGICAL_OR,
-	LOGICAL_AND,
-	LOGICAL_NOT
+	OP_LOGICAL_OR,
+	OP_LOGICAL_AND,
+	OP_LOGICAL_NOT
 };
 
-typedef struct symbol {
-    const char *name;			//symbol name (unique in each table)
-    int isFunc;					//not 0 if symbol is a function
-    union{						//each symbol is either a function or a variable
-    	struct variable var;
-    	struct function func;
-    }is;
-    struct symbol *next;		//points to the next list element
-} symbol;
-
-void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam);
+void generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam);
 

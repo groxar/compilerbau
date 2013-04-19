@@ -8,6 +8,7 @@
     #include "string.h"
     #include "stdio.h"
     #include "symboltable.h"
+    #include "ir_generator.h"
 %}
 
 %union {
@@ -15,6 +16,7 @@
   char* id;
   int regCnr;
   int lblCnr;
+  struct scope_list *b;
 }
 
 %{
@@ -86,7 +88,7 @@
 %type<n> NUM
 %type<n> variable_declaration
 %type<n> identifier_declaration
-%type<regCnr> expression
+%type<b> expression
 
 %%
 
@@ -212,28 +214,7 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression {$$=$3; generateIRCode($1, $3, 0, 0);}
-     | expression LOGICAL_OR expression {$$=generateIRCode(LOGICAL_OR, $1, $3, 0);}
-     | expression LOGICAL_AND expression {$$=generateIRCode(LOGICAL_AND, $1, $3, 0);}
-     | LOGICAL_NOT expression {$$=generateIRCode(LOGICAL_NOT, $2, 0);}
-     | expression EQ expression {$$=generateIRCode(EQ, $1, $3, 0);}
-     | expression NE expression {$$=generateIRCode(NE, $1, $3, 0);}
-     | expression LS expression  {$$=generateIRCode(LS, $1, $3, 0);}
-     | expression LSEQ expression  {$$=generateIRCode(LSEQ, $1, $3, 0);}
-     | expression GTEQ expression  {$$=generateIRCode(GTEQ, $1, $3, 0);}
-     | expression GT expression {$$=generateIRCode(GT, $1, $3, 0);}
-     | expression PLUS expression  {$$=generateIRCode(PLUS, $1, $3, 0);}
-     | expression MINUS expression  {$$=generateIRCode(MINUS, $1, $3, 0);}
-     | expression SHIFT_LEFT expression
-     | expression SHIFT_RIGHT expression
-     | expression MUL expression  {$$=generateIRCode(MUL, $1, $3, 0);}
-     | expression MOD expression  {$$=generateIRCode(MOD, $1, $3, 0);}
-     | expression DIV expression   {$$=generateIRCode(DIV, $1, $3, 0);}
-     | MINUS expression %prec UNARY_MINUS
-     | PLUS expression %prec UNARY_PLUS
-     | ID BRACKET_OPEN primary BRACKET_CLOSE
-     | PARA_OPEN expression PARA_CLOSE
-     | function_call /*{ $$ = sa_FunctionCall($1 , @1); } //$$ == yylval->symbol*/
+     : expression ASSIGN expression {$$=$3; generateIRCode(OP_ASSIGN, $1, $3, NULL);}
      | primary
      ;
 
