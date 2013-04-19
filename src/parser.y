@@ -84,12 +84,9 @@
 %type<n> type
 %type<id> ID
 %type<n> NUM
-<<<<<<< HEAD
 %type<n> variable_declaration
 %type<n> identifier_declaration
-=======
 %type<regCnr> expression
->>>>>>> 35bd73c1e1a074ab6496e136e7eb1ec8fb8780ba
 
 %%
 
