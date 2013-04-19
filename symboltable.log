@@ -167,3 +167,20 @@ TYP, VAR_TYPE, NAME, ADDRESS
 	1, 262, threshold, 36
 	1, 262, i, 37
 	1, 262, sum, 38
+
+
+TYP, VAR_TYPE, NAME, ADDRESS
+1, 262, global, 0
+1, 262, a, 1
+0, 263, print, 11
+	1, 262, i, 11
+0, 262, scan, 12
+0, 263, exit, 12
+	1, 262, i, 12
+0, 262, func, 13
+	1, 262, arr, 25
+	1, 262, len, 35
+	1, 262, threshold, 36
+	1, 262, i, 37
+	1, 262, sum, 38
+0, 262, main, 39

@@ -4,6 +4,29 @@
 int reg_counter = 0;
 int lbl_counter = 0;
 
+//arithmetische Ausdrücke handhaben
+scope_list_t* doEval(enum opcodes opcode, scope_list_t *firstParam, scope_list_t *secondParam){
+	//hier wird eine neue temp variable erstellt
+	scope_list_t *result = (scope_list_t*) malloc(sizeof(scope_list_t));
+	//malloc(größe von symbol)
+	//name der tmp variable ist ".t"+reg_counter;
+	result->name = (char*) ".t"+reg_counter;
+	reg_counter++;
+	switch(opcode){
+		case OP_PLUS:
+
+			break;
+		case OP_MINUS:
+		case OP_MUL:
+		case OP_DIV:
+		case OP_UNARY_MINUS:
+		case OP_UNARY_PLUS:
+			break;
+	}
+	// return neue tempvariable und speichere diese im parser in $$
+	return result;
+}
+
 scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
 	scope_list_t *result = (scope_list_t*) malloc(sizeof(scope_list_t));
 
@@ -18,7 +41,7 @@ scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, str
 		case OP_UNARY_MINUS:
 		case OP_UNARY_PLUS:
 
-			doEval(op, firstParam, secondParam);
+			result = doEval(op, firstParam, secondParam);
 			break;
 		case OP_EQ:
 		case OP_NE:
@@ -62,29 +85,8 @@ void doAssign(firstParam, secondParam){
 }
 
 
-//arithmetische Ausdrücke handhaben
-void doEval(enum opcodes opcode, scope_list_t firstParam, scope_list_t secondParam){
-	//hier wird eine neue temp variable erstellt
-	scope_list_t *result;
-	//malloc(größe von symbol)
-	//result = (scope_list_t) malloc(scope_list_t);
-	//name der tmp variable ist ".t"+reg_counter;
-	result->name = (char*) ".t"+reg_counter;
-	reg_counter++;
-	//generate_ir_code(opcode, neue tempvariable, firstparam, secondparam)
-	switch(opcode){
-		case OP_PLUS:
 
-			break;
-		case OP_MINUS:
-		case OP_MUL:
-		case OP_DIV:
-		case OP_UNARY_MINUS:
-		case OP_UNARY_PLUS:
-			break;
-	}
-	// return neue tempvariable und speichere diese im parser in $$
-}
+
 
 void doGoto(){
 
