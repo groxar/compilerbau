@@ -4,7 +4,9 @@
 int reg_counter = 0;
 int lbl_counter = 0;
 
-void generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
+scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
+	scope_list_t *result = (scope_list_t*) malloc(sizeof(scope_list_t));
+
 	switch(op){
 		case OP_ASSIGN:
 
@@ -50,6 +52,7 @@ void generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope
 			break;*/
 
 	}
+	return result;
 }
 
 void doAssign(firstParam, secondParam){

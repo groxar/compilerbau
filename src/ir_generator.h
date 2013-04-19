@@ -25,5 +25,5 @@ enum opcodes {
 	OP_LOGICAL_NOT
 };
 
-void generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam);
+scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam);
 

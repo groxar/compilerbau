@@ -215,6 +215,27 @@ stmt_loop
 									
 expression
      : expression ASSIGN expression {$$=$3; generateIRCode(OP_ASSIGN, $1, $3, NULL);}
+     | expression LOGICAL_OR expression {$$=generateIRCode(OP_LOGICAL_OR, $1, $3, NULL);}
+     | expression LOGICAL_AND expression {$$=generateIRCode(OP_LOGICAL_AND, $1, $3, NULL);}
+     | LOGICAL_NOT expression {$$=generateIRCode(OP_LOGICAL_NOT, $2, NULL, NULL);}
+     | expression EQ expression {$$=generateIRCode(OP_EQ, $1, $3, NULL);}
+     | expression NE expression {$$=generateIRCode(OP_NE, $1, $3, NULL);}
+     | expression LS expression  {$$=generateIRCode(OP_LS, $1, $3, NULL);}
+     | expression LSEQ expression  {$$=generateIRCode(OP_LSEQ, $1, $3, NULL);}
+     | expression GTEQ expression  {$$=generateIRCode(OP_GTEQ, $1, $3, NULL);}
+     | expression GT expression {$$=generateIRCode(OP_GT, $1, $3, NULL);}
+     | expression PLUS expression  {$$=generateIRCode(OP_PLUS, $1, $3, NULL);}
+     | expression MINUS expression  {$$=generateIRCode(OP_MINUS, $1, $3, NULL);}
+     | expression SHIFT_LEFT expression
+     | expression SHIFT_RIGHT expression
+     | expression MUL expression  {$$=generateIRCode(OP_MUL, $1, $3, NULL);}
+     | expression MOD expression  {$$=generateIRCode(OP_MOD, $1, $3, NULL);}
+     | expression DIV expression   {$$=generateIRCode(OP_DIV, $1, $3, NULL);}
+     | MINUS expression %prec UNARY_MINUS
+     | PLUS expression %prec UNARY_PLUS
+     | ID BRACKET_OPEN primary BRACKET_CLOSE
+     | PARA_OPEN expression PARA_CLOSE
+     | function_call /*{ $$ = sa_FunctionCall($1 , @1); } //$$ == yylval->symbol*/
      | primary
      ;
 
