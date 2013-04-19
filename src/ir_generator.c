@@ -3,6 +3,23 @@
 
 int reg_counter = 0;
 int lbl_counter = 0;
+ir_code_t* pos_crnt = (ir_code_t*) 0;
+
+
+void quadList(enum opcodes opcode, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
+	ir_code_t* quad = (ir_code_t*) malloc(sizeof(ir_code_t));
+	quad->opcode = opcode;
+	quad->firstParam = firstParam;
+	quad->secondParam = secondParam;
+	quad->thirdParam = thirdParam;
+
+
+	quad->prev = pos_crnt;
+	if(pos_crnt != 0){
+		pos_crnt->next = quad;
+	}
+	pos_crnt = quad;
+}
 
 //arithmetische Ausdrücke handhaben
 scope_list_t* doEval(enum opcodes opcode, scope_list_t *firstParam, scope_list_t *secondParam){
@@ -12,6 +29,8 @@ scope_list_t* doEval(enum opcodes opcode, scope_list_t *firstParam, scope_list_t
 	//name der tmp variable ist ".t"+reg_counter;
 	result->name = (char*) ".t"+reg_counter;
 	reg_counter++;
+
+
 	switch(opcode){
 		case OP_PLUS:
 
@@ -27,10 +46,10 @@ scope_list_t* doEval(enum opcodes opcode, scope_list_t *firstParam, scope_list_t
 	return result;
 }
 
-scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
+scope_list_t* generateIRCode(enum opcodes opcode, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam){
 	scope_list_t *result = (scope_list_t*) malloc(sizeof(scope_list_t));
 
-	switch(op){
+	switch(opcode){
 		case OP_ASSIGN:
 
 			break;
@@ -41,7 +60,7 @@ scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, str
 		case OP_UNARY_MINUS:
 		case OP_UNARY_PLUS:
 
-			result = doEval(op, firstParam, secondParam);
+			result = doEval(opcode, firstParam, secondParam);
 			break;
 		case OP_EQ:
 		case OP_NE:

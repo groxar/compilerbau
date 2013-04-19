@@ -1,3 +1,5 @@
+typedef struct ir_code ir_code_t;
+
 enum opcodes {
 	OP_ASSIGN,
 	OP_PLUS,
@@ -25,5 +27,14 @@ enum opcodes {
 	OP_LOGICAL_NOT
 };
 
-scope_list_t* generateIRCode(enum opcodes op, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam);
+scope_list_t* generateIRCode(enum opcodes opcode, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam);
 
+struct ir_code{
+    enum opcodes opcode;
+    scope_list_t* firstParam;
+    scope_list_t* secondParam;
+    scope_list_t* thirdParam;
+
+    ir_code_t* prev;
+    ir_code_t* next;
+};
