@@ -115,30 +115,64 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { insertSymbol(VAR,$1,$3,0,$5); $$ = $1; } 
-     | variable_declaration COMMA ID { insertSymbol(VAR,$1,$3,0,1); $$ = $1; }
+     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { if(!insertSymbol(VAR,$1,$3,0,$5))
+        {
+            ;
+        }
+     $$ = $1; } 
+     | variable_declaration COMMA ID { if(!insertSymbol(VAR,$1,$3,0,1))
+        {
+
+        }
+     $$ = $1; }
      | identifier_declaration {$$ = $1}
      ;
 
 identifier_declaration
-     : type ID BRACKET_OPEN NUM BRACKET_CLOSE { $1 != VOID?
-                                                insertSymbol(VAR,$1,$2,0, $4)
-                                                : printf("Error"); $$ = $1; }
-     | type ID { insertSymbol(VAR,$1,$2,0,1); $$ = $1; }
+     : type ID BRACKET_OPEN NUM BRACKET_CLOSE {if(!insertSymbol(VAR,$1,$2,0, $4))
+        {
+            ;
+        }
+     }
+     | type ID { if(!insertSymbol(VAR,$1,$2,0,1))
+        {
+            ;
+        }
+     $$ = $1; }
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { endFunction(); }
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { endFunction(); }
+     : function_begin PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { if(!endFunction())
+        {
+            ;
+        }
+     }
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE { if(!endFunction())
+        {
+            ;
+        }
+     }
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE { endFunction(); }
-     | function_begin function_parameter_list PARA_CLOSE { endFunction(); }
+     : function_begin PARA_CLOSE { if(!endFunction())
+        {
+            ;
+        }
+     }
+     | function_begin function_parameter_list PARA_CLOSE { if(!endFunction())
+        {
+            ;
+        }
+     }
      ;
 
 function_begin
-     : type ID PARA_OPEN {n_para = 0; beginFunction($1,$2);}
+     : type ID PARA_OPEN {n_para = 0; if(!beginFunction($1,$2))
+        {
+            ;
+        }
+     }
      ;
 
 function_parameter_list
