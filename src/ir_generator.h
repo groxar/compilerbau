@@ -1,16 +1,18 @@
 enum opcodes {
-	OP_ASSIGN,
-	OP_ADD,
-	OP_SUB,
-	OP_MUL,
-	OP_DIV,
-	OP_MINUS,
-	OP_IFEQ,
-	OP_IFNE,
-	OP_IFGT,
-	OP_IFGE,
-	OP_IFLS,
-	OP_IFLE,
+	ASSIGN,
+	PLUS,
+	MINUS,
+	MUL,
+	DIV,
+	MOD,
+	UNARY_MINUS,
+	UNARY_PLUS,
+	EQ,
+	NE,
+	GT,
+	GTEQ,
+	LS,
+	LSEQ,
 	OP_GOTO,
 	OP_RETURN,
 	OP_RETURN_OPNULL,
@@ -18,9 +20,9 @@ enum opcodes {
 	OP_CALL_TWO,
 	OP_ARRAY_LD,
 	OP_ARRAY_ST,
-	OP_LOGICAL_OR,
-	OP_LOGICAL_AND,
-	OP_LOGICAL_NOT
+	LOGICAL_OR,
+	LOGICAL_AND,
+	LOGICAL_NOT
 };
 
 typedef struct symbol {

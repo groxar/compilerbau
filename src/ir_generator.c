@@ -1,25 +1,27 @@
 #include "ir_generator.h";
+#include "symboltable.h";
 
 int reg_counter = 0;
 int lbl_counter = 0;
 
-void generateIRCode(enum opcodes op, firstParam, secondParam, thirdParam, jump){
+void generateIRCode(enum opcodes op, scope_list_t firstParam, scope_list_t secondParam, scope_list_t thirdParam, jump){
 	switch(op){
-		case OP_ASSIGN:
+		case ASSIGN:
 
 			break;
-		case OP_ADD:
-		case OP_SUB:
-		case OP_MUL:
-		case OP_DIV:
-		case OP_MINUS:
+		case PLUS:
+		case MINUS:
+		case MUL:
+		case DIV:
+		case UNARY_MINUS:
+		case UNARY_PLUS:
 			break;
-		case OP_IFEQ:
-		case OP_IFNE:
-		case OP_IFGT:
-		case OP_IFGE:
-		case OP_IFLS:
-		case OP_IFLE:
+		case EQ:
+		case NE:
+		case GT:
+		case GTEQ:
+		case LS:
+		case LSEQ:
 
 			break;
 		case OP_GOTO:
@@ -55,12 +57,15 @@ void doAssign(firstParam, secondParam){
 
 void doEval(opcode, firstParam, secondParam){
 	//hier wird eine neue temp variable erstellt
+	scope_list_t *result;
 	//malloc(größe von symbol)
-	//name der tmp variable ist ".t"+reg_counter
-	//reg_counter++
+	result = (scope_list_t) malloc(scope_list_t);
+	//name der tmp variable ist ".t"+reg_counter;
+	result->name = (char*) ".t"+reg_counter;
+	reg_counter++;
 	//generate_ir_code(opcode, neue tempvariable, firstparam, secondparam)
+
 	// return neue tempvariable und speichere diese im parser in $$
-	insertSymbol();
 }
 
 void doGoto(){
