@@ -24,7 +24,9 @@ enum opcodes {
 	OP_AS,
 	OP_LOR,
 	OP_LAND,
-	OP_LNOT
+	OP_LNOT,
+    OP_SL,
+    OP_SR
 };
 
 struct ir_code{
@@ -38,6 +40,8 @@ struct ir_code{
 };
 
 void initIR();
-scope_list_t* genIRCode(enum opcodes opcode, scope_list_t* firstParam, scope_list_t* secondParam, scope_list_t* thirdParam);
+scope_list_t* calcIR(enum opcodes opcode, struct scope_list* secondPara, struct scope_list* thirdPara);
+scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara);
+scope_list_t* genTemp(int var_type, int value);
 
 

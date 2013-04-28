@@ -29,7 +29,7 @@ DHBWCC_OBJECTS = $(addprefix $(OBJDIR)/, scanner.o parser.o main.o diag.o resour
 .PHONY: compiler cc_objects cc_parser cc_scanner 
 compiler: $(OBJDIR)/dhbwcc
 cc_objects: $(GENERATED_OBJECTS)
-parser: $(OBJDIR)/parser.c $(OBJDIR)/parser.h
+parser: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
 scanner: $(OBJDIR)/scanner.c
 
 $(OBJDIR)/dhbwcc: $(DHBWCC_OBJECTS) 
@@ -47,14 +47,14 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.c
 $(OBJDIR)/symboltable.o: $(SRCDIR)/symboltable.c $(SRCDIR)/symboltable.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(OBJDIR)/parser.h
+$(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(SRCDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/parser.o: $(OBJDIR)/parser.c $(OBJDIR)/parser.h
+$(OBJDIR)/parser.o: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/parser.c $(OBJDIR)/parser.h: $(SRCDIR)/parser.y
-	$(BISON) -v -t --locations --defines=$(OBJDIR)/parser.h \
+$(OBJDIR)/parser.c $(SRCDIR)/parser.h: $(SRCDIR)/parser.y
+	$(BISON) -v -t --locations --defines=$(SRCDIR)/parser.h \
 	  -o $(OBJDIR)/parser.c -rall --report-file=$(OBJDIR)/bison.out $<
 
 $(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(OBJDIR)/parser.h

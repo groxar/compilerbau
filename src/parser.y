@@ -37,6 +37,7 @@
 {
 	yydebug = 1;
     initSymboltable();
+    initIR();
 };
 
 /*
@@ -218,34 +219,36 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression {$$=genIRCode(OP_ASS, $1, $3, NULL);}
-     | expression LOGICAL_OR expression {$$=genIRCode(OP_LOR, $1, $3, NULL);}
-     | expression LOGICAL_AND expression {$$=genIRCode(OP_LAND, $1, $3, NULL);}
-     | LOGICAL_NOT expression {$$=genIRCode(OP_LNOT, $2, NULL, NULL);}
-     | expression EQ expression {$$=genIRCode(OP_EQ, $1, $3, NULL);}
-     | expression NE expression {$$=genIRCode(OP_NE, $1, $3, NULL);}
-     | expression LS expression  {$$=genIRCode(OP_LT, $1, $3, NULL);}
-     | expression LSEQ expression  {$$=genIRCode(OP_LE, $1, $3, NULL);}
-     | expression GTEQ expression  {$$=genIRCode(OP_GE, $1, $3, NULL);}
-     | expression GT expression {$$=genIRCode(OP_GT, $1, $3, NULL);}
-     | expression PLUS expression  {$$=genIRCode(OP_ADD, $1, $3, NULL);}
-     | expression MINUS expression  {$$=genIRCode(OP_SUB, $1, $3, NULL);}
-     | expression SHIFT_LEFT expression 
-     | expression SHIFT_RIGHT expression
-     | expression MUL expression  {$$=genIRCode(OP_MUL, $1, $3, NULL);}
-     | expression MOD expression  {$$=genIRCode(OP_MOD, $1, $3, NULL);}
-     | expression DIV expression   {$$=genIRCode(OP_DIV, $1, $3, NULL);}
-     | MINUS expression %prec UNARY_MINUS
-     | PLUS expression %prec UNARY_PLUS
-     | ID BRACKET_OPEN primary BRACKET_CLOSE
-     | PARA_OPEN expression PARA_CLOSE
-     | function_call /*{ $$ = sa_FunctionCall($1 , @1); } //$$ == yylval->symbol*/
-     | primary
+     : expression ASSIGN expression {$$=assignIR($1,$3);} 
+     | expression LOGICAL_OR expression {$$=calcIR(OP_LOR,$1,$3);}
+     | expression LOGICAL_AND expression {$$=calcIR(OP_LAND,$1,$3);}
+     | LOGICAL_NOT expression 
+     | expression EQ expression 
+     | expression NE expression 
+     | expression LS expression  
+     | expression LSEQ expression 
+     | expression GTEQ expression 
+     | expression GT expression 
+     | expression PLUS expression {$$=calcIR(OP_ADD,$1,$3);}
+     | expression MINUS expression {$$=calcIR(OP_SUB,$1,$3);}  
+     | expression SHIFT_LEFT expression {$$=calcIR(OP_SL,$1,$3);}
+     | expression SHIFT_RIGHT expression {$$=calcIR(OP_SR,$1,$3);}
+     | expression MUL expression {$$=calcIR(OP_MUL,$1,$3);}
+     | expression MOD expression {$$=calcIR(OP_MOD,$1,$3);}
+     | expression DIV expression {$$=calcIR(OP_DIV,$1,$3);}
+     | MINUS expression %prec UNARY_MINUS {$$=calcIR(OP_SUB, genTemp(INT,0),$2);}
+     | PLUS expression %prec UNARY_PLUS {$$=$2;}
+     | ID BRACKET_OPEN primary BRACKET_CLOSE  
+     | PARA_OPEN expression PARA_CLOSE {$$=$2;}
+     | function_call {$$=$1;} 
+     | primary {$$=$1;}
      ;
 
+
+
 primary
-     : NUM { $$ = genTemp($1); }
-     | ID { $$ = getSymbol($1); }
+     : NUM { $$ = genTemp(INT,$1); }
+     | ID {$$ = getSymbol($1); } 
      ;
 
 function_call
