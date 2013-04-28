@@ -1,6 +1,4 @@
-#ifndef SYMBOLTABLE_H_
-#define SYMBOLTABLE_H_
-
+#pragma once
 //ENUMS
 enum type{
     FUNC, VAR
@@ -47,4 +45,3 @@ int beginFunction(int _ret_val, char* _name);
 int setN_Para(char* _name, int _n_para);
 
 int endFunction();
-#endif

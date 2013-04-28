@@ -88,7 +88,11 @@
 %type<n> NUM
 %type<n> variable_declaration
 %type<n> identifier_declaration
+/*ir code*/
 %type<b> expression
+%type<b> primary
+%type<b> function_call 
+
 
 %%
 
@@ -124,7 +128,7 @@ variable_declaration
 
         }
      $$ = $1; }
-     | identifier_declaration {$$ = $1}
+     | identifier_declaration {$$ = $1;}
      ;
 
 identifier_declaration
@@ -214,23 +218,23 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression {$$=$3; generateIRCode(OP_ASSIGN, $1, $3, NULL, 0);}
-     | expression LOGICAL_OR expression {$$=generateIRCode(OP_LOGICAL_OR, $1, $3, NULL, 0);}
-     | expression LOGICAL_AND expression {$$=generateIRCode(OP_LOGICAL_AND, $1, $3, NULL, 0);}
-     | LOGICAL_NOT expression {$$=generateIRCode(OP_LOGICAL_NOT, $2, NULL, NULL, 0);}
-     | expression EQ expression {$$=generateIRCode(OP_EQ, $1, $3, NULL, 0);}
-     | expression NE expression {$$=generateIRCode(OP_NE, $1, $3, NULL, 0);}
-     | expression LS expression  {$$=generateIRCode(OP_LS, $1, $3, NULL, 0);}
-     | expression LSEQ expression  {$$=generateIRCode(OP_LSEQ, $1, $3, NULL, 0);}
-     | expression GTEQ expression  {$$=generateIRCode(OP_GTEQ, $1, $3, NULL, 0);}
-     | expression GT expression {$$=generateIRCode(OP_GT, $1, $3, NULL, 0);}
-     | expression PLUS expression  {$$=generateIRCode(OP_PLUS, $1, $3, NULL, 0);}
-     | expression MINUS expression  {$$=generateIRCode(OP_MINUS, $1, $3, NULL, 0);}
-     | expression SHIFT_LEFT expression
+     : expression ASSIGN expression {$$=genIRCode(OP_ASS, $1, $3, NULL);}
+     | expression LOGICAL_OR expression {$$=genIRCode(OP_LOR, $1, $3, NULL);}
+     | expression LOGICAL_AND expression {$$=genIRCode(OP_LAND, $1, $3, NULL);}
+     | LOGICAL_NOT expression {$$=genIRCode(OP_LNOT, $2, NULL, NULL);}
+     | expression EQ expression {$$=genIRCode(OP_EQ, $1, $3, NULL);}
+     | expression NE expression {$$=genIRCode(OP_NE, $1, $3, NULL);}
+     | expression LS expression  {$$=genIRCode(OP_LT, $1, $3, NULL);}
+     | expression LSEQ expression  {$$=genIRCode(OP_LE, $1, $3, NULL);}
+     | expression GTEQ expression  {$$=genIRCode(OP_GE, $1, $3, NULL);}
+     | expression GT expression {$$=genIRCode(OP_GT, $1, $3, NULL);}
+     | expression PLUS expression  {$$=genIRCode(OP_ADD, $1, $3, NULL);}
+     | expression MINUS expression  {$$=genIRCode(OP_SUB, $1, $3, NULL);}
+     | expression SHIFT_LEFT expression 
      | expression SHIFT_RIGHT expression
-     | expression MUL expression  {$$=generateIRCode(OP_MUL, $1, $3, NULL, 0);}
-     | expression MOD expression  {$$=generateIRCode(OP_MOD, $1, $3, NULL, 0);}
-     | expression DIV expression   {$$=generateIRCode(OP_DIV, $1, $3, NULL, 0);}
+     | expression MUL expression  {$$=genIRCode(OP_MUL, $1, $3, NULL);}
+     | expression MOD expression  {$$=genIRCode(OP_MOD, $1, $3, NULL);}
+     | expression DIV expression   {$$=genIRCode(OP_DIV, $1, $3, NULL);}
      | MINUS expression %prec UNARY_MINUS
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
@@ -240,8 +244,8 @@ expression
      ;
 
 primary
-     : NUM
-     | ID
+     : NUM { $$ = genTemp($1); }
+     | ID { $$ = getSymbol($1); }
      ;
 
 function_call
@@ -253,8 +257,8 @@ function_call_parameters
      : function_call_parameters COMMA expression
      | expression
      ;
-%%
 
+%%
 void yyerror (const char *msg)
 {
 	FATAL_COMPILER_ERROR(INVALID_SYNTAX, 1, "(%d.%d-%d.%d): %s\n", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column, msg);

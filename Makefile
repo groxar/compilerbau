@@ -60,7 +60,7 @@ $(OBJDIR)/parser.c $(OBJDIR)/parser.h: $(SRCDIR)/parser.y
 $(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(OBJDIR)/parser.h
 	$(FLEX) -o $(OBJDIR)/scanner.c $<
 	
-$(OBJDIR)/ir_generator.o: $(SRCDIR)/ir_generator.c
+$(OBJDIR)/ir_generator.o: $(SRCDIR)/ir_generator.c $(SRCDIR)/ir_generator.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean_compiler

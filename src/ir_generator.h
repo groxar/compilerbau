@@ -1,41 +1,43 @@
+#pragma once
 typedef struct ir_code ir_code_t;
 
 enum opcodes {
-	OP_ASSIGN,
-	OP_PLUS,
-	OP_MINUS,
+	OP_ASS,
+	OP_ADD,
+	OP_SUB,
 	OP_MUL,
 	OP_DIV,
+    OP_NEG,
 	OP_MOD,
-	OP_UNARY_MINUS,
-	OP_UNARY_PLUS,
 	OP_EQ,
 	OP_NE,
 	OP_GT,
-	OP_GTEQ,
-	OP_LS,
-	OP_LSEQ,
-	OP_GOTO,
-	OP_RETURN,
-	OP_RETURN_OPNULL,
-	OP_CALL_ONE,
-	OP_CALL_TWO,
-	OP_ARRAY_LD,
-	OP_ARRAY_ST,
-	OP_LOGICAL_OR,
-	OP_LOGICAL_AND,
-	OP_LOGICAL_NOT
+	OP_GE,
+	OP_LT,
+	OP_LE,
+	OP_GO,
+	OP_RET,
+	OP_RETN,
+	OP_CAL,
+	OP_CALN,
+	OP_AL,
+	OP_AS,
+	OP_LOR,
+	OP_LAND,
+	OP_LNOT
 };
-
-scope_list_t* generateIRCode(enum opcodes opcode, struct scope_list *firstParam, struct scope_list *secondParam, struct scope_list *thirdParam, int jump);
 
 struct ir_code{
     enum opcodes opcode;
-    scope_list_t* firstParam;
-    scope_list_t* secondParam;
-    scope_list_t* thirdParam;
-    int jump;
+    scope_list_t* firstPara;
+    scope_list_t* secondPara;
+    scope_list_t* thirdPara;
 
     ir_code_t* prev;
     ir_code_t* next;
 };
+
+void initIR();
+scope_list_t* genIRCode(enum opcodes opcode, scope_list_t* firstParam, scope_list_t* secondParam, scope_list_t* thirdParam);
+
+
