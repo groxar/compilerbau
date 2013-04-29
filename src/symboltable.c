@@ -2,11 +2,14 @@
 #include "string.h"
 #include "stdio.h"
 #include "symboltable.h"
+#include "parser.h"
 
 static scope_list_t*  global_scope = (scope_list_t*) 0;
 static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den aktuellen scope
 static scope_list_t** crnt_pos     = &global_scope; //crnt_pos zeigt auf nächste freie Stelle
 static int            next_address = 0;
+
+void printTable();
 
 void initSymboltable()
 {
@@ -139,7 +142,7 @@ int beginFunction(int _ret_val, char*_name)
         //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
 
         function = (func_t*) malloc(sizeof(func_t));
-        function->scope =(func_t*) 0;
+        function->scope =(scope_list_t*) 0;
         function->n_para = 0; //Parameter-Zahl auf 0 setzen
          int result = insertSymbol(FUNC, _ret_val, _name, (int) function,0);//!!long || int (depends on architecture)
         if(result!=0) //falls insertSymbol fehlgeschlagen ist
@@ -178,6 +181,8 @@ int setN_Para(char* _name, int _n_para)
     if(sym->var.func_ptr->n_para != _n_para && sym->var.func_ptr->n_para != 0)
         return -1;
 
+    sym->var.func_ptr->n_para = _n_para;
+
     return 0;
 }
 /**
@@ -205,19 +210,24 @@ void printTable()
     scope_list_t* entry = global_scope;
     scope_list_t* func_entry;
     FILE*         file = fopen("symboltable.log","a");
+    const char* string_type [] = {"Function","Variable"};
+    const char* string_var []  = {"int","void"};
 
-    fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS\n");
+    fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS, Value\n");
     
     while(entry != 0)
     {
-        fprintf(file,"%d, %d, %s, %d\n",entry->type,entry->var_type,entry->name,entry->address);
-
+        if(entry->type==VAR)
+            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type-INT],entry->name,entry->address,entry->var.value);
+        else            
+            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type-INT],entry->name,entry->address,entry->var.func_ptr->n_para);
+        
         if(entry->type == FUNC)
         {
             func_entry = entry->var.func_ptr->scope;
             while(func_entry != 0)
             {
-                fprintf(file,"\t%d, %d, %s, %d\n",func_entry->type,func_entry->var_type,func_entry->name,func_entry->address);
+                fprintf(file,"\t%s, %s, %s, %d, %d\n",string_type[(int)func_entry->type],string_var[(int)func_entry->var_type - INT],func_entry->name,func_entry->address,func_entry->var.value);
                 func_entry = func_entry->next;
             }
         }
@@ -227,3 +237,4 @@ void printTable()
 
     fclose(file);
 }
+

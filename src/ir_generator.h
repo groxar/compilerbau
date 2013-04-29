@@ -16,6 +16,8 @@ enum opcodes {
 	OP_LT,
 	OP_LE,
 	OP_GO,
+    OP_GOT,//Goto on != 0
+    OP_GOF,//Goto on == 0
 	OP_RET,
 	OP_RETN,
 	OP_CAL,
@@ -26,7 +28,8 @@ enum opcodes {
 	OP_LAND,
 	OP_LNOT,
     OP_SL,
-    OP_SR
+    OP_SR,
+    LABEL
 };
 
 struct ir_code{
@@ -40,8 +43,14 @@ struct ir_code{
 };
 
 void initIR();
+void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* term);
+scope_list_t* arrayLoadIR(struct scope_list *secondPara, struct scope_list *thirdPara);
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list* secondPara, struct scope_list* thirdPara);
 scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara);
 scope_list_t* genTemp(int var_type, int value);
+scope_list_t* addLabel(char* name);
+scope_list_t* genLabel();
+ir_code_t* trackLabel(struct scope_list* label);
+ir_code_t* trackUnsetGoto();
 
 
