@@ -44,12 +44,16 @@ struct ir_code{
 
 void initIR();
 void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* term);
+void backPatch(int i);
+void frontPatch();
+
 scope_list_t* arrayLoadIR(struct scope_list *secondPara, struct scope_list *thirdPara);
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list* secondPara, struct scope_list* thirdPara);
 scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara);
 scope_list_t* genTemp(int var_type, int value);
 scope_list_t* addLabel(char* name);
 scope_list_t* genLabel();
+
 ir_code_t* trackLabel(struct scope_list* label);
 ir_code_t* trackUnsetGoto();
 

@@ -213,7 +213,7 @@ stmt_block
 	
 stmt_conditional
      : stmt_begin 
-     | stmt_begin ELSE stmt
+     | stmt_begin ELSE { backPatch(1); gotoIR(OP_GO,NULL,NULL); frontPatch();} stmt {trackUnsetGoto()->firstPara = genLabel();}
      ;
 
 stmt_begin

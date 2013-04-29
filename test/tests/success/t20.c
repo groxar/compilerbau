@@ -2,14 +2,17 @@
 int a;
 int main()
 {
-    int i;
-    int bsd[23];
-    i=20;
-    a=5;
-    i=i+i;
-    a=20+4+i;
+    a=1;
+    if(1+1)
+    {
+        a=3+3;
+    }
+    else
+    {
+        a=3+4;
+    }
+    a=2+2;
     //i=1/2*3+5+12-2%3>>2&2|2+i<<3;
-    bsd[20]=bsd[i];
     return a;
 }
 

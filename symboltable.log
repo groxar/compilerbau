@@ -1,20 +1,294 @@
 Symboltable log
 
 TYP, VAR_TYPE, NAME, ADDRESS, Value
-Function, int, print, 0, 0
+Variable, int, a, 0, 0
 
 
 TYP, VAR_TYPE, NAME, ADDRESS, Value
-Function, int, print, 0, 0
-	Variable, int, i, 0, 0
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
 
 
 TYP, VAR_TYPE, NAME, ADDRESS, Value
-Function, int, print, 0, 0
-	Variable, int, i, 1, 0
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
 
 
 TYP, VAR_TYPE, NAME, ADDRESS, Value
-Function, int, print, 0, 1
-	Variable, int, i, 1, 0
-	Variable, int, #0, 2, 2
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 0
+	Variable, int, b, 10, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 0
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 0
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+	Variable, int, d, 12, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 3
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+	Variable, int, d, 12, 0
+	Variable, int, asd, 13, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 3
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+	Variable, int, d, 12, 0
+	Variable, int, asd, 13, 0
+Function, int, foo, 14, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 3
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+	Variable, int, d, 12, 0
+	Variable, int, asd, 13, 0
+Function, int, foo, 14, 0
+	Variable, int, bsd, 14, 0
+
+
+TYP, VAR_TYPE, NAME, ADDRESS, Value
+Variable, int, a, 0, 0
+Function, int, main, 1, 0
+	Variable, int, #0, 1, 1
+	Variable, int, #1, 2, 1
+	Variable, int, #2, 3, 1
+	Variable, int, #3, 4, 3
+	Variable, int, #4, 5, 3
+	Function, void, #l0, 6, 0
+	Variable, int, #5, 6, 3
+	Variable, int, #6, 7, 4
+	Function, void, #l1, 8, 0
+	Variable, int, #7, 8, 2
+	Variable, int, #8, 9, 2
+Function, int, func, 10, 3
+	Variable, int, b, 10, 0
+	Variable, int, c, 11, 0
+	Variable, int, d, 12, 0
+	Variable, int, asd, 13, 0
+Function, int, foo, 14, 0
+	Variable, int, bsd, 14, 0
+	Variable, int, #9, 15, 1

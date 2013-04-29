@@ -21,14 +21,23 @@ void initIR()
 void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_list *secondPara, struct scope_list *thirdPara){
 
 	ir_code_t* quad = (ir_code_t*) malloc(sizeof(ir_code_t));
+    ir_code_t* temp;
 
 	quad->opcode        = opcode;
 	quad->firstPara     = firstPara;
 	quad->secondPara    = secondPara;
 	quad->thirdPara     = thirdPara;
 	quad->prev          = pos_crnt;
+    quad->next          = (ir_code_t*) 0;
+    
+   	if(pos_crnt != 0){
+        temp = pos_crnt->next;//insertion between quads
+        if(temp != 0)
+        {
+            temp->prev = quad;
+            quad->next = temp;
+        }
 
-	if(pos_crnt != 0){
 		pos_crnt->next = quad;
 	}
     else{
@@ -37,6 +46,21 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
 
 	pos_crnt = quad;
     printIR();
+}
+
+void backPatch(int i){
+    for(; 0 < i && pos_crnt->prev != 0;i--)
+    {
+        pos_crnt = pos_crnt->prev;
+    }
+}
+
+void frontPatch()
+{
+    while(pos_crnt->next != 0)
+    {
+        pos_crnt = pos_crnt->next;
+    }
 }
 
 ir_code_t* trackLabel(struct scope_list* target){
@@ -55,6 +79,9 @@ ir_code_t* trackLabel(struct scope_list* target){
 
 ir_code_t* trackUnsetGoto(){
 
+
+    printf("/n/n%d",(int)pos_crnt);
+    fflush(stdout);
     ir_code_t* pos = pos_crnt;
 
     while(pos != 0)
@@ -155,9 +182,9 @@ void printIR()
             case OP_GE:     fprintf(file,"\t%s = %s >= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_LT:     fprintf(file,"\t%s = %s < %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_LE:     fprintf(file,"\t%s = %s <= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_GO:     fprintf(file,"\tgoto %s", entry->firstPara->name);break;
-            case OP_GOT:    fprintf(file,"\tgoto %s if %s != 0", entry->firstPara->name, entry->secondPara->name);break;
-            case OP_GOF:    fprintf(file,"\tgoto %s if %s == 0", entry->firstPara->name, entry->secondPara->name);break;
+            case OP_GO:     fprintf(file,"\tgoto %s", (entry->firstPara?entry->firstPara->name:"?"));break;
+            case OP_GOT:    fprintf(file,"\tgoto %s if %s != 0", (entry->firstPara?entry->firstPara->name:"?\0"), entry->secondPara->name);break;
+            case OP_GOF:    fprintf(file,"\tgoto %s if %s == 0", (entry->firstPara?entry->firstPara->name:"?\0"), entry->secondPara->name);break;
             case OP_RET:    fprintf(file,"\treturn");break;
             case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
@@ -165,7 +192,7 @@ void printIR()
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;
-            case LABEL:     fprintf(file, "%s", entry->firstPara->name);
+            case LABEL:     entry->firstPara->name[0]!='#'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
         }
         fprintf(file,"\n");
 
