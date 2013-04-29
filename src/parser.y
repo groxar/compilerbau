@@ -213,7 +213,7 @@ stmt_block
 	
 stmt_conditional
      : stmt_begin 
-     | stmt_begin ELSE { backPatch(1); gotoIR(OP_GO,NULL,NULL); frontPatch();} stmt {trackUnsetGoto()->firstPara = genLabel();}
+     | stmt_begin ELSE { backPatch(1); gotoIR(OP_GO,NULL,NULL); frontPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();}
      ;
 
 stmt_begin
@@ -221,8 +221,8 @@ stmt_begin
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE stmt
-     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON
+     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,$3);gotoIR(OP_GOT,genLabel(),$3); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} 
+     | DO {gotoIR(OP_GOT,genLabel(),NULL); backPatch(1);} stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON {frontPatch(1);trackUnsetGoto()->secondPara = $6; }
      ;
 									
 expression

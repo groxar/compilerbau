@@ -6,199 +6,80 @@ main
 
 
 main
-	a = #0
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto ? if #1 == 0
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto ? if #1 == 0
-	#3 = #3 + #4
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto ? if #1 == 0
-	#3 = #3 + #4
-	a = #3
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto ? if #1 == 0
-	#3 = #3 + #4
-	a = #3
 	#l0
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto ?
 	#l0
+	goto #l0 if ? != 0
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto ?
 	#l0
-	#5 = #5 + #6
+	a = a + a
+	goto #l0 if ? != 0
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto ?
 	#l0
-	#5 = #5 + #6
-	a = #5
+	a = a + a
+	a = a
+	goto #l0 if ? != 0
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto ?
 	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
+	a = a + a
+	a = a
+	a = a > #0
+	goto #l0 if ? != 0
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
 	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
-	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-	a = #7
-
-
-
-main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
-	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-	a = #7
+	a = a + a
+	a = a
+	a = a > #0
+	goto #l0 if a != 0
 func
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
 	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-	a = #7
+	a = a + a
+	a = a
+	a = a > #0
+	goto #l0 if a != 0
 func
 foo
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
 	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-	a = #7
+	a = a + a
+	a = a
+	a = a > #0
+	goto #l0 if a != 0
 func
 foo
-	bsd = bsd + #9
+	bsd = bsd + #1
 
 
 
 main
-	a = #0
-	#1 = #1 + #2
-	goto #l0 if #1 == 0
-	#3 = #3 + #4
-	a = #3
-	goto #l1
 	#l0
-	#5 = #5 + #6
-	a = #5
-	#l1
-	#7 = #7 + #8
-	a = #7
+	a = a + a
+	a = a
+	a = a > #0
+	goto #l0 if a != 0
 func
 foo
-	bsd = bsd + #9
+	bsd = bsd + #1
 	bsd = bsd

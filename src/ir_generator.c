@@ -45,19 +45,19 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
     }
 
 	pos_crnt = quad;
-    printIR();
+   printIR();
 }
 
 void backPatch(int i){
-    for(; 0 < i && pos_crnt->prev != 0;i--)
+    for(; i > 0 && pos_crnt->prev != 0;i--)
     {
         pos_crnt = pos_crnt->prev;
     }
 }
 
-void frontPatch()
+void frontPatch(int i)
 {
-    while(pos_crnt->next != 0)
+    for(;i > 0 && pos_crnt->next != 0;i--)
     {
         pos_crnt = pos_crnt->next;
     }
@@ -79,14 +79,14 @@ ir_code_t* trackLabel(struct scope_list* target){
 
 ir_code_t* trackUnsetGoto(){
 
-
-    printf("/n/n%d",(int)pos_crnt);
-    fflush(stdout);
     ir_code_t* pos = pos_crnt;
 
     while(pos != 0)
     {
-        if((pos->opcode == OP_GO || pos->opcode == OP_GOT || pos->opcode == OP_GOF )&& pos->firstPara == 0)
+        if(pos->opcode == OP_GO&& pos->firstPara == 0)
+            return pos;
+
+        else if((pos->opcode == OP_GOT || pos->opcode == OP_GOF) && ( pos->firstPara == 0 || pos->secondPara == 0))
             return pos;
         pos = pos->prev; 
     }
@@ -183,8 +183,8 @@ void printIR()
             case OP_LT:     fprintf(file,"\t%s = %s < %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_LE:     fprintf(file,"\t%s = %s <= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_GO:     fprintf(file,"\tgoto %s", (entry->firstPara?entry->firstPara->name:"?"));break;
-            case OP_GOT:    fprintf(file,"\tgoto %s if %s != 0", (entry->firstPara?entry->firstPara->name:"?\0"), entry->secondPara->name);break;
-            case OP_GOF:    fprintf(file,"\tgoto %s if %s == 0", (entry->firstPara?entry->firstPara->name:"?\0"), entry->secondPara->name);break;
+            case OP_GOT:    fprintf(file,"\tgoto %s if %s != 0", (entry->firstPara?entry->firstPara->name:"?\0"), (entry->secondPara?entry->secondPara->name:"?\0"));break;
+            case OP_GOF:    fprintf(file,"\tgoto %s if %s == 0", (entry->firstPara?entry->firstPara->name:"?\0"), (entry->secondPara?entry->secondPara->name:"?\0"));break;
             case OP_RET:    fprintf(file,"\treturn");break;
             case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
@@ -199,7 +199,7 @@ void printIR()
         entry = entry->next;
     }
 
-
+ 
     fclose(file);
 }
 
