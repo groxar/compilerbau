@@ -47,6 +47,7 @@ void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* te
 void backPatch(int i);
 void frontPatch(int i);
 
+scope_list_t* callFuncIR(struct scope_list* func);
 scope_list_t* arrayLoadIR(struct scope_list *secondPara, struct scope_list *thirdPara);
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list* secondPara, struct scope_list* thirdPara);
 scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara);

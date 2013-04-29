@@ -90,7 +90,7 @@ typedef union YYSTYPE
   char* id;
   int regCnr;
   int lblCnr;
-  struct scope_list *b;
+  struct scope_list *s;
 
 
 

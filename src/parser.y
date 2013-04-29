@@ -16,7 +16,7 @@
   char* id;
   int regCnr;
   int lblCnr;
-  struct scope_list *b;
+  struct scope_list *s;
 }
 
 %{
@@ -91,9 +91,10 @@
 %type<n> variable_declaration
 %type<n> identifier_declaration
 /*ir code*/
-%type<b> expression
-%type<b> primary
-%type<b> function_call 
+%type<s> expression
+%type<s> primary
+%type<s> function_call
+%type<s> function_call_parameters
 %type<id> function_begin
 
 
@@ -259,13 +260,13 @@ primary
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE
-      | ID PARA_OPEN function_call_parameters PARA_CLOSE
+      : ID PARA_OPEN PARA_CLOSE { callFuncIR(getSymbol($1));}
+      | ID PARA_OPEN function_call_parameters PARA_CLOSE { callFuncIR(getSymbol($1));}
       ;
 
 function_call_parameters
      : function_call_parameters COMMA expression
-     | expression
+     | expression 
      ;
 
 %%
