@@ -130,6 +130,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
  * \return Returns 0 for success
  * 		   Returns -1 if a function with this name already exists
  * 		   Returns -2 if currently not in global scope
+ * 		   Returns -3 if different return value
  */
 int beginFunction(int _ret_val, char*_name)
 {
@@ -173,6 +174,8 @@ int beginFunction(int _ret_val, char*_name)
  * \brief Sets the number of parameters of a funtion
  * \param __name The name of the function
  * \param _n_para The number of parameters
+ * \return -1 different number of parameters
+ * 			0 successfull
  */
 int setN_Para(char* _name, int _n_para)
 {
@@ -189,6 +192,7 @@ int setN_Para(char* _name, int _n_para)
 }
 /**
  * \brief Ends the function by changing the current scope back to globalscope
+ * \return 0 successfull
  */
 //needs return type check
 int endFunction()
