@@ -30,7 +30,7 @@ DHBWCC_OBJECTS = $(addprefix $(OBJDIR)/, scanner.o parser.o main.o diag.o resour
 compiler: $(OBJDIR)/dhbwcc
 cc_objects: $(GENERATED_OBJECTS)
 parser: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
-scanner: $(OBJDIR)/scanner.c
+scanner: $(OBJDIR)/scannSRCc
 
 $(OBJDIR)/dhbwcc: $(DHBWCC_OBJECTS) 
 	$(CC) $(CFLAGS) -o $@ $+
