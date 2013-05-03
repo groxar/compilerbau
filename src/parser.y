@@ -258,7 +258,17 @@ expression
      | PLUS expression %prec UNARY_PLUS         {$$ = $2;}
      | ID BRACKET_OPEN primary BRACKET_CLOSE    {$$ = arrayLoadIR(getSymbol($1),$3);}
      | PARA_OPEN expression PARA_CLOSE          {$$ = $2;}
-     | function_call                            {$$ = $1;} 
+     | function_call                            {if($1->var_type!=VOID)
+        {
+            $$ = $1;
+        
+        }
+        else
+        {
+            yyerror("blup");
+        }
+     }
+
      | primary                                  {$$ = $1;}
      ;
 
@@ -270,7 +280,16 @@ primary
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE { callFuncIR(getSymbol($1));}
+      : ID PARA_OPEN PARA_CLOSE {   scope_list_t* func = getSymbol($1);
+                                    if(func)
+                                    {
+                                        $$=callFuncIR(getSymbol($1));
+                                    }
+                                    else
+                                    {
+                                        ;
+                                    }
+                                }
       | ID PARA_OPEN function_call_parameters PARA_CLOSE { callFuncIR(getSymbol($1));}
       ;
 
