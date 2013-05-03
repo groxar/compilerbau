@@ -126,15 +126,15 @@ variable_declaration
      : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { 
      	switch(insertSymbol(VAR,$1,$3,0,$5)){
 	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("double variable declaration"); break;
-	     	case -2: yyerror("variable type can't be void"); break;
+	     	case -1: yyerror("Double variable declaration"); break;
+	     	case -2: yyerror("Variable type can't be void"); break;
 	     }
      $$ = $1; } 
      | variable_declaration COMMA ID { 
      	switch(insertSymbol(VAR,$1,$3,0,1)){
 	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("double variable declaration"); break;
-	     	case -2: yyerror("variable type can't be void"); break;
+	     	case -1: yyerror("Double variable declaration"); break;
+	     	case -2: yyerror("Variable type can't be void"); break;
 	     } 
      }
      | identifier_declaration {$$ = $1;}
@@ -144,49 +144,50 @@ identifier_declaration
      : type ID BRACKET_OPEN NUM BRACKET_CLOSE {
      	switch(insertSymbol(VAR,$1,$2,0,1)){
 	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("double variable declaration"); break;
-	     	case -2: yyerror("variable type can't be void"); break;
+	     	case -1: yyerror("Double variable declaration"); break;
+	     	case -2: yyerror("Variable type can't be void"); break;
 	     } 
      }
      | type ID { 
      	switch(insertSymbol(VAR,$1,$2,0,1)){
 	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("double variable declaration"); break;
-	     	case -2: yyerror("variable type can't be void"); break;
+	     	case -1: yyerror("Double variable declaration"); break;
+	     	case -2: yyerror("Variable type can't be void"); break;
 	     } 
      }
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {addLabel($1);} stmt_list BRACE_CLOSE { if(!endFunction())
-        {
-            ;
-        }
-     }
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {addLabel($1); setN_Para($1,n_para);} stmt_list BRACE_CLOSE { if(!endFunction())
-        {
-            ;
-        }
-     }
+     : function_begin PARA_CLOSE BRACE_OPEN {addLabel($1);} stmt_list BRACE_CLOSE { endFunction(); }
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {addLabel($1); 
+	     if(!setN_Para($1,n_para)) 
+	     {
+	     	printf("Anzahl Parameter: %i",n_para);
+	     	fflush(stdout);
+	     }else{
+	     	yyerror("Different number of parameters");
+	     }
+	 ;} stmt_list BRACE_CLOSE { endFunction();}
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE { if(!endFunction())
-        {
-            ;
-        }
-     }
-     | function_begin function_parameter_list PARA_CLOSE { if(!endFunction())
-        {
-            ;
-        }
-     }
+     : function_begin PARA_CLOSE { endFunction();}
+     | function_begin function_parameter_list PARA_CLOSE { endFunction(); 
+     	if(!setN_Para($1,n_para)){
+	     	printf("Anzahl Parameter: %i",n_para);
+	     	fflush(stdout);
+	     }else{
+	     	yyerror("Different number of parameters");
+	     }}
      ;
 
 function_begin
-     : type ID PARA_OPEN {n_para = 0; if(!beginFunction($1,$2))
-        {
-            $$=$2;
+     : type ID PARA_OPEN {n_para = 0; 
+     	switch(beginFunction($1,$2)) {
+           case 0: $$=$2; break;
+           case -1: yyerror("A function with this name already exists"); break;
+           case -2: yyerror("Declaration of a function in a function is not allowed"); break;
+           case -3: yyerror("Different return value"); break;
         }
      }
      ;
@@ -256,14 +257,15 @@ expression
      | PLUS expression %prec UNARY_PLUS         {$$ = $2;}
      | ID BRACKET_OPEN primary BRACKET_CLOSE    {$$ = arrayLoadIR(getSymbol($1),$3);}
      | PARA_OPEN expression PARA_CLOSE          {$$ = $2;}
-     | function_call                            {if($1->var_type!=VOID)
+     | function_call                            {
+     	if($1->var_type!=VOID)
         {
             $$ = $1;
         
         }
         else
         {
-            yyerror("blup");
+            yyerror("Operation on void are not allowed");
         }
      }
 
@@ -285,7 +287,7 @@ function_call
                                     }
                                     else
                                     {
-                                        ;
+                                        yyerror("Function not found");
                                     }
                                 }
       | ID PARA_OPEN function_call_parameters PARA_CLOSE { callFuncIR(getSymbol($1));}
