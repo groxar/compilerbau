@@ -35,7 +35,7 @@
 // Enable debug output
 %initial-action
 {
-	yydebug = 1;
+	yydebug = 0;
     initSymboltable();
     initIR();
 };
@@ -123,30 +123,38 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { if(!insertSymbol(VAR,$1,$3,0,$5))
-        {
-            ;
-        }
+     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { 
+     	switch(insertSymbol(VAR,$1,$3,0,$5)){
+	     	case 0: $$ = $1; break;
+	     	case -1: yyerror("double variable declaration"); break;
+	     	case -2: yyerror("variable type can't be void"); break;
+	     }
      $$ = $1; } 
-     | variable_declaration COMMA ID { if(!insertSymbol(VAR,$1,$3,0,1))
-        {
-
-        }
-     $$ = $1; }
+     | variable_declaration COMMA ID { 
+     	switch(insertSymbol(VAR,$1,$3,0,1)){
+	     	case 0: $$ = $1; break;
+	     	case -1: yyerror("double variable declaration"); break;
+	     	case -2: yyerror("variable type can't be void"); break;
+	     } 
+     }
      | identifier_declaration {$$ = $1;}
      ;
 
 identifier_declaration
-     : type ID BRACKET_OPEN NUM BRACKET_CLOSE {if(!insertSymbol(VAR,$1,$2,0, $4))
-        {
-            ;
-        }
-     $$ = $1;}
-     | type ID { if(!insertSymbol(VAR,$1,$2,0,1))
-        {
-            ;
-        }
-     $$ = $1; }
+     : type ID BRACKET_OPEN NUM BRACKET_CLOSE {
+     	switch(insertSymbol(VAR,$1,$2,0,1)){
+	     	case 0: $$ = $1; break;
+	     	case -1: yyerror("double variable declaration"); break;
+	     	case -2: yyerror("variable type can't be void"); break;
+	     } 
+     }
+     | type ID { 
+     	switch(insertSymbol(VAR,$1,$2,0,1)){
+	     	case 0: $$ = $1; break;
+	     	case -1: yyerror("double variable declaration"); break;
+	     	case -2: yyerror("variable type can't be void"); break;
+	     } 
+     }
      ;
 
 function_definition

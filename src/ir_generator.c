@@ -11,6 +11,9 @@ ir_code_t* pos_crnt = (ir_code_t*) 0;
 
 void printIR();
 
+/**
+ * \brief Writes the log into a file and cleans the old log
+ */
 void initIR()
 {
     FILE* file = fopen("ir.log","w");
@@ -18,6 +21,13 @@ void initIR()
     fclose(file);
 }
 
+/**
+ * \brief Adds the quadruples to the list
+ * \param opcode A unic identifier of the opcode
+ * \param firstPara The first operand
+ * \param secondPara the second operand
+ * \param thirdPara The third operand
+ */
 void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_list *secondPara, struct scope_list *thirdPara){
 
 	ir_code_t* quad = (ir_code_t*) malloc(sizeof(ir_code_t));
@@ -48,13 +58,20 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
     printIR();
 }
 
+/**
+ * \brief Takes the position of goto-jumps and goes backwords
+ * \param i Number of backsteps
+ */
 void backPatch(int i){
     for(; i > 0 && pos_crnt->prev != 0;i--)
     {
         pos_crnt = pos_crnt->prev;
     }
 }
-
+/**
+ * \brief Takes the position of goto-jumps and goes forward
+ * \param i Number of backsteps
+ */
 void frontPatch(int i)
 {
     for(;i > 0 && pos_crnt->next != 0;i--)
@@ -62,7 +79,10 @@ void frontPatch(int i)
         pos_crnt = pos_crnt->next;
     }
 }
-
+/**
+ * \brief Tracks the label
+ * \param target The target to track
+ */
 ir_code_t* trackLabel(struct scope_list* target){
 
     ir_code_t* pos = global;
@@ -77,6 +97,10 @@ ir_code_t* trackLabel(struct scope_list* target){
     return (ir_code_t*) 0;
 }
 
+/**
+ * \brief Tracks unset GoTos
+ * \return A pointer of ir_code_t
+ */
 ir_code_t* trackUnsetGoto(){
 
     ir_code_t* pos = pos_crnt;
@@ -93,10 +117,20 @@ ir_code_t* trackUnsetGoto(){
     return (ir_code_t*) 0;
 }
 
+/**
+ * \brief Generates a goto
+ * \param opcode A unic identifier of the opcode
+ * \param label Name of the label where to go
+ * \param term The condition of the go
+ */
 void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* term){
     quadList(opcode,label,term,NULL);
 }
 
+/**
+ * \brief Generates a function call
+ * \param func the name of the function
+ */
 scope_list_t* callFuncIR(struct scope_list* func){
 
     if(func->var.func_ptr->n_para)
@@ -107,6 +141,12 @@ scope_list_t* callFuncIR(struct scope_list* func){
     return genTemp(func->var_type,0);
 }
 
+/**
+ * \brief Generates the IR-Code for an array
+ * \param secondPara Name of the array
+ * \param thirdPara The value of the arrayfield
+ * \return Returns a pointer to the temp variable with the IR-code of the array
+ */
 scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thirdPara){
     
     scope_list_t* temp = genTemp(INT,0);
@@ -114,6 +154,13 @@ scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thi
     return temp;
 }
 
+/**
+ * \brief Generic methode to generate the IR code for all binary operators
+ * \param opcode A unic identifier of the opcode
+ * \param firstPara The first operand
+ * \param secondPara the second operand
+ * \return Returns a pointer to the temp variable with the IR-code
+ */
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list *secondPara, struct scope_list *thirdPara){
 
     scope_list_t* firstPara = (secondPara->name[0]=='#' && thirdPara->name[0]!='#' )? thirdPara : secondPara; //möglicherweise ändern (assign on temp var)
@@ -123,21 +170,36 @@ scope_list_t* calcIR(enum opcodes opcode, struct scope_list *secondPara, struct 
     return firstPara;
 }
 
+/**
+ * \brief Generates the IR-code for assign
+ * \param firstPara The variable to assign to
+ * \param secondPara The value to assign
+ * \return Returns a pointer to the temp variable with the IR-code
+ */
 scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara){
 
     quadList(OP_ASS, firstPara, secondPara, NULL);
     return firstPara;
 }
 
+/**
+ * \brief Adds a label to the list
+ * \param name The name of the function / label
+ * \return Returns a pointer to the label
+ */
 scope_list_t* addLabel(char* name){
-
+//ToDo: umbenennen zu addLabelIR
     scope_list_t* label = getSymbol(name);
     quadList(LABEL,label,NULL,NULL);
     return label;
 }
 
+/**
+ * \brief Generates a label
+ * \return Returns a pointer to the generated label
+ */
 scope_list_t* genLabel(){
-    
+//ToDo: umbenennen zu genLabelIR()
     char buffer[16];
     scope_list_t* label;
 
@@ -152,6 +214,11 @@ scope_list_t* genLabel(){
     return label;
 }
 
+/**
+ * \brief Generates a temp variable
+ * \param var_type The name of the function / label
+ * \return Returns a pointer to the generated temp variable
+ */
 //add error handle if name already obtained 
 scope_list_t* genTemp(int var_type, int value){
 
@@ -164,7 +231,9 @@ scope_list_t* genTemp(int var_type, int value){
     return getSymbol(buffer);
 }
 
-
+/**
+ * \brief Prints the IR code to the file ir.log
+ */
 void printIR()
 {
     ir_code_t* entry = global;

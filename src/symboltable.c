@@ -90,6 +90,8 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 
     if(getSymbolInScope(*crnt_scope,_name) != 0)
         return -1;
+    if(_type == VAR && _var_type == VOID)
+    	return -2;
 
     scope_list_t* new_variable = (scope_list_t*) malloc(sizeof(scope_list_t));
     int name_length = strlen(_name);
