@@ -184,9 +184,11 @@ function_declaration
      ;
 
 function_begin
-     : type ID PARA_OPEN {n_para = 0; if(!beginFunction($1,$2))
-        {
-            $$=$2;
+     : type ID PARA_OPEN {n_para = 0; 
+     	switch(beginFunction($1,$2)) {
+           case 0: $$=$2; break;
+           case -1: yyerror("a function with this name already exists"); break;
+           case -2: yyerror("declaration of a function in a function is not allowed"); break;
         }
      }
      ;
