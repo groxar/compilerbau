@@ -57,7 +57,7 @@ $(OBJDIR)/parser.c $(SRCDIR)/parser.h: $(SRCDIR)/parser.y
 	$(BISON) -v -t --locations --defines=$(SRCDIR)/parser.h \
 	  -o $(OBJDIR)/parser.c -rall --report-file=$(OBJDIR)/bison.out $<
 
-$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(OBJDIR)/parser.h
+$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(SRCDIR)/parser.h
 	$(FLEX) -o $(OBJDIR)/scanner.c $<
 	
 $(OBJDIR)/ir_generator.o: $(SRCDIR)/ir_generator.c $(SRCDIR)/ir_generator.h
