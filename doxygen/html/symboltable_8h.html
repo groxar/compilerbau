@@ -173,12 +173,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Returns 0 for success Returns -1 if a function with this name already exists Returns -2 if currently not in global scope </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Returns 0 for success Returns -1 if a function with this name already exists Returns -2 if currently not in global scope Returns -3 if different return value </dd></dl>
 
 <p><p>!long || int (depends on architecture) </p>
 </p>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00132">132</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00135">135</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
@@ -189,6 +189,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
         <tr>
           <td class="memname">int endFunction </td>
           <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
@@ -198,8 +199,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="memdoc">
 
 <p>Ends the function by changing the current scope back to globalscope. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>0 successfull </dd></dl>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00192">192</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00198">198</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
@@ -345,8 +347,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </table>
   </dd>
 </dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>-1 different number of parameters 0 successfull </dd></dl>
 
-<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00175">175</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
+<p>Definition at line <a class="el" href="symboltable_8c_source.html#l00180">180</a> of file <a class="el" href="symboltable_8c_source.html">symboltable.c</a>.</p>
 
 </div>
 </div>
@@ -365,7 +368,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 3 13:12:03 2013 for DHBW Compiler by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 3 14:52:26 2013 for DHBW Compiler by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
