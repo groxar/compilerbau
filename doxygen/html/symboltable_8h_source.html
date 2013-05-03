@@ -41,56 +41,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>src/symboltable.h</h1><a href="symboltable_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef SYMBOLTABLE_H_</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define SYMBOLTABLE_H_</span>
-<a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="comment">//ENUMS</span>
-<a name="l00005"></a><a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">00005</a> <span class="keyword">enum</span> <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a>{
-<a name="l00006"></a><a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2daf68346ce0bfce7ab2ca0a240f5132863">00006</a>     <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2da389e03ce61ac2d93fd54069187ab58af">FUNC</a>, <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2daf68346ce0bfce7ab2ca0a240f5132863">VAR</a>
-<a name="l00007"></a>00007 };
-<a name="l00008"></a>00008 
-<a name="l00009"></a>00009 <span class="comment">//TYPEDEFS</span>
-<a name="l00010"></a><a class="code" href="symboltable_8h.html#ab8b4faca73f54c3c73fdab4bc5c5250b">00010</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structfunc.html">func</a> <a class="code" href="structfunc.html">func_t</a>;
-<a name="l00011"></a><a class="code" href="symboltable_8h.html#adf49c68dee8c92044273c4823450d426">00011</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structscope__list.html">scope_list</a> <a class="code" href="structscope__list.html">scope_list_t</a>;
-<a name="l00012"></a>00012 
-<a name="l00013"></a><a class="code" href="structfunc.html">00013</a> <span class="keyword">struct </span><a class="code" href="structfunc.html">func</a>{
-<a name="l00014"></a><a class="code" href="structfunc.html#a4154975721de4c01da3fd8f52b882d8f">00014</a>     <span class="keywordtype">int</span>           <a class="code" href="structfunc.html#a4154975721de4c01da3fd8f52b882d8f">n_para</a>;
-<a name="l00015"></a><a class="code" href="structfunc.html#ab08d1ca826374cbfaf1f09894dd1330b">00015</a>     <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="structfunc.html#ab08d1ca826374cbfaf1f09894dd1330b">scope</a>;
-<a name="l00016"></a>00016 };
-<a name="l00017"></a>00017 
-<a name="l00018"></a><a class="code" href="structscope__list.html">00018</a> <span class="keyword">struct </span><a class="code" href="structscope__list.html">scope_list</a>{
-<a name="l00019"></a><a class="code" href="structscope__list.html#acb94424b119c4326109364e8302a7b75">00019</a>     <span class="keywordtype">int</span>   <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a>;
-<a name="l00020"></a><a class="code" href="structscope__list.html#aeec6bc2489a589fde7780fdbf801416c">00020</a>     <span class="keywordtype">int</span>   <a class="code" href="structscope__list.html#aeec6bc2489a589fde7780fdbf801416c">var_type</a>;<span class="comment">//return type || variable type</span>
-<a name="l00021"></a><a class="code" href="structscope__list.html#a84cb2c7282cc58ab9fd4e50688ce6557">00021</a>     <span class="keywordtype">char</span>* <a class="code" href="structscope__list.html#a84cb2c7282cc58ab9fd4e50688ce6557">name</a>;
-<a name="l00022"></a><a class="code" href="structscope__list.html#a647f3a4b67230f854c883346324c48cd">00022</a>     <span class="keywordtype">int</span>   <a class="code" href="structscope__list.html#a647f3a4b67230f854c883346324c48cd">address</a>;
-<a name="l00023"></a>00023 
-<a name="l00024"></a>00024     <span class="keyword">union </span>{
-<a name="l00025"></a><a class="code" href="structscope__list.html#ad7cab234c9bc12e456f315f634d3c42a">00025</a>         <span class="keywordtype">int</span>     <a class="code" href="structscope__list.html#ad7cab234c9bc12e456f315f634d3c42a">value</a>;
-<a name="l00026"></a><a class="code" href="structscope__list.html#a9d881dc0c170b54039407858e0c6e1a5">00026</a>         <a class="code" href="structfunc.html">func_t</a>* <a class="code" href="structscope__list.html#a9d881dc0c170b54039407858e0c6e1a5">func_ptr</a>;
-<a name="l00027"></a>00027     } <a class="code" href="structscope__list.html#a9459687b6c65966b0d79d727c9ea21d7">var</a>;
-<a name="l00028"></a>00028 
-<a name="l00029"></a><a class="code" href="structscope__list.html#a9cb90e835593d3f9e0bd3a6980f83807">00029</a>     <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="structscope__list.html#a9cb90e835593d3f9e0bd3a6980f83807">next</a>;
-<a name="l00030"></a>00030 };
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="comment">//global variables</span>
-<a name="l00033"></a>00033 <span class="comment">/* extern scope_list_t* global_scope;</span>
-<a name="l00034"></a>00034 <span class="comment">extern scope_list_t** crnt_scope;</span>
-<a name="l00035"></a>00035 <span class="comment">extern scope_list_t** crnt_pos;</span>
-<a name="l00036"></a>00036 <span class="comment">*/</span>
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038 <span class="comment">//Functions</span>
-<a name="l00039"></a>00039 <span class="keywordtype">void</span> <a class="code" href="symboltable_8c.html#ab58e41d98ec0f7dbd7ce24297dc34566">initSymboltable</a>();
+<h1>src/symboltable.h</h1><a href="symboltable_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="comment">//ENUMS</span>
+<a name="l00003"></a><a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">00003</a> <span class="keyword">enum</span> <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a>{
+<a name="l00004"></a><a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2daf68346ce0bfce7ab2ca0a240f5132863">00004</a>     <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2da389e03ce61ac2d93fd54069187ab58af">FUNC</a>, <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2daf68346ce0bfce7ab2ca0a240f5132863">VAR</a>
+<a name="l00005"></a>00005 };
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="comment">//TYPEDEFS</span>
+<a name="l00008"></a><a class="code" href="symboltable_8h.html#ab8b4faca73f54c3c73fdab4bc5c5250b">00008</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structfunc.html">func</a> <a class="code" href="structfunc.html">func_t</a>;
+<a name="l00009"></a><a class="code" href="symboltable_8h.html#adf49c68dee8c92044273c4823450d426">00009</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structscope__list.html">scope_list</a> <a class="code" href="structscope__list.html">scope_list_t</a>;
+<a name="l00010"></a>00010 
+<a name="l00011"></a><a class="code" href="structfunc.html">00011</a> <span class="keyword">struct </span><a class="code" href="structfunc.html">func</a>{
+<a name="l00012"></a><a class="code" href="structfunc.html#a4154975721de4c01da3fd8f52b882d8f">00012</a>     <span class="keywordtype">int</span>           <a class="code" href="structfunc.html#a4154975721de4c01da3fd8f52b882d8f">n_para</a>;
+<a name="l00013"></a><a class="code" href="structfunc.html#ab08d1ca826374cbfaf1f09894dd1330b">00013</a>     <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="structfunc.html#ab08d1ca826374cbfaf1f09894dd1330b">scope</a>;
+<a name="l00014"></a>00014 };
+<a name="l00015"></a>00015 
+<a name="l00016"></a><a class="code" href="structscope__list.html">00016</a> <span class="keyword">struct </span><a class="code" href="structscope__list.html">scope_list</a>{
+<a name="l00017"></a><a class="code" href="structscope__list.html#acb94424b119c4326109364e8302a7b75">00017</a>     <span class="keywordtype">int</span>   <a class="code" href="symboltable_8h.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a>;
+<a name="l00018"></a><a class="code" href="structscope__list.html#aeec6bc2489a589fde7780fdbf801416c">00018</a>     <span class="keywordtype">int</span>   <a class="code" href="structscope__list.html#aeec6bc2489a589fde7780fdbf801416c">var_type</a>;<span class="comment">//return type || variable type</span>
+<a name="l00019"></a><a class="code" href="structscope__list.html#a84cb2c7282cc58ab9fd4e50688ce6557">00019</a>     <span class="keywordtype">char</span>* <a class="code" href="structscope__list.html#a84cb2c7282cc58ab9fd4e50688ce6557">name</a>;
+<a name="l00020"></a><a class="code" href="structscope__list.html#a647f3a4b67230f854c883346324c48cd">00020</a>     <span class="keywordtype">int</span>   <a class="code" href="structscope__list.html#a647f3a4b67230f854c883346324c48cd">address</a>;
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022     <span class="keyword">union </span>{
+<a name="l00023"></a><a class="code" href="structscope__list.html#ad7cab234c9bc12e456f315f634d3c42a">00023</a>         <span class="keywordtype">int</span>     <a class="code" href="structscope__list.html#ad7cab234c9bc12e456f315f634d3c42a">value</a>;
+<a name="l00024"></a><a class="code" href="structscope__list.html#a9d881dc0c170b54039407858e0c6e1a5">00024</a>         <a class="code" href="structfunc.html">func_t</a>* <a class="code" href="structscope__list.html#a9d881dc0c170b54039407858e0c6e1a5">func_ptr</a>;
+<a name="l00025"></a>00025     } <a class="code" href="structscope__list.html#a9459687b6c65966b0d79d727c9ea21d7">var</a>;
+<a name="l00026"></a>00026 
+<a name="l00027"></a><a class="code" href="structscope__list.html#a9cb90e835593d3f9e0bd3a6980f83807">00027</a>     <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="structscope__list.html#a9cb90e835593d3f9e0bd3a6980f83807">next</a>;
+<a name="l00028"></a>00028 };
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 <span class="comment">//global variables</span>
+<a name="l00031"></a>00031 <span class="comment">/* extern scope_list_t* global_scope;</span>
+<a name="l00032"></a>00032 <span class="comment">extern scope_list_t** crnt_scope;</span>
+<a name="l00033"></a>00033 <span class="comment">extern scope_list_t** crnt_pos;</span>
+<a name="l00034"></a>00034 <span class="comment">*/</span>
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 <span class="comment">//Functions</span>
+<a name="l00037"></a>00037 <span class="keywordtype">void</span> <a class="code" href="symboltable_8c.html#ab58e41d98ec0f7dbd7ce24297dc34566">initSymboltable</a>();
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039 <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="symboltable_8c.html#adb618ee9fdc73e021ee8fae5701cafa6" title="Looks up a symbol of the current (function) scope or if actual scope is not a function...">getSymbol</a>( <span class="keywordtype">char</span>* _name);
 <a name="l00040"></a>00040 
-<a name="l00041"></a>00041 <a class="code" href="structscope__list.html">scope_list_t</a>* <a class="code" href="symboltable_8c.html#adb618ee9fdc73e021ee8fae5701cafa6" title="Looks up a symbol of the current (function) scope or if actual scope is not a function...">getSymbol</a>( <span class="keywordtype">char</span>* _name);
+<a name="l00041"></a>00041 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#ac00832315497fd945a71053820476a7f" title="Inserts a symbol into the current scope.">insertSymbol</a>(<span class="keywordtype">int</span> _type, <span class="keywordtype">int</span> _var_type, <span class="keywordtype">char</span>* _name, <span class="keywordtype">int</span> _value, <span class="keywordtype">int</span> _size);
 <a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#ac00832315497fd945a71053820476a7f" title="Inserts a symbol into the current scope.">insertSymbol</a>(<span class="keywordtype">int</span> _type, <span class="keywordtype">int</span> _var_type, <span class="keywordtype">char</span>* _name, <span class="keywordtype">int</span> _value, <span class="keywordtype">int</span> _size);
+<a name="l00043"></a>00043 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#a2bf28b5a7d82b5983b60c75c34c84752" title="Inserts a new function into the symboltable and changes the scope to functionscope...">beginFunction</a>(<span class="keywordtype">int</span> _ret_val, <span class="keywordtype">char</span>* _name);
 <a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#a2bf28b5a7d82b5983b60c75c34c84752" title="Inserts a new function into the symboltable and changes the scope to functionscope...">beginFunction</a>(<span class="keywordtype">int</span> _ret_val, <span class="keywordtype">char</span>* _name);
+<a name="l00045"></a>00045 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#afa5b31d1c5c5faafb23b8d632f2b519d" title="Sets the number of parameters of a funtion.">setN_Para</a>(<span class="keywordtype">char</span>* _name, <span class="keywordtype">int</span> _n_para);
 <a name="l00046"></a>00046 
-<a name="l00047"></a>00047 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#afa5b31d1c5c5faafb23b8d632f2b519d" title="Sets the number of parameters of a funtion.">setN_Para</a>(<span class="keywordtype">char</span>* _name, <span class="keywordtype">int</span> _n_para);
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#a0c1fdce75e5c3b8091e1d65306506427" title="Ends the function by changing the current scope back to globalscope.">endFunction</a>();
-<a name="l00050"></a>00050 <span class="preprocessor">#endif</span>
+<a name="l00047"></a>00047 <span class="keywordtype">int</span> <a class="code" href="symboltable_8c.html#a0c1fdce75e5c3b8091e1d65306506427" title="Ends the function by changing the current scope back to globalscope.">endFunction</a>();
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -106,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 12 13:58:25 2013 for DHBW Compiler by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 3 13:12:03 2013 for DHBW Compiler by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

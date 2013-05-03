@@ -232,7 +232,7 @@ scope_list_t* genTemp(int var_type, int value){
 }
 
 /**
- * \brief Prints the IR code
+ * \brief Prints the IR code to the file ir.log
  */
 void printIR()
 {
