@@ -32,10 +32,10 @@ cc_objects: $(GENERATED_OBJECTS)
 parser: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
 scanner: $(OBJDIR)/scannSRCc
 
-$(OBJDIR): | $(OBJDIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
+
 $(OBJDIR)/dhbwcc: $(DHBWCC_OBJECTS) 
 	$(CC) $(CFLAGS) -o $@ $+
 
@@ -57,7 +57,7 @@ $(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(SRCDIR)/parser.h
 $(OBJDIR)/parser.o: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/parser.c $(SRCDIR)/parser.h: $(SRCDIR)/parser.y
+$(OBJDIR)/parser.c $(SRCDIR)/parser.h: $(SRCDIR)/parser.y $(OBJDIR)
 	$(BISON) -v -t --locations --defines=$(SRCDIR)/parser.h \
 	  -o $(OBJDIR)/parser.c -rall --report-file=$(OBJDIR)/bison.out $<
 
