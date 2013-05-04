@@ -11,6 +11,7 @@ typedef struct scope_list scope_list_t;
 struct func{
     int           n_para;
     scope_list_t* scope;
+    int           decl;//true if function was declarednext
 };
 
 struct scope_list{
@@ -18,6 +19,7 @@ struct scope_list{
     int   var_type;//return type || variable type
     char* name;
     int   address;
+    int   size;
 
     union {
         int     value;
@@ -44,4 +46,4 @@ int beginFunction(int _ret_val, char* _name);
 
 int setN_Para(char* _name, int _n_para);
 
-int endFunction();
+int endFunction(char* _name, int _decl);

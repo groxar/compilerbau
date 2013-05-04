@@ -100,6 +100,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     new_variable->var_type = _var_type;
     new_variable->name     = (char*) malloc(name_length + 1);
     new_variable->address  = next_address;
+    new_variable->size     = _size;
     new_variable->next     = (scope_list_t*) 0;
 
     // Da Pointer und int gleiche Byte-Zahl, benutze int im 32-Bit-System
@@ -131,33 +132,39 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
  * 		   Returns -1 if a function with this name already exists
  * 		   Returns -2 if currently not in global scope
  * 		   Returns -3 if different return value
+ * 		   Returns -4 variable with the samename in global scope
  */
 int beginFunction(int _ret_val, char*_name)
 {
+    scope_list_t* sym = getSymbolInScope(global_scope,_name);
+    func_t* function;
+
+    if(sym != 0 && sym->type==VAR)
+        return -4;
     if(*crnt_scope != global_scope)
         return -2;
     
-    scope_list_t* sym = getSymbolInScope(global_scope,_name);
-    func_t* function;
 
     if(sym == 0)
     {
         //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
 
         function = (func_t*) malloc(sizeof(func_t));
-        function->scope =(scope_list_t*) 0;
-        function->n_para = 0; //Parameter-Zahl auf 0 setzen
-         int result = insertSymbol(FUNC, _ret_val, _name, (int) function,0);//!!long || int (depends on architecture)
+        function->scope = (scope_list_t*) 0;
+        function->n_para = -1; //Parameter-Zahl auf -1 setzen
+        int result = insertSymbol(FUNC, _ret_val, _name, (int) function,0);//!!long || int (depends on architecture)
         if(result!=0) //falls insertSymbol fehlgeschlagen ist
             return result;
     }
     else
     {
         //löscht alte einträge
-
         function = sym->var.func_ptr;
-        freeScope(function->scope);
-        function->scope = (scope_list_t*)0;
+        if(function->scope!=0)
+        {
+            freeScope(function->scope);
+            function->scope = (scope_list_t*)0;
+        }
     }
 
     //ändert den Scope auf die Function ab
@@ -183,7 +190,7 @@ int setN_Para(char* _name, int _n_para)
     
     scope_list_t* sym = getSymbolInScope(global_scope,_name);
 
-    if(sym->var.func_ptr->n_para != _n_para && sym->var.func_ptr->n_para != 0)
+    if(sym->var.func_ptr->n_para != _n_para && sym->var.func_ptr->n_para != -1)
         return -1;
 
     sym->var.func_ptr->n_para = _n_para;
@@ -193,10 +200,17 @@ int setN_Para(char* _name, int _n_para)
 /**
  * \brief Ends the function by changing the current scope back to globalscope
  * \return 0 successfull
+ * \return -1 already declared
  */
 //needs return type check
-int endFunction()
+int endFunction(char* _name, int _decl)
 {
+    scope_list_t* function = getSymbol(_name);
+    if(function->var.func_ptr->decl)
+           return -1;
+    function->var.func_ptr->decl = _decl;
+
+    //changes current scope
     scope_list_t** end_pos = &global_scope;
 
     while( *end_pos != 0)

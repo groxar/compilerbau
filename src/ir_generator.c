@@ -134,11 +134,11 @@ void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* te
 scope_list_t* callFuncIR(struct scope_list* func){
 
     if(func->var.func_ptr->n_para)
-        quadList(OP_CAL, func, NULL, NULL);
-    else
         quadList(OP_CALN, func, NULL, NULL);
-    
-    return genTemp(func->var_type,0);
+    else
+        quadList(OP_CAL, func, NULL, NULL);
+   
+    return genTemp(func->var_type,1);
 }
 
 /**
@@ -202,9 +202,16 @@ scope_list_t* genLabel(){
 //ToDo: umbenennen zu genLabelIR()
     char buffer[16];
     scope_list_t* label;
-
+    func_t* function;
     sprintf(buffer, "#l%d", lbl_counter);
-    insertSymbol(FUNC,VOID,buffer,0,0);
+    
+    //just needed for fail/t06
+    function = (func_t*) malloc(sizeof(func_t));
+    function->scope = (scope_list_t*) 0;
+    function->n_para = -1; 
+    //
+
+    insertSymbol(FUNC,VOID,buffer,(int)function,0);
     lbl_counter++;
 
     label = getSymbol(buffer);

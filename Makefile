@@ -1,3 +1,4 @@
+
 # DHBW CC directories
 OBJDIR = bin
 SRCDIR = src
@@ -19,7 +20,6 @@ CFLAGS_GEN = -O2 -g -I$(OBJDIR) -w $(INCLUDES) $(STANDARDS)
 
 .PHONY: all check test
 all: compiler 
-
 ###############################################
 # DHBW Compiler                               #
 ###############################################
@@ -32,6 +32,10 @@ cc_objects: $(GENERATED_OBJECTS)
 parser: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
 scanner: $(OBJDIR)/scannSRCc
 
+$(OBJDIR): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 $(OBJDIR)/dhbwcc: $(DHBWCC_OBJECTS) 
 	$(CC) $(CFLAGS) -o $@ $+
 

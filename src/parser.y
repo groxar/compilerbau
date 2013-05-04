@@ -9,6 +9,7 @@
     #include "stdio.h"
     #include "symboltable.h"
     #include "ir_generator.h"
+    #define voidCheck(a) (a!=0&&a->var_type!=VOID)?(a->size==1?a:yyerror("Reference access not allowed")):yyerror("Operations arent allowed on void")
 %}
 
 %union {
@@ -21,6 +22,10 @@
 
 %{
     static int n_para;
+    scope_list_t* crntFunc = (scope_list_t*)0;
+    scope_list_t* callFunc = (scope_list_t*)0;
+    scope_list_t* callFuncPara = (scope_list_t*)0;
+    char buffer[100];
 %}
  
 // Verbose error messages
@@ -142,7 +147,7 @@ variable_declaration
 
 identifier_declaration
      : type ID BRACKET_OPEN NUM BRACKET_CLOSE {
-     	switch(insertSymbol(VAR,$1,$2,0,1)){
+     	switch(insertSymbol(VAR,$1,$2,0,$4)){
 	     	case 0: $$ = $1; break;
 	     	case -1: yyerror("Double variable declaration"); break;
 	     	case -2: yyerror("Variable type can't be void"); break;
@@ -158,38 +163,55 @@ identifier_declaration
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {addLabel($1);} stmt_list BRACE_CLOSE { endFunction(); }
+     : function_begin PARA_CLOSE BRACE_OPEN {addLabel($1); 
+        if(setN_Para($1,n_para))
+            yyerror("Different number of parameters");
+        crntFunc = getSymbol($1);
+     } stmt_list BRACE_CLOSE 
+     {            
+        if(endFunction($1,1))
+            yyerror("Function was previously defined");
+        crntFunc = (scope_list_t*) 0;
+     }
      | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {addLabel($1); 
-	     if(!setN_Para($1,n_para)) 
-	     {
-	     	printf("Anzahl Parameter: %i",n_para);
-	     	fflush(stdout);
-	     }else{
+	     if(setN_Para($1,n_para)) {
 	     	yyerror("Different number of parameters");
 	     }
-	 ;} stmt_list BRACE_CLOSE { endFunction();}
+         crntFunc = getSymbol($1);
+	 } stmt_list BRACE_CLOSE 
+     { 
+        if(endFunction($1,1))
+            yyerror("Function was previously defined");
+        crntFunc = (scope_list_t*) 0;
+     }
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE { endFunction();}
-     | function_begin function_parameter_list PARA_CLOSE { endFunction(); 
-     	if(!setN_Para($1,n_para)){
-	     	printf("Anzahl Parameter: %i",n_para);
-	     	fflush(stdout);
-	     }else{
+     : function_begin PARA_CLOSE { 
+        if(setN_Para($1,n_para))
+            yyerror("Different number of parameters"); 
+        if(endFunction($1,0))
+            yyerror("Function was previously defined");
+     }
+     | function_begin function_parameter_list PARA_CLOSE { 
+        if(setN_Para($1,n_para))
 	     	yyerror("Different number of parameters");
-	     }}
+        if(endFunction($1,0))
+            yyerror("Function was previously defined"); 
+     }
      ;
 
 function_begin
      : type ID PARA_OPEN {n_para = 0; 
      	switch(beginFunction($1,$2)) {
-           case 0: $$=$2; break;
-           case -1: yyerror("A function with this name already exists"); break;
-           case -2: yyerror("Declaration of a function in a function is not allowed"); break;
-           case -3: yyerror("Different return value"); break;
-        }
-     }
+           case 0:  $$=$2;break;
+           case -1: yyerror("A function with this name already exists"); $$=genLabel()->name;break;
+           case -2: yyerror("Declaration of a function in a function is not allowed"); $$=genLabel()->name;break;
+           case -3: yyerror("Different return value"); $$=genLabel()->name;break;
+           case -4: yyerror("A Variable with this name already exists"); $$=genLabel();break;
+         }
+     } 
+    
      ;
 
 function_parameter_list
@@ -212,8 +234,28 @@ stmt
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
-     | RETURN expression SEMICOLON
-     | RETURN SEMICOLON
+     | RETURN expression {
+        if(crntFunc!=0)
+        {
+            if($2->var_type!=crntFunc->var_type)
+            {
+                yyerror("Wrong return type");
+            }
+        }
+        else
+            yyerror("Return has to be within a function");
+     }SEMICOLON
+     | RETURN {
+        if(crntFunc!=0)
+        {
+            if(crntFunc->var_type!=VOID)
+            {
+                yyerror("No return value defined");
+            }
+        }
+        else
+            yyerror("Return has to be within a function");
+     }SEMICOLON
      | SEMICOLON /* empty statement */
      ;
 
@@ -227,48 +269,37 @@ stmt_conditional
      ;
 
 stmt_begin
-     : IF PARA_OPEN expression PARA_CLOSE { gotoIR(OP_GOF,NULL,$3); } stmt { trackUnsetGoto()->firstPara = genLabel();}
+     : IF PARA_OPEN expression PARA_CLOSE { gotoIR(OP_GOF,NULL,voidCheck($3)); } stmt { trackUnsetGoto()->firstPara = genLabel();}
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,$3);gotoIR(OP_GOT,genLabel(),$3); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} 
-     | DO {gotoIR(OP_GOT,genLabel(),NULL); backPatch(1);} stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON {frontPatch(1);trackUnsetGoto()->secondPara = $6; }
+     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,voidCheck($3));gotoIR(OP_GOT,genLabel(),voidCheck($3)); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} 
+     | DO {gotoIR(OP_GOT,genLabel(),NULL); backPatch(1);} stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON {frontPatch(1);trackUnsetGoto()->secondPara = voidCheck($6); }
      ;
 									
 expression
-     : expression ASSIGN expression             {$$ = assignIR($1,$3);}
-     | expression LOGICAL_OR expression         {$$ = calcIR(OP_LOR,$1,$3);}
-     | expression LOGICAL_AND expression        {$$ = calcIR(OP_LAND,$1,$3);}
-     | LOGICAL_NOT expression                   {$$ = calcIR(OP_EQ,genTemp(INT,0),$2);}
-     | expression EQ expression                 {$$ = calcIR(OP_EQ,$1,$3);}
-     | expression NE expression                 {$$ = calcIR(OP_NE,$1,$3);}
-     | expression LS expression                 {$$ = calcIR(OP_LT,$1,$3);}
-     | expression LSEQ expression               {$$ = calcIR(OP_LE,$1,$3);} 
-     | expression GTEQ expression               {$$ = calcIR(OP_GE,$1,$3);}
-     | expression GT expression                 {$$ = calcIR(OP_GT,$1,$3);} 
-     | expression PLUS expression               {$$ = calcIR(OP_ADD,$1,$3);}
-     | expression MINUS expression              {$$ = calcIR(OP_SUB,$1,$3);}
-     | expression SHIFT_LEFT expression         {$$ = calcIR(OP_SL,$1,$3);}
-     | expression SHIFT_RIGHT expression        {$$ = calcIR(OP_SR,$1,$3);}
-     | expression MUL expression                {$$ = calcIR(OP_MUL,$1,$3);}
-     | expression MOD expression                {$$ = calcIR(OP_MOD,$1,$3);}
-     | expression DIV expression                {$$ = calcIR(OP_DIV,$1,$3);}
-     | MINUS expression %prec UNARY_MINUS       {$$ = calcIR(OP_SUB, genTemp(INT,0),$2);}
-     | PLUS expression %prec UNARY_PLUS         {$$ = $2;}
+     : expression ASSIGN expression             {$$ = assignIR(voidCheck($1),voidCheck($3));}
+     | expression LOGICAL_OR expression         {$$ = calcIR(OP_LOR,voidCheck($1),voidCheck($3));}
+     | expression LOGICAL_AND expression        {$$ = calcIR(OP_LAND,voidCheck($1),voidCheck($3));}
+     | LOGICAL_NOT expression                   {$$ = calcIR(OP_EQ,genTemp(INT,0),voidCheck($2));}
+     | expression EQ expression                 {$$ = calcIR(OP_EQ,voidCheck($1),voidCheck($3));}
+     | expression NE expression                 {$$ = calcIR(OP_NE,voidCheck($1),voidCheck($3));}
+     | expression LS expression                 {$$ = calcIR(OP_LT,voidCheck($1),voidCheck($3));}
+     | expression LSEQ expression               {$$ = calcIR(OP_LE,voidCheck($1),voidCheck($3));} 
+     | expression GTEQ expression               {$$ = calcIR(OP_GE,voidCheck($1),voidCheck($3));}
+     | expression GT expression                 {$$ = calcIR(OP_GT,voidCheck($1),voidCheck($3));} 
+     | expression PLUS expression               {$$ = calcIR(OP_ADD,voidCheck($1),voidCheck($3));}
+     | expression MINUS expression              {$$ = calcIR(OP_SUB,voidCheck($1),voidCheck($3));}
+     | expression SHIFT_LEFT expression         {$$ = calcIR(OP_SL,voidCheck($1),voidCheck($3));}
+     | expression SHIFT_RIGHT expression        {$$ = calcIR(OP_SR,voidCheck($1),voidCheck($3));}
+     | expression MUL expression                {$$ = calcIR(OP_MUL,voidCheck($1),voidCheck($3));}
+     | expression MOD expression                {$$ = calcIR(OP_MOD,voidCheck($1),voidCheck($3));}
+     | expression DIV expression                {$$ = calcIR(OP_DIV,voidCheck($1),voidCheck($3));}
+     | MINUS expression %prec UNARY_MINUS       {$$ = calcIR(OP_SUB, genTemp(INT,0),voidCheck($2));}
+     | PLUS expression %prec UNARY_PLUS         {$$ = voidCheck($2);}
      | ID BRACKET_OPEN primary BRACKET_CLOSE    {$$ = arrayLoadIR(getSymbol($1),$3);}
      | PARA_OPEN expression PARA_CLOSE          {$$ = $2;}
-     | function_call                            {
-     	if($1->var_type!=VOID)
-        {
-            $$ = $1;
-        
-        }
-        else
-        {
-            yyerror("Operation on void are not allowed");
-        }
-     }
-
+     | function_call                            {$$ = $1;}
      | primary                                  {$$ = $1;}
      ;
 
@@ -276,26 +307,65 @@ expression
 
 primary
      : NUM  { $$ = genTemp(INT,$1); }
+
      | ID   { $$ = getSymbol($1); } 
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE {   scope_list_t* func = getSymbol($1);
-                                    if(func)
+      : ID PARA_OPEN PARA_CLOSE {   callFunc= getSymbol($1);
+                                    if(callFunc)
                                     {
-                                        $$=callFuncIR(getSymbol($1));
+                                        if(callFunc->var.func_ptr->n_para!=0)
+                                            yyerror("Function doesnt expect any parameter");
+                                        else
+                                            $$=callFuncIR(callFunc);
                                     }
                                     else
                                     {
                                         yyerror("Function not found");
                                     }
                                 }
-      | ID PARA_OPEN function_call_parameters PARA_CLOSE { callFuncIR(getSymbol($1));}
+      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { 
+                                    callFunc= getSymbol($1);
+                                    if(callFunc)
+                                    {
+                                        if(callFunc->var.func_ptr->n_para!=n_para)
+                                        {
+                                            sprintf(buffer,"Function expects %d parameter" , callFunc->var.func_ptr->n_para);
+                                            yyerror(buffer);
+                                        }
+                                        else
+                                            $$=callFuncIR(callFunc);
+                                    }
+                                    else
+                                    {
+                                        yyerror("Function not found");
+                                    }
+                                }
       ;
 
 function_call_parameters
-     : function_call_parameters COMMA expression
-     | expression 
+     : function_call_parameters COMMA expression {n_para++;}
+     | expression { 
+        callFuncPara = callFunc->var.func_ptr->scope;
+        if(callFunc->var.func_ptr->n_para > n_para && callFuncPara != 0 )
+        {   
+            for(int i = 0 ; i < n_para; i++)
+            {
+                callFuncPara = callFuncPara->next;
+            }
+
+            if(callFuncPara->var_type != $1->var_type)
+                yyerror("Function parameter type missmatch");
+            else if(callFuncPara->size != $1->size)
+            {
+                sprintf(buffer,"Array of size %d expected", callFuncPara->size);
+                yyerror(buffer);
+            }
+
+        }
+        n_para++;
+     }
      ;
 
 %%
