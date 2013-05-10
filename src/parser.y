@@ -9,6 +9,8 @@
     #include "stdio.h"
     #include "symboltable.h"
     #include "ir_generator.h"
+    #include "typcheck.c" 
+    //ToDo: noch ersetzen durch typecheck.h, gibt gerade aber errors
     #define voidCheck(a) (a!=0&&a->var_type!=VOID)?(a->size==1?a:yyerror("Reference access not allowed")):yyerror("Operations arent allowed on void")
 %}
 
@@ -21,11 +23,7 @@
 }
 
 %{
-    static int n_para;
-    scope_list_t* crntFunc = (scope_list_t*)0;
-    scope_list_t* callFunc = (scope_list_t*)0;
-    scope_list_t* callFuncPara = (scope_list_t*)0;
-    char buffer[100];
+
 %}
  
 // Verbose error messages
@@ -134,7 +132,7 @@ variable_declaration
 	     	case -1: yyerror("Double variable declaration"); break;
 	     	case -2: yyerror("Variable type can't be void"); break;
 	     }
-     $$ = $1; } 
+      } 
      | variable_declaration COMMA ID { 
      	switch(insertSymbol(VAR,$1,$3,0,1)){
 	     	case 0: $$ = $1; break;
@@ -163,42 +161,15 @@ identifier_declaration
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {addLabel($1); 
-        if(setN_Para($1,n_para))
-            yyerror("Different number of parameters");
-        crntFunc = getSymbol($1);
-     } stmt_list BRACE_CLOSE 
-     {            
-        if(endFunction($1,1))
-            yyerror("Function was previously defined");
-        crntFunc = (scope_list_t*) 0;
-     }
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {addLabel($1); 
-	     if(setN_Para($1,n_para)) {
-	     	yyerror("Different number of parameters");
-	     }
-         crntFunc = getSymbol($1);
-	 } stmt_list BRACE_CLOSE 
-     { 
-        if(endFunction($1,1))
-            yyerror("Function was previously defined");
-        crntFunc = (scope_list_t*) 0;
-     }
+     : function_begin PARA_CLOSE BRACE_OPEN {function_definition1($1);} 
+       stmt_list BRACE_CLOSE {function_definition2($1);}
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition1($1);} 
+       stmt_list BRACE_CLOSE  {function_definition2($1);}
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE { 
-        if(setN_Para($1,n_para))
-            yyerror("Different number of parameters"); 
-        if(endFunction($1,0))
-            yyerror("Function was previously defined");
-     }
-     | function_begin function_parameter_list PARA_CLOSE { 
-        if(setN_Para($1,n_para))
-	     	yyerror("Different number of parameters");
-        if(endFunction($1,0))
-            yyerror("Function was previously defined"); 
-     }
+     : function_begin PARA_CLOSE {function_declaration1($1);}
+     | function_begin function_parameter_list PARA_CLOSE {function_declaration1($1);}
      ;
 
 function_begin
