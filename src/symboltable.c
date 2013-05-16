@@ -122,7 +122,6 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     return 0; 
 }
 
-// ToDo:_ret_val beschreiben
 /**
  * \brief Inserts a new function into the symboltable and changes
  * 		  the scope to functionscope of the new function
