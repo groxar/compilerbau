@@ -177,7 +177,7 @@ int beginFunction(int _ret_val, char*_name)
 
 
 /**
- * \brief Sets the number of parameters of a funtion
+ * \brief Sets the number of parameters of a function
  * \param __name The name of the function
  * \param _n_para The number of parameters
  * \return -1 different number of parameters
