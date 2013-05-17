@@ -6,34 +6,26 @@
 #include "symboltable.h"
 #include "ir_generator.h"
 #include "parser.h"
+#include "typcheck.h"
 
 
-
-
-	static int n_para;
-    scope_list_t* crntFunc = (scope_list_t*)0;
-    scope_list_t* callFunc = (scope_list_t*)0;
-    scope_list_t* callFuncPara = (scope_list_t*)0;
-    char buffer[100];
-
-
-void function_definition_tc1(char* $1){
-	addLabel($1);
-	        if(setN_Para($1,n_para))
+void function_definition_tc1(char* func_begin, int n_para, scope_list_t* crntFunc){
+	addLabel(func_begin);
+	        if(setN_Para(func_begin,n_para))
 	            yyerror("Different number of parameters");
-	        crntFunc = getSymbol($1);
+	        crntFunc = getSymbol(func_begin);
 }
 
-void function_definition_tc(char* $1){
-    if(endFunction($1,1))
+void function_definition_tc(char* func_def, scope_list_t* crntFunc){
+    if(endFunction(func_def,1))
         yyerror("Function was previously defined");
     crntFunc = (scope_list_t*) 0;
 }
 
-void function_declaration_tc(char* $1){
-    if(setN_Para($1,n_para))
+void function_declaration_tc(char* func_dec, int n_para){
+    if(setN_Para(func_dec,n_para))
         yyerror("Different number of parameters");
-    if(endFunction($1,0))
+    if(endFunction(func_dec,0))
         yyerror("Function was previously defined");
 }
 
@@ -58,10 +50,10 @@ char* function_begin_tc(int type, char* id){
          }
 }
 
-void return_tc(int var_type, int crntFunc_var_type){
+void return_tc(int var_type, scope_list_t* crntFunc){
     if(crntFunc!=0)
     {
-    	if(var_type!=crntFunc_var_type)
+    	if(var_type!=crntFunc->var_type)
         {
             yyerror("Wrong return type");
         }
@@ -70,13 +62,71 @@ void return_tc(int var_type, int crntFunc_var_type){
         yyerror("Return has to be within a function");
 }
 
-void return_tc2(int crntFunc_var_type){
+void return_tc2(scope_list_t* crntFunc){
     if(crntFunc!=0)
     {
-    	if(crntFunc_var_type != VOID){
+    	if(crntFunc->var_type != VOID){
     		yyerror("No return value defined");
     	}
     }
        else
            yyerror("Return has to be within a function");
+}
+
+scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
+	scope_list_t *func_call;
+
+	callFunc= getSymbol(id);
+	if(callFunc)
+	{
+		if(callFunc->var.func_ptr->n_para!=0)
+			yyerror("Function doesnt expect any parameter");
+		else
+			func_call=callFuncIR(callFunc);
+	}
+	else
+	{
+		yyerror("Function not found");
+	}
+
+	return func_call;
+}
+
+scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para, char buffer){
+	scope_list_t *func_call;
+	callFunc= getSymbol(id);
+	if(callFunc)
+	{
+		if(callFunc->var.func_ptr->n_para!=n_para)
+		{
+			sprintf(buffer,"Function expects %d parameter" , callFunc->var.func_ptr->n_para);
+			yyerror(buffer);
+		}
+		else
+			func_call=callFuncIR(callFunc);
+	}
+	else
+	{
+		yyerror("Function not found");
+	}
+	return func_call;
+}
+
+void function_call_parameters_tc(scope_list_t* func_call_para, int n_para, char buffer, scope_list_t* callFunc, scope_list_t* callFuncPara){
+	callFuncPara = callFunc->var.func_ptr->scope;
+	if(callFunc->var.func_ptr->n_para > n_para && callFuncPara != 0 )
+	{
+		for(int i = 0 ; i < n_para; i++)
+		{
+			callFuncPara = callFuncPara->next;
+		}
+
+		if(callFuncPara->var_type != func_call_para->var_type)
+			yyerror("Function parameter type missmatch");
+		else if(callFuncPara->size != func_call_para->size)
+		{
+			sprintf(buffer,"Array of size %d expected", callFuncPara->size);
+			yyerror(buffer);
+		}
+	}
 }

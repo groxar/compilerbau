@@ -23,7 +23,7 @@ all: compiler
 ###############################################
 # DHBW Compiler                               #
 ###############################################
-DHBWCC_OBJECTS = $(addprefix $(OBJDIR)/, scanner.o parser.o main.o diag.o resource_manager.o symboltable.o ir_generator.o)
+DHBWCC_OBJECTS = $(addprefix $(OBJDIR)/, scanner.o parser.o main.o diag.o resource_manager.o symboltable.o ir_generator.o typcheck.o)
 
 ## Convenient targets for DHBW Compiler
 .PHONY: compiler cc_objects cc_parser cc_scanner 
@@ -50,6 +50,9 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.c
 
 $(OBJDIR)/symboltable.o: $(SRCDIR)/symboltable.c $(SRCDIR)/symboltable.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
+	
+$(OBJDIR)/typcheck.o: $(SRCDIR)/typcheck.c $(SRCDIR)/typcheck.h
+	$(CC) $(CFLAGS_GEN) -c $< -o $@	
 
 $(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(SRCDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@

@@ -9,8 +9,7 @@
     #include "stdio.h"
     #include "symboltable.h"
     #include "ir_generator.h"
-    #include "typcheck.c" 
-    //ToDo: noch ersetzen durch typecheck.h, gibt gerade aber errors
+    #include "typcheck.h" 
     #define voidCheck(a) (a!=0&&a->var_type!=VOID)?(a->size==1?a:yyerror("Reference access not allowed")):yyerror("Operations arent allowed on void")
 %}
 
@@ -23,7 +22,11 @@
 }
 
 %{
-
+	static int n_para;
+    scope_list_t* crntFunc = (scope_list_t*)0;
+    scope_list_t* callFunc = (scope_list_t*)0;
+    scope_list_t* callFuncPara = (scope_list_t*)0;
+    char buffer[100];
 %}
  
 // Verbose error messages
@@ -137,15 +140,15 @@ identifier_declaration
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {function_definition_tc1($1);} 
-       stmt_list BRACE_CLOSE {function_definition_tc($1);}
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition_tc1($1);} 
-       stmt_list BRACE_CLOSE  {function_definition_tc($1);}
+     : function_begin PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, crntFunc);} 
+       stmt_list BRACE_CLOSE {function_definition_tc($1, crntFunc);}
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, crntFunc);} 
+       stmt_list BRACE_CLOSE  {function_definition_tc($1, crntFunc);}
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE { function_declaration_tc($1); }
-     | function_begin function_parameter_list PARA_CLOSE { function_declaration_tc($1); }
+     : function_begin PARA_CLOSE { function_declaration_tc($1, n_para); }
+     | function_begin function_parameter_list PARA_CLOSE { function_declaration_tc($1, n_para); }
      ;
 
 function_begin
@@ -173,8 +176,8 @@ stmt
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
-     | RETURN expression { return_tc($2->var_type,crntFunc->var_type); }SEMICOLON
-     | RETURN { return_tc2(crntFunc->var_type); }SEMICOLON
+     | RETURN expression { return_tc($2->var_type, crntFunc); }SEMICOLON
+     | RETURN { return_tc2(crntFunc); }SEMICOLON
      | SEMICOLON /* empty statement */
      ;
 
@@ -231,60 +234,13 @@ primary
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE {   callFunc= getSymbol($1);
-                                    if(callFunc)
-                                    {
-                                        if(callFunc->var.func_ptr->n_para!=0)
-                                            yyerror("Function doesnt expect any parameter");
-                                        else
-                                            $$=callFuncIR(callFunc);
-                                    }
-                                    else
-                                    {
-                                        yyerror("Function not found");
-                                    }
-                                }
-      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { 
-                                    callFunc= getSymbol($1);
-                                    if(callFunc)
-                                    {
-                                        if(callFunc->var.func_ptr->n_para!=n_para)
-                                        {
-                                            sprintf(buffer,"Function expects %d parameter" , callFunc->var.func_ptr->n_para);
-                                            yyerror(buffer);
-                                        }
-                                        else
-                                            $$=callFuncIR(callFunc);
-                                    }
-                                    else
-                                    {
-                                        yyerror("Function not found");
-                                    }
-                                }
+      : ID PARA_OPEN PARA_CLOSE { $$ = function_call_tc($1, callFunc); }
+      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { $$ = function_call_tc2($1, callFunc, n_para, buffer); }
       ;
 
 function_call_parameters
      : function_call_parameters COMMA expression {n_para++;}
-     | expression { 
-        callFuncPara = callFunc->var.func_ptr->scope;
-        if(callFunc->var.func_ptr->n_para > n_para && callFuncPara != 0 )
-        {   
-            for(int i = 0 ; i < n_para; i++)
-            {
-                callFuncPara = callFuncPara->next;
-            }
-
-            if(callFuncPara->var_type != $1->var_type)
-                yyerror("Function parameter type missmatch");
-            else if(callFuncPara->size != $1->size)
-            {
-                sprintf(buffer,"Array of size %d expected", callFuncPara->size);
-                yyerror(buffer);
-            }
-
-        }
-        n_para++;
-     }
+     | expression { function_call_parameters_tc($1, n_para, buffer, callFunc, callFuncPara); n_para++; }
      ;
 
 %%
