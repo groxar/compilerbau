@@ -149,7 +149,8 @@ int beginFunction(int _ret_val, char*_name)
         //fügt die Function in die Symboltabelle ein wenn die Funktion noch nicht definiert wurde
 
         function = (func_t*) malloc(sizeof(func_t));
-        function->scope = (scope_list_t*) 0;
+        function->scope  = (scope_list_t*) 0;
+        function->decl   = 0;
         function->n_para = -1; //Parameter-Zahl auf -1 setzen
         int result = insertSymbol(FUNC, _ret_val, _name, (int) function,0);//!!long || int (depends on architecture)
         if(result!=0) //falls insertSymbol fehlgeschlagen ist
