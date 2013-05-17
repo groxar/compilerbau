@@ -46,7 +46,7 @@ char* function_begin_tc(int type, char* id){
            case -1: yyerror("A function with this name already exists"); b_func=genLabel()->name;break;
            case -2: yyerror("Declaration of a function in a function is not allowed"); b_func=genLabel()->name;break;
            case -3: yyerror("Different return value"); b_func=genLabel()->name;break;
-           case -4: yyerror("A Variable with this name already exists"); b_func=genLabel();break;
+           case -4: yyerror("A variable or a function with this name already exists"); b_func=genLabel();break;
     }
  	return b_func;
 }
