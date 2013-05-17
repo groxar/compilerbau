@@ -5,7 +5,11 @@
 #include "stdio.h"
 #include "symboltable.h"
 #include "ir_generator.h"
+<<<<<<< HEAD
+=======
 #include "parser.h"
+
+>>>>>>> caf387f7ae56282825e4e87b71b0a05d26dc680b
 
 
 static int n_para;
@@ -15,18 +19,19 @@ scope_list_t* callFuncPara = (scope_list_t*)0;
 char buffer[100];
 
 
-	static int n_para;
-    scope_list_t* crntFunc = (scope_list_t*)0;
-    scope_list_t* callFunc = (scope_list_t*)0;
-    scope_list_t* callFuncPara = (scope_list_t*)0;
-    char buffer[100];
-
-
+<<<<<<< HEAD
+void function_definition1(char* $1){
+    addLabel($1);
+    if(setN_Para($1,n_para))
+	    yyerror("Different number of parameters");
+	crntFunc = getSymbol($1);
+=======
 void function_definition_tc1(char* $1){
 	addLabel($1);
 	        if(setN_Para($1,n_para))
 	            yyerror("Different number of parameters");
 	        crntFunc = getSymbol($1);
+>>>>>>> caf387f7ae56282825e4e87b71b0a05d26dc680b
 }
 
 void function_definition_tc(char* $1){

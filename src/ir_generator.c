@@ -107,7 +107,7 @@ ir_code_t* trackUnsetGoto(){
 
     while(pos != 0)
     {
-        if(pos->opcode == OP_GO&& pos->firstPara == 0)
+        if(pos->opcode == OP_GO && pos->firstPara == 0)
             return pos;
 
         else if((pos->opcode == OP_GOT || pos->opcode == OP_GOF) && ( pos->firstPara == 0 || pos->secondPara == 0))

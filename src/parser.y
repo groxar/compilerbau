@@ -126,62 +126,30 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { 
-     	switch(insertSymbol(VAR,$1,$3,0,$5)){
-	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("Double variable declaration"); break;
-	     	case -2: yyerror("Variable type can't be void"); break;
-	     }
-      } 
-     | variable_declaration COMMA ID { 
-     	switch(insertSymbol(VAR,$1,$3,0,1)){
-	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("Double variable declaration"); break;
-	     	case -2: yyerror("Variable type can't be void"); break;
-	     } 
-     }
+     : variable_declaration COMMA ID BRACKET_OPEN NUM BRACKET_CLOSE { $$=variable_declaration_tc($1,$3,$5); } 
+     | variable_declaration COMMA ID { $$=variable_declaration_tc($1,$3,1); }
      | identifier_declaration {$$ = $1;}
      ;
 
 identifier_declaration
-     : type ID BRACKET_OPEN NUM BRACKET_CLOSE {
-     	switch(insertSymbol(VAR,$1,$2,0,$4)){
-	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("Double variable declaration"); break;
-	     	case -2: yyerror("Variable type can't be void"); break;
-	     } 
-     }
-     | type ID { 
-     	switch(insertSymbol(VAR,$1,$2,0,1)){
-	     	case 0: $$ = $1; break;
-	     	case -1: yyerror("Double variable declaration"); break;
-	     	case -2: yyerror("Variable type can't be void"); break;
-	     } 
-     }
+     : type ID BRACKET_OPEN NUM BRACKET_CLOSE { variable_declaration_tc($1,$2,$4); }
+     | type ID { $$=variable_declaration_tc($1,$2,1); }
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {function_definition1($1);} 
-       stmt_list BRACE_CLOSE {function_definition2($1);}
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition1($1);} 
-       stmt_list BRACE_CLOSE  {function_definition2($1);}
+     : function_begin PARA_CLOSE BRACE_OPEN {function_definition_tc1($1);} 
+       stmt_list BRACE_CLOSE {function_definition_tc($1);}
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition_tc1($1);} 
+       stmt_list BRACE_CLOSE  {function_definition_tc($1);}
      ;
 
 function_declaration
-     : function_begin PARA_CLOSE {function_declaration1($1);}
-     | function_begin function_parameter_list PARA_CLOSE {function_declaration1($1);}
+     : function_begin PARA_CLOSE { function_declaration_tc($1); }
+     | function_begin function_parameter_list PARA_CLOSE { function_declaration_tc($1); }
      ;
 
 function_begin
-     : type ID PARA_OPEN {n_para = 0; 
-     	switch(beginFunction($1,$2)) {
-           case 0:  $$=$2;break;
-           case -1: yyerror("A function with this name already exists"); $$=genLabel()->name;break;
-           case -2: yyerror("Declaration of a function in a function is not allowed"); $$=genLabel()->name;break;
-           case -3: yyerror("Different return value"); $$=genLabel()->name;break;
-           case -4: yyerror("A Variable with this name already exists"); $$=genLabel();break;
-         }
-     } 
+     : type ID PARA_OPEN { n_para = 0; $$=function_begin_tc($1,$2); } 
     
      ;
 
@@ -205,28 +173,8 @@ stmt
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
-     | RETURN expression {
-        if(crntFunc!=0)
-        {
-            if($2->var_type!=crntFunc->var_type)
-            {
-                yyerror("Wrong return type");
-            }
-        }
-        else
-            yyerror("Return has to be within a function");
-     }SEMICOLON
-     | RETURN {
-        if(crntFunc!=0)
-        {
-            if(crntFunc->var_type!=VOID)
-            {
-                yyerror("No return value defined");
-            }
-        }
-        else
-            yyerror("Return has to be within a function");
-     }SEMICOLON
+     | RETURN expression { return_tc($2->var_type,crntFunc->var_type); }SEMICOLON
+     | RETURN { return_tc2(crntFunc->var_type); }SEMICOLON
      | SEMICOLON /* empty statement */
      ;
 
