@@ -47,7 +47,8 @@ char* function_begin_tc(int type, char* id){
            case -2: yyerror("Declaration of a function in a function is not allowed"); b_func=genLabel()->name;break;
            case -3: yyerror("Different return value"); b_func=genLabel()->name;break;
            case -4: yyerror("A Variable with this name already exists"); b_func=genLabel();break;
-         }
+    }
+ 	return b_func;
 }
 
 void return_tc(int var_type, scope_list_t* crntFunc){
@@ -74,30 +75,21 @@ void return_tc2(scope_list_t* crntFunc){
 }
 
 scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
-	printf("1");fflush(stdout);
 	scope_list_t *func_call;
-	printf("2");fflush(stdout);
 	callFunc= getSymbol(id);
-	printf("3");fflush(stdout);
 	if(callFunc)
 	{
-		printf("4");fflush(stdout);
 		if(callFunc->var.func_ptr->n_para!=0){
-			printf("5");fflush(stdout);
 			yyerror("Function doesnt expect any parameter");
 		}
 		else{
 			func_call=callFuncIR(callFunc);
-			printf("6");fflush(stdout);
 		}
 	}
 	else
 	{
-		printf("7");fflush(stdout);
 		yyerror("Function not found");
-		printf("8");fflush(stdout);
 	}
-	printf("9");fflush(stdout);
 	return func_call;
 }
 
