@@ -1,4 +1,3 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
 
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
@@ -86,13 +85,8 @@
 typedef union YYSTYPE
 {
 
-<<<<<<< HEAD
 /* Line 1676 of yacc.c  */
 #line 16 "src/parser.y"
-=======
-/* Line 2068 of yacc.c  */
-#line 17 "src/parser.y"
->>>>>>> ac5e85332f8ce5540a4771f67cfec0129a75a3f2
 
   int n;
   char* id;
@@ -102,8 +96,8 @@ typedef union YYSTYPE
 
 
 
-/* Line 2068 of yacc.c  */
-#line 99 "src/parser.h"
+/* Line 1676 of yacc.c  */
+#line 101 "src/parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

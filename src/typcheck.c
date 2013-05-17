@@ -11,9 +11,9 @@
 
 void function_definition_tc1(char* func_begin, int n_para, scope_list_t* crntFunc){
 	addLabel(func_begin);
-	        if(setN_Para(func_begin,n_para))
-	            yyerror("Different number of parameters");
-	        crntFunc = getSymbol(func_begin);
+	if(setN_Para(func_begin,n_para))
+		yyerror("Different number of parameters");
+	crntFunc = getSymbol(func_begin);
 }
 
 void function_definition_tc(char* func_def, scope_list_t* crntFunc){
@@ -74,21 +74,30 @@ void return_tc2(scope_list_t* crntFunc){
 }
 
 scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
+	printf("1");fflush(stdout);
 	scope_list_t *func_call;
-
+	printf("2");fflush(stdout);
 	callFunc= getSymbol(id);
+	printf("3");fflush(stdout);
 	if(callFunc)
 	{
-		if(callFunc->var.func_ptr->n_para!=0)
+		printf("4");fflush(stdout);
+		if(callFunc->var.func_ptr->n_para!=0){
+			printf("5");fflush(stdout);
 			yyerror("Function doesnt expect any parameter");
-		else
+		}
+		else{
 			func_call=callFuncIR(callFunc);
+			printf("6");fflush(stdout);
+		}
 	}
 	else
 	{
+		printf("7");fflush(stdout);
 		yyerror("Function not found");
+		printf("8");fflush(stdout);
 	}
-
+	printf("9");fflush(stdout);
 	return func_call;
 }
 
