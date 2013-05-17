@@ -140,10 +140,10 @@ identifier_declaration
      ;
 
 function_definition
-     : function_begin PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, crntFunc);} 
-       stmt_list BRACE_CLOSE {function_definition_tc($1, crntFunc);}
-     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, crntFunc);} 
-       stmt_list BRACE_CLOSE  {function_definition_tc($1, crntFunc);}
+     : function_begin PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, &crntFunc);} 
+       stmt_list BRACE_CLOSE {function_definition_tc($1, &crntFunc);}
+     | function_begin function_parameter_list PARA_CLOSE BRACE_OPEN {function_definition_tc1($1, n_para, &crntFunc);} 
+       stmt_list BRACE_CLOSE  {function_definition_tc($1, &crntFunc);}
      ;
 
 function_declaration
