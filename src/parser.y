@@ -136,7 +136,7 @@ variable_declaration
 
 identifier_declaration
      : type ID BRACKET_OPEN NUM BRACKET_CLOSE { $$=variable_declaration_tc($1,$2,$4); }
-     | type ID { $$=variable_declaration_tc($1,$2,1); }
+     | type ID { $$= variable_declaration_tc($1,$2,1); }
      ;
 
 function_definition
