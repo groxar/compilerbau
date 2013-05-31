@@ -9,17 +9,17 @@
 #include "typcheck.h"
 
 
-void function_definition_tc1(char* func_begin, int n_para, scope_list_t* crntFunc){
+void function_definition_tc1(char* func_begin, int n_para, scope_list_t** crntFunc){
 	addLabel(func_begin);
 	if(setN_Para(func_begin,n_para))
 		yyerror("Different number of parameters");
-	crntFunc = getSymbol(func_begin);
+	*crntFunc = getSymbol(func_begin);
 }
 
-void function_definition_tc(char* func_def, scope_list_t* crntFunc){
+void function_definition_tc(char* func_def, scope_list_t** crntFunc){
     if(endFunction(func_def,1))
         yyerror("Function was previously defined");
-    crntFunc = (scope_list_t*) 0;
+    *crntFunc = (scope_list_t*) 0;
 }
 
 void function_declaration_tc(char* func_dec, int n_para){
@@ -46,7 +46,7 @@ char* function_begin_tc(int type, char* id){
            case -1: yyerror("A function with this name already exists"); b_func=genLabel()->name;break;
            case -2: yyerror("Declaration of a function in a function is not allowed"); b_func=genLabel()->name;break;
            case -3: yyerror("Different return value"); b_func=genLabel()->name;break;
-           case -4: yyerror("A Variable with this name already exists"); b_func=genLabel();break;
+           case -4: yyerror("A variable or a function with this name already exists"); b_func=genLabel();break;
     }
  	return b_func;
 }
@@ -64,8 +64,7 @@ void return_tc(int var_type, scope_list_t* crntFunc){
 }
 
 void return_tc2(scope_list_t* crntFunc){
-    if(crntFunc!=0)
-    {
+    if(crntFunc!=0) {
     	if(crntFunc->var_type != VOID){
     		yyerror("No return value defined");
     	}

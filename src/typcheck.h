@@ -1,9 +1,9 @@
 #pragma once
 
 
-void function_definition_tc1(char* func_begin, int n_para, scope_list_t* crntFunc);
+void function_definition_tc1(char* func_begin, int n_para, scope_list_t** crntFunc);
 
-void function_definition_tc(char* func_def, scope_list_t* crntFunc);
+void function_definition_tc(char* func_def, scope_list_t** crntFunc);
 
 void function_declaration_tc(char* func_dec, int n_para);
 
