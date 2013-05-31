@@ -10,7 +10,6 @@
     #include "symboltable.h"
     #include "ir_generator.h"
     #include "typcheck.h" 
-    #define voidCheck(a) (a!=0&&a->var_type!=VOID)?(a->size==1?a:yyerror("Reference access not allowed")):yyerror("Operations arent allowed on void")
 %}
 
 %union {
@@ -235,12 +234,12 @@ primary
 
 function_call
       : ID PARA_OPEN PARA_CLOSE { $$ = function_call_tc($1, callFunc); }
-      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { $$ = function_call_tc2($1, callFunc, n_para, buffer); }
+      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { $$ = function_call_tc2($1, callFunc, n_para); }
       ;
 
 function_call_parameters
      : function_call_parameters COMMA expression {n_para++;}
-     | expression { function_call_parameters_tc($1, n_para, buffer, callFunc, callFuncPara); n_para++; }
+     | expression { function_call_parameters_tc($1, n_para, callFunc, callFuncPara); n_para++; }
      ;
 
 %%

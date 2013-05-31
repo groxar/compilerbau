@@ -197,7 +197,7 @@ int setN_Para(char* _name, int _n_para)
 
     return 0;
 }
-/**
+/** 
  * \brief Ends the function by changing the current scope back to globalscope
  * \return 0 successfull
  * \return -1 already declared

@@ -9,6 +9,26 @@
 #include "typcheck.h"
 
 
+//#define voidCheck(a) (a!=0&&a->var_type!=VOID)?(a->size==1?a:yyerror("Reference access not allowed")):yyerror("Operations arent allowed on void")
+
+scope_list_t* voidCheck(scope_list_t* _exp){
+    
+    if(_exp!=0 && _exp->var_type!=VOID)
+    {
+        if(_exp->size!=1)
+        {
+            yyerror("Reference access not allowed");
+        }
+    }
+    else
+    {
+        yyerror("Operatrions arent allowed on void");
+        _exp=genTemp(INT,0);
+    }
+
+    return _exp;
+}
+
 void function_definition_tc1(char* func_name, int n_para, scope_list_t** crntFunc){
 	addLabel(func_name);
 	if(setN_Para(func_name,n_para))
@@ -40,7 +60,7 @@ int variable_declaration_tc(int var_type, char* var_name, int arr_size){
 }
 
 char* function_begin_tc(int type, char* id){
-	char* b_func = malloc(sizeof(char)*strlen(id)+3);
+	char* b_func = malloc(sizeof(char)*(strlen(id)+3));
  	switch(beginFunction(type, id)) {
            case 0:  b_func = id; break;
            case -1: yyerror("A function with this name already exists"); 
@@ -89,12 +109,14 @@ void return_tc2(scope_list_t* crntFunc){
 }
 
 scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
+    char* buffer = malloc(sizeof(char)*50);
 	scope_list_t *func_call;
 	callFunc= getSymbol(id);
 	if(callFunc)
 	{
 		if(callFunc->var.func_ptr->n_para!=0){
-			yyerror("Function doesnt expect any parameter");
+            sprintf(buffer, "Function expects %d parameter", callFunc->var.func_ptr->n_para);
+			yyerror(buffer);
 		}
 		else{
 			func_call=callFuncIR(callFunc);
@@ -102,12 +124,14 @@ scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
 	}
 	else
 	{
+        
 		yyerror("Function not found");
 	}
 	return func_call;
 }
 
-scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para, char buffer){
+scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para){
+    char* buffer = malloc(sizeof(char)*50);
 	scope_list_t *func_call;
 	callFunc= getSymbol(id);
 	if(callFunc)
@@ -127,7 +151,8 @@ scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para, ch
 	return func_call;
 }
 
-void function_call_parameters_tc(scope_list_t* func_call_para, int n_para, char buffer, scope_list_t* callFunc, scope_list_t* callFuncPara){
+void function_call_parameters_tc(scope_list_t* func_call_para, int n_para, scope_list_t* callFunc, scope_list_t* callFuncPara){
+    char* buffer = malloc(sizeof(char)*50);
 	callFuncPara = callFunc->var.func_ptr->scope;
 	if(callFunc->var.func_ptr->n_para > n_para && callFuncPara != 0 )
 	{

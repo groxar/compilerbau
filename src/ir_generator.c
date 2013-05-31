@@ -163,7 +163,7 @@ scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thi
  */
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list *secondPara, struct scope_list *thirdPara){
 
-    scope_list_t* firstPara = (secondPara->name[0]=='#' && thirdPara->name[0]!='#' )? thirdPara : secondPara; //möglicherweise ändern (assign on temp var)
+    scope_list_t* firstPara = (secondPara->name[0]=='#' && thirdPara->name[0]!='#' )? secondPara : thirdPara; //möglicherweise ändern (assign on temp var)
 
     quadList(opcode, firstPara, secondPara, thirdPara);
     
