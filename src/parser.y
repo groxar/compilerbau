@@ -194,7 +194,7 @@ stmt_begin
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,voidCheck($3));gotoIR(OP_GOT,genLabel(),voidCheck($3)); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} 
+     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,voidCheck($3));gotoIR(OP_GOT,genLabel(),$3); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} //removed uneeded second voidCheck
      | DO {gotoIR(OP_GOT,genLabel(),NULL); backPatch(1);} stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON {frontPatch(1);trackUnsetGoto()->secondPara = voidCheck($6); }
      ;
 									

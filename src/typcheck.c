@@ -118,9 +118,7 @@ scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
             sprintf(buffer, "Function expects %d parameter", callFunc->var.func_ptr->n_para);
 			yyerror(buffer);
 		}
-		else{
-			func_call=callFuncIR(callFunc);
-		}
+	        func_call=callFuncIR(callFunc);
 	}
 	else
 	{
@@ -154,19 +152,19 @@ scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para){
 void function_call_parameters_tc(scope_list_t* func_call_para, int n_para, scope_list_t* callFunc, scope_list_t* callFuncPara){
     char* buffer = malloc(sizeof(char)*50);
 	callFuncPara = callFunc->var.func_ptr->scope;
+
 	if(callFunc->var.func_ptr->n_para > n_para && callFuncPara != 0 )
 	{
 		for(int i = 0 ; i < n_para; i++)
 		{
 			callFuncPara = callFuncPara->next;
-		}
-
-		if(callFuncPara->var_type != func_call_para->var_type)
-			yyerror("Function parameter type missmatch");
-		else if(callFuncPara->size != func_call_para->size)
-		{
-			sprintf(buffer,"Array of size %d expected", callFuncPara->size);
-			yyerror(buffer);
-		}
+        }
+	    if(callFuncPara->var_type != func_call_para->var_type)
+		    yyerror("Function parameter type missmatch");
+	    else if(callFuncPara->size != func_call_para->size)
+	    {
+		    sprintf(buffer,"Array of size %d expected", callFuncPara->size);
+		    yyerror(buffer);
+	    }
 	}
 }

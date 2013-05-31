@@ -244,7 +244,7 @@ scope_list_t* genTemp(int var_type, int value){
 void printIR()
 {
     ir_code_t* entry = global;
-    FILE* file       = fopen("ir.log","a");
+    FILE* file       = fopen("ir.log","w");
 
     fprintf(file,"\n\n\n");
     while(entry != 0)
@@ -274,7 +274,7 @@ void printIR()
             case OP_RET:    fprintf(file,"\treturn");break;
             case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
-            case OP_CALN:   fprintf(file,"\tcallN %s", entry->firstPara->name);break;//NEEDs parameter
+            case OP_CALN:   fprintf(file,"\tcallN %s %d", entry->firstPara->name, entry->firstPara->var.func_ptr->n_para);break;
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;

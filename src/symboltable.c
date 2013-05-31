@@ -229,7 +229,7 @@ void printTable()
 {
     scope_list_t* entry = global_scope;
     scope_list_t* func_entry;
-    FILE*         file = fopen("symboltable.log","a");
+    FILE*         file = fopen("symboltable.log","w");
     const char* string_type [] = {"Function","Variable"};
     const char* string_var []  = {"int","void"};
 
