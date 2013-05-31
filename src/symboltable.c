@@ -133,7 +133,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
  * 		   Returns -3 if different return value
  * 		   Returns -4 variable with the samename in global scope
  */
-int beginFunction(int _ret_val, char*_name)
+int beginFunction(int _ret_val, char* _name)
 {
     scope_list_t* sym = getSymbolInScope(global_scope,_name);
     func_t* function;

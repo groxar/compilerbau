@@ -54,7 +54,7 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
         global = quad;
     }
 
-    pos_crnt = quad;
+    pos_crnt = quad;   
     printIR();
 }
 

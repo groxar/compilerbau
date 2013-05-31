@@ -9,23 +9,23 @@
 #include "typcheck.h"
 
 
-void function_definition_tc1(char* func_begin, int n_para, scope_list_t** crntFunc){
-	addLabel(func_begin);
-	if(setN_Para(func_begin,n_para))
+void function_definition_tc1(char* func_name, int n_para, scope_list_t** crntFunc){
+	addLabel(func_name);
+	if(setN_Para(func_name,n_para))
 		yyerror("Different number of parameters");
-	*crntFunc = getSymbol(func_begin);
+	*crntFunc = getSymbol(func_name);
 }
 
-void function_definition_tc(char* func_def, scope_list_t** crntFunc){
-    if(endFunction(func_def,1))
+void function_definition_tc(char* func_name, scope_list_t** crntFunc){
+    if(endFunction(func_name,1))
         yyerror("Function was previously defined");
     *crntFunc = (scope_list_t*) 0;
 }
 
-void function_declaration_tc(char* func_dec, int n_para){
-    if(setN_Para(func_dec,n_para))
+void function_declaration_tc(char* func_name, int n_para){
+    if(setN_Para(func_name,n_para))
         yyerror("Different number of parameters");
-    if(endFunction(func_dec,0))
+    if(endFunction(func_name,0))
         yyerror("Function was previously defined");
 }
 
@@ -40,13 +40,28 @@ int variable_declaration_tc(int var_type, char* var_name, int arr_size){
 }
 
 char* function_begin_tc(int type, char* id){
-	char* b_func = "";
+	char* b_func = malloc(sizeof(char)*strlen(id)+3);
  	switch(beginFunction(type, id)) {
-           case 0:  b_func=id; break;
-           case -1: yyerror("A function with this name already exists"); b_func=genLabel()->name;break;
-           case -2: yyerror("Declaration of a function in a function is not allowed"); b_func=genLabel()->name;break;
-           case -3: yyerror("Different return value"); b_func=genLabel()->name;break;
-           case -4: yyerror("A variable or a function with this name already exists"); b_func=genLabel();break;
+           case 0:  b_func = id; break;
+           case -1: yyerror("A function with this name already exists"); 
+                    sprintf(b_func,"#f%s",id);
+                    endFunction(id,1);
+                    beginFunction(type,b_func);
+                    break;
+           case -2: yyerror("Declaration of a function in a function is not allowed"); 
+                    sprintf(b_func,"#f%s",id);
+                    endFunction(id,1);
+                    beginFunction(type,b_func);
+                    break;
+           case -3: yyerror("Already exist with different return value"); 
+                    sprintf(b_func,"#f%s",id);
+                    endFunction(id,1);
+                    beginFunction(type,b_func);
+                    break;
+           case -4: yyerror("A variable with this name already exists"); 
+                    sprintf(b_func,"#f%s",id);
+                    beginFunction(type,b_func);
+                    break;
     }
  	return b_func;
 }
