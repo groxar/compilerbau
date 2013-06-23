@@ -54,17 +54,17 @@ $(OBJDIR)/symboltable.o: $(SRCDIR)/symboltable.c $(SRCDIR)/symboltable.h
 $(OBJDIR)/typcheck.o: $(SRCDIR)/typcheck.c $(SRCDIR)/typcheck.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@	
 
-$(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(SRCDIR)/parser.h
+$(OBJDIR)/scanner.o: $(OBJDIR)/scanner.c $(OBJDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/parser.o: $(OBJDIR)/parser.c $(SRCDIR)/parser.h
+$(OBJDIR)/parser.o: $(OBJDIR)/parser.c $(OBJDIR)/parser.h
 	$(CC) $(CFLAGS_GEN) -c $< -o $@
 
-$(OBJDIR)/parser.c $(SRCDIR)/parser.h: $(SRCDIR)/parser.y $(OBJDIR)
-	$(BISON) -v -t --locations --defines=$(SRCDIR)/parser.h \
+$(OBJDIR)/parser.c $(OBJDIR)/parser.h: $(SRCDIR)/parser.y $(OBJDIR)
+	$(BISON) -v -t --locations --defines=$(OBJDIR)/parser.h \
 	  -o $(OBJDIR)/parser.c -rall --report-file=$(OBJDIR)/bison.out $<
 
-$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(SRCDIR)/parser.h
+$(OBJDIR)/scanner.c: $(SRCDIR)/scanner.l $(OBJDIR)/parser.h
 	$(FLEX) -o $(OBJDIR)/scanner.c $<
 	
 $(OBJDIR)/ir_generator.o: $(SRCDIR)/ir_generator.c $(SRCDIR)/ir_generator.h

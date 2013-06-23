@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 #include "main.h"
+#include "symboltable.h"
+#include "ir_generator.h"
 
 extern FILE* yyin;
 int yyparse();
@@ -269,6 +271,10 @@ int main (int argc, char *argv[]) {
   printf("IR: %s\n", cc_options.ir_file);
   yyin = fopen(cc_options.input_file,"r");
   yyparse();
+
+  if(cc_options.print_ir)
+      printIR(cc_options.ir_file);
+
   rm_cleanup_resources(&resource_mgr);
   return 0;
 }

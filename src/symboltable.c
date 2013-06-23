@@ -2,7 +2,6 @@
 #include "string.h"
 #include "stdio.h"
 #include "symboltable.h"
-#include "parser.h"
 
 static scope_list_t*  global_scope = (scope_list_t*) 0;
 static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den aktuellen scope
@@ -90,7 +89,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
 
     if(getSymbolInScope(*crnt_scope,_name) != 0)
         return -1;
-    if(_type == VAR && _var_type == VOID)
+    if(_type == VAR && _var_type == V_VOID)
     	return -2;
 
     scope_list_t* new_variable = (scope_list_t*) malloc(sizeof(scope_list_t));
@@ -230,24 +229,24 @@ void printTable()
     scope_list_t* entry = global_scope;
     scope_list_t* func_entry;
     FILE*         file = fopen("symboltable.log","w");
-    const char* string_type [] = {"Function","Variable"};
+    const char* string_type [] = {"Function","Variable","Constant"};
     const char* string_var []  = {"int","void"};
 
     fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS, Value\n");
     
     while(entry != 0)
     {
-        if(entry->type==VAR)
-            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type-INT],entry->name,entry->address,entry->var.value);
+        if(entry->type==VAR || entry->type == CONST)
+            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.value);
         else            
-            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type-INT],entry->name,entry->address,entry->var.func_ptr->n_para);
+            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.func_ptr->n_para);
         
         if(entry->type == FUNC)
         {
             func_entry = entry->var.func_ptr->scope;
             while(func_entry != 0)
             {
-                fprintf(file,"\t%s, %s, %s, %d, %d\n",string_type[(int)func_entry->type],string_var[(int)func_entry->var_type - INT],func_entry->name,func_entry->address,func_entry->var.value);
+                fprintf(file,"\t%s, %s, %s, %d, %d\n",string_type[(int)func_entry->type],string_var[(int)func_entry->var_type],func_entry->name,func_entry->address,func_entry->var.value);
                 func_entry = func_entry->next;
             }
         }

@@ -11,7 +11,7 @@ int variable_declaration_tc(int var_type, char* var_name, int arr_size);
 
 char* function_begin_tc(int type, char* id);
 
-void return_tc(int var_type, scope_list_t* crntFunc);
+void return_tc(scope_list_t* expression, scope_list_t* crntFunc);
 
 void return_tc2(scope_list_t* crntFunc);
 

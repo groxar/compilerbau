@@ -41,8 +41,6 @@
 %initial-action
 {
 	yydebug = 0;
-    initSymboltable();
-    initIR();
 };
 
 
@@ -123,8 +121,8 @@ program_element
      ;
 									
 type
-     : INT { $$ = INT; }
-     | VOID { $$ = VOID; }
+     : INT { $$ = V_INT; }
+     | VOID { $$ = V_VOID; }
      ;
 
 variable_declaration
@@ -175,7 +173,7 @@ stmt
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
-     | RETURN expression { return_tc($2->var_type, crntFunc); }SEMICOLON
+     | RETURN expression { return_tc($2, crntFunc); }SEMICOLON
      | RETURN { return_tc2(crntFunc); }SEMICOLON
      | SEMICOLON /* empty statement */
      ;
@@ -194,7 +192,7 @@ stmt_begin
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,voidCheck($3));gotoIR(OP_GOT,genLabel(),$3); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} //removed uneeded second voidCheck
+     : WHILE PARA_OPEN expression PARA_CLOSE {gotoIR(OP_GOF,NULL,voidCheck($3));gotoIR(OP_GOT,genLabel(),$3); backPatch(1);} stmt {trackUnsetGoto()->firstPara = genLabel();frontPatch(1);} 
      | DO {gotoIR(OP_GOT,genLabel(),NULL); backPatch(1);} stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON {frontPatch(1);trackUnsetGoto()->secondPara = voidCheck($6); }
      ;
 									
@@ -202,7 +200,7 @@ expression
      : expression ASSIGN expression             {$$ = assignIR(voidCheck($1),voidCheck($3));}
      | expression LOGICAL_OR expression         {$$ = calcIR(OP_LOR,voidCheck($1),voidCheck($3));}
      | expression LOGICAL_AND expression        {$$ = calcIR(OP_LAND,voidCheck($1),voidCheck($3));}
-     | LOGICAL_NOT expression                   {$$ = calcIR(OP_EQ,genTemp(INT,0),voidCheck($2));}
+     | LOGICAL_NOT expression                   {$$ = calcIR(OP_EQ,genTemp(V_INT,0),voidCheck($2));}
      | expression EQ expression                 {$$ = calcIR(OP_EQ,voidCheck($1),voidCheck($3));}
      | expression NE expression                 {$$ = calcIR(OP_NE,voidCheck($1),voidCheck($3));}
      | expression LS expression                 {$$ = calcIR(OP_LT,voidCheck($1),voidCheck($3));}
@@ -216,7 +214,7 @@ expression
      | expression MUL expression                {$$ = calcIR(OP_MUL,voidCheck($1),voidCheck($3));}
      | expression MOD expression                {$$ = calcIR(OP_MOD,voidCheck($1),voidCheck($3));}
      | expression DIV expression                {$$ = calcIR(OP_DIV,voidCheck($1),voidCheck($3));}
-     | MINUS expression %prec UNARY_MINUS       {$$ = calcIR(OP_SUB, genTemp(INT,0),voidCheck($2));}
+     | MINUS expression %prec UNARY_MINUS       {$$ = calcIR(OP_SUB, genTemp(V_INT,0),voidCheck($2));}
      | PLUS expression %prec UNARY_PLUS         {$$ = voidCheck($2);}
      | ID BRACKET_OPEN primary BRACKET_CLOSE    {$$ = arrayLoadIR(getSymbol($1),$3);}
      | PARA_OPEN expression PARA_CLOSE          {$$ = $2;}
@@ -227,7 +225,7 @@ expression
 
 
 primary
-     : NUM  { $$ = genTemp(INT,$1); }
+     : NUM  { $$ = genConst(V_INT,$1); }
 
      | ID   { $$ = getSymbol($1); } 
      ;

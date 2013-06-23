@@ -1,7 +1,11 @@
 #pragma once
 //ENUMS
 enum type{
-    FUNC, VAR
+    FUNC, VAR, CONST
+};
+
+enum var_type{
+    V_INT, V_VOID
 };
 
 //TYPEDEFS

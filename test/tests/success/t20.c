@@ -9,7 +9,7 @@ int main()
     }while(a>21);
     //i=1/2*3+5+12-2%3>>2&2|2+i<<3;
     return a;
-    func();
+    func(2,3,4);
 }
 
 int func(int b, int c , int d)

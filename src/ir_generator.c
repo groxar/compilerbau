@@ -2,10 +2,10 @@
 #include "ir_generator.h"
 #include "stdlib.h"
 #include "stdio.h"
-#include "parser.h"
 
 int reg_counter = 0;
 int lbl_counter = 0;
+int cns_counter = 0;
 ir_code_t* global   = (ir_code_t*) 0;
 ir_code_t* pos_crnt = (ir_code_t*) 0;
 
@@ -55,7 +55,6 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
     }
 
     pos_crnt = quad;   
-    printIR();
 }
 
 /**
@@ -138,7 +137,7 @@ scope_list_t* callFuncIR(struct scope_list* func){
     else
         quadList(OP_CAL, func, NULL, NULL);
    
-    return genTemp(func->var_type,1);
+    return genTemp(func->var_type,0);
 }
 
 /**
@@ -149,7 +148,7 @@ scope_list_t* callFuncIR(struct scope_list* func){
  */
 scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thirdPara){
     
-    scope_list_t* temp = genTemp(INT,0);
+    scope_list_t* temp = genTemp(V_INT,0);
     quadList(OP_AL, temp, secondPara, thirdPara);
     return temp;
 }
@@ -163,7 +162,7 @@ scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thi
  */
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list *secondPara, struct scope_list *thirdPara){
 
-    scope_list_t* firstPara = (secondPara->name[0]=='#' && thirdPara->name[0]!='#' )? secondPara : thirdPara; //möglicherweise ändern (assign on temp var)
+    scope_list_t* firstPara = secondPara->name[0]=='#'?secondPara :thirdPara->name[0]=='#'?thirdPara:genTemp(V_INT,0) ; 
 
     quadList(opcode, firstPara, secondPara, thirdPara);
     
@@ -180,6 +179,15 @@ scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPa
 
     quadList(OP_ASS, firstPara, secondPara, NULL);
     return firstPara;
+}
+
+
+
+void genRetIR(scope_list_t* sym){
+    if(sym==NULL)
+        quadList(OP_RET,NULL,NULL,NULL);
+    else
+        quadList(OP_RETN,sym,NULL,NULL);
 }
 
 /**
@@ -203,7 +211,7 @@ scope_list_t* genLabel(){
     char buffer[16];
     scope_list_t* label;
     func_t* function;
-    sprintf(buffer, "#l%d", lbl_counter);
+    sprintf(buffer, ".l%d", lbl_counter);
     
     //just needed for fail/t06
     function = (func_t*) malloc(sizeof(func_t));
@@ -211,7 +219,7 @@ scope_list_t* genLabel(){
     function->n_para = -1; 
     //
 
-    insertSymbol(FUNC,VOID,buffer,(int)function,0);
+    insertSymbol(FUNC,V_VOID,buffer,(int)function,0);
     lbl_counter++;
 
     label = getSymbol(buffer);
@@ -219,6 +227,27 @@ scope_list_t* genLabel(){
     quadList(LABEL,label,NULL,NULL);
 
     return label;
+}
+
+/**
+ * \brief Generates a const
+ * \param var_type of the constl
+ * \return Returns a pointer to the generated const
+ */
+//add error handle if name already obtained 
+scope_list_t* genConst(int var_type, int value){
+
+    char buffer[16];
+    scope_list_t* cnst;
+    
+    sprintf(buffer, "#c%d", cns_counter);
+    insertSymbol(CONST, var_type, buffer, value, 1);
+    cns_counter++;
+
+    cnst = getSymbol(buffer);
+    quadList(OP_ASSC,cnst,NULL,NULL);
+
+    return cnst;
 }
 
 /**
@@ -241,16 +270,17 @@ scope_list_t* genTemp(int var_type, int value){
 /**
  * \brief Prints the IR code to the file ir.log
  */
-void printIR()
+void printIR(char const * const _file_name)
 {
     ir_code_t* entry = global;
-    FILE* file       = fopen("ir.log","w");
-
-    fprintf(file,"\n\n\n");
+    FILE* file       = fopen(_file_name,"w");
+    
     while(entry != 0)
     {
+        
         switch(entry->opcode)
         {
+            case OP_ASSC:   fprintf(file,"\t%s = %d", entry->firstPara->name, entry->firstPara->var.value);break;
             case OP_ASS:    fprintf(file,"\t%s = %s", entry->firstPara->name, entry->secondPara->name);break;
             case OP_ADD:    fprintf(file,"\t%s = %s + %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_SUB:    fprintf(file,"\t%s = %s - %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
@@ -269,8 +299,8 @@ void printIR()
             case OP_LT:     fprintf(file,"\t%s = %s < %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_LE:     fprintf(file,"\t%s = %s <= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_GO:     fprintf(file,"\tgoto %s", (entry->firstPara?entry->firstPara->name:"?"));break;
-            case OP_GOT:    fprintf(file,"\tgoto %s if %s != 0", (entry->firstPara?entry->firstPara->name:"?\0"), (entry->secondPara?entry->secondPara->name:"?\0"));break;
-            case OP_GOF:    fprintf(file,"\tgoto %s if %s == 0", (entry->firstPara?entry->firstPara->name:"?\0"), (entry->secondPara?entry->secondPara->name:"?\0"));break;
+            case OP_GOT:    fprintf(file,"\tif %s != 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
+            case OP_GOF:    fprintf(file,"\tif %s == 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
             case OP_RET:    fprintf(file,"\treturn");break;
             case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
@@ -278,7 +308,7 @@ void printIR()
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;
-            case LABEL:     entry->firstPara->name[0]!='#'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
+            case LABEL:     entry->firstPara->name[0]!='.'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
         }
         fprintf(file,"\n");
 

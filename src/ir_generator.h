@@ -2,6 +2,7 @@
 typedef struct ir_code ir_code_t;
 
 enum opcodes {
+    OP_ASSC,
 	OP_ASS,
 	OP_ADD,
 	OP_SUB,
@@ -42,7 +43,7 @@ struct ir_code{
     ir_code_t* next;
 };
 
-void initIR();
+void printIR(char const * const _file_name);
 void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* term);
 void backPatch(int i);
 void frontPatch(int i);
@@ -51,6 +52,8 @@ scope_list_t* callFuncIR(struct scope_list* func);
 scope_list_t* arrayLoadIR(struct scope_list *secondPara, struct scope_list *thirdPara);
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list* secondPara, struct scope_list* thirdPara);
 scope_list_t* assignIR(struct scope_list *firstPara, struct scope_list *secondPara);
+void genRetIR(scope_list_t* sym);
+scope_list_t* genConst(int var_type, int value);
 scope_list_t* genTemp(int var_type, int value);
 scope_list_t* addLabel(char* name);
 scope_list_t* genLabel();

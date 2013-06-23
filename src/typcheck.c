@@ -5,7 +5,6 @@
 #include "stdio.h"
 #include "symboltable.h"
 #include "ir_generator.h"
-#include "parser.h"
 #include "typcheck.h"
 
 
@@ -13,7 +12,7 @@
 
 scope_list_t* voidCheck(scope_list_t* _exp){
     
-    if(_exp!=0 && _exp->var_type!=VOID)
+    if(_exp!=0 && _exp->var_type!=V_VOID)
     {
         if(_exp->size!=1)
         {
@@ -23,7 +22,7 @@ scope_list_t* voidCheck(scope_list_t* _exp){
     else
     {
         yyerror("Operatrions arent allowed on void");
-        _exp=genTemp(INT,0);
+        _exp=genTemp(V_INT,0);
     }
 
     return _exp;
@@ -60,36 +59,37 @@ int variable_declaration_tc(int var_type, char* var_name, int arr_size){
 }
 
 char* function_begin_tc(int type, char* id){
-	char* b_func = malloc(sizeof(char)*(strlen(id)+3));
+	char* b_func = malloc(sizeof(char)*(strlen(id)+4));
  	switch(beginFunction(type, id)) {
            case 0:  b_func = id; break;
            case -1: yyerror("A function with this name already exists"); 
-                    sprintf(b_func,"#f%s",id);
+                    sprintf(b_func,".%s",id);
                     endFunction(id,1);
                     beginFunction(type,b_func);
                     break;
            case -2: yyerror("Declaration of a function in a function is not allowed"); 
-                    sprintf(b_func,"#f%s",id);
+                    sprintf(b_func,".%s",id);
                     endFunction(id,1);
                     beginFunction(type,b_func);
                     break;
            case -3: yyerror("Already exist with different return value"); 
-                    sprintf(b_func,"#f%s",id);
+                    sprintf(b_func,".%s",id);
                     endFunction(id,1);
                     beginFunction(type,b_func);
                     break;
            case -4: yyerror("A variable with this name already exists"); 
-                    sprintf(b_func,"#f%s",id);
+                    sprintf(b_func,".%s",id);
                     beginFunction(type,b_func);
                     break;
     }
  	return b_func;
 }
 
-void return_tc(int var_type, scope_list_t* crntFunc){
+void return_tc(scope_list_t* expression, scope_list_t* crntFunc){
     if(crntFunc!=0)
     {
-    	if(var_type!=crntFunc->var_type)
+        genRetIR(expression);
+    	if(expression->var_type!=crntFunc->var_type)
         {
             yyerror("Wrong return type");
         }
@@ -100,7 +100,8 @@ void return_tc(int var_type, scope_list_t* crntFunc){
 
 void return_tc2(scope_list_t* crntFunc){
     if(crntFunc!=0) {
-    	if(crntFunc->var_type != VOID){
+        genRetIR(NULL);
+    	if(crntFunc->var_type != V_VOID){
     		yyerror("No return value defined");
     	}
     }
