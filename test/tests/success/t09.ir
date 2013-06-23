@@ -1,0 +1,14 @@
+main
+	#c0 = 0
+	i = #c0
+	.l0
+	#c1 = 2
+	#c1 = i << #c1
+	i = #c1
+	#c2 = 1024
+	#c2 = i < #c2
+	#c3 = 512
+	#c3 = i > #c3
+	#c2 = #c2 & #c3
+	if #c2 != 0 goto .l0
+	return i

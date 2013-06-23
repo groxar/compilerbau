@@ -1,0 +1,15 @@
+main
+	#c0 = 0
+	i = #c0
+	#c1 = 10
+	#c1 = i < #c1
+	if #c1 == 0 goto .l1
+	.l0
+	#c2 = 1
+	#c2 = i + #c2
+	i = #c2
+	.l1
+	if #c1 != 0 goto .l0
+	#c3 = 0
+	i = #c3
+	return i

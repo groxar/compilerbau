@@ -1,0 +1,21 @@
+main
+	#c0 = 0
+	#0 = global[ #c0 ]
+	#c1 = 0
+	#0 = #c1
+	#c2 = 0
+	i = #c2
+	#c3 = 10
+	#c3 = i < #c3
+	if #c3 == 0 goto .l1
+	.l0
+	#1 = global[ i ]
+	#1 = i
+	#c4 = 1
+	#c4 = i + #c4
+	i = #c4
+	.l1
+	if #c3 != 0 goto .l0
+	#c5 = 12
+	#c5 = i + #c5
+	return #c5

@@ -1,0 +1,4 @@
+print
+	#c0 = 2
+	#c0 = #c0 * i
+	return #c0

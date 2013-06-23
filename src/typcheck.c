@@ -119,7 +119,7 @@ scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
             sprintf(buffer, "Function expects %d parameter", callFunc->var.func_ptr->n_para);
 			yyerror(buffer);
 		}
-	        func_call=callFuncIR(callFunc, NULL);
+                func_call=callFuncIR(callFunc, NULL);
 	}
 	else
 	{
