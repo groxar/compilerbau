@@ -37,6 +37,7 @@ void quadList(enum opcodes opcode, struct scope_list *firstPara, struct scope_li
 	quad->firstPara     = firstPara;
 	quad->secondPara    = secondPara;
 	quad->thirdPara     = thirdPara;
+    quad->paraList     = NULL;
 	quad->prev          = pos_crnt;
     quad->next          = (ir_code_t*) 0;
     
@@ -130,13 +131,17 @@ void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* te
  * \brief Generates a function call
  * \param func the name of the function
  */
-scope_list_t* callFuncIR(struct scope_list* func){
+scope_list_t* callFuncIR(struct scope_list* func, para_list_t* pl){
 
     if(func->var.func_ptr->n_para)
+    {
         quadList(OP_CALN, func, NULL, NULL);
+        pos_crnt->paraList=pl;
+    }
     else
         quadList(OP_CAL, func, NULL, NULL);
    
+
     return genTemp(func->var_type,0);
 }
 
@@ -267,6 +272,32 @@ scope_list_t* genTemp(int var_type, int value){
     return getSymbol(buffer);
 }
 
+para_list_t* genPL(scope_list_t* _sym)
+{
+    para_list_t* pl = (para_list_t*) malloc(sizeof(para_list_t));
+    pl->para = _sym;
+    pl->prev = NULL;
+    pl->next = NULL;
+    return pl;
+}
+
+para_list_t* mergePL(para_list_t* _head, para_list_t* _tail)
+{
+    for(;_head->next;_head=_head->next);
+
+   _head->next = _tail;
+   _tail->prev = _head;
+   return _tail;
+}
+
+char* pltos(para_list_t* pl)
+{
+    char* s = (char*)malloc(sizeof(char)*80);
+
+    pl->next!=NULL?sprintf(s,"%s , %s",pl->para->name,pltos(pl->next)):sprintf(s,"%s",pl->para->name);
+    return s;
+}
+
 /**
  * \brief Prints the IR code to the file ir.log
  */
@@ -304,7 +335,7 @@ void printIR(char const * const _file_name)
             case OP_RET:    fprintf(file,"\treturn");break;
             case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
-            case OP_CALN:   fprintf(file,"\tcallN %s %d", entry->firstPara->name, entry->firstPara->var.func_ptr->n_para);break;
+            case OP_CALN:   fprintf(file,"\tcallN %s %d ( %s )", entry->firstPara->name, entry->firstPara->var.func_ptr->n_para, pltos(entry->paraList));break;
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;

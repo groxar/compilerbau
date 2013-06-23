@@ -119,7 +119,7 @@ scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
             sprintf(buffer, "Function expects %d parameter", callFunc->var.func_ptr->n_para);
 			yyerror(buffer);
 		}
-	        func_call=callFuncIR(callFunc);
+	        func_call=callFuncIR(callFunc, NULL);
 	}
 	else
 	{
@@ -129,7 +129,7 @@ scope_list_t* function_call_tc(char* id, scope_list_t* callFunc){
 	return func_call;
 }
 
-scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para){
+scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para, para_list_t* pl){
     char* buffer = malloc(sizeof(char)*50);
 	scope_list_t *func_call;
 	callFunc= getSymbol(id);
@@ -141,7 +141,7 @@ scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para){
 			yyerror(buffer);
 		}
 		else
-			func_call=callFuncIR(callFunc);
+			func_call=callFuncIR(callFunc, pl);
 	}
 	else
 	{

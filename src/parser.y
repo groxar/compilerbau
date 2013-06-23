@@ -18,6 +18,7 @@
   int regCnr;
   int lblCnr;
   struct scope_list *s;
+  struct para_list *pl;
 }
 
 %{
@@ -97,7 +98,7 @@
 %type<s> expression
 %type<s> primary
 %type<s> function_call
-%type<s> function_call_parameters
+%type<pl> function_call_parameters
 %type<id> function_begin
 
 
@@ -232,12 +233,12 @@ primary
 
 function_call
       : ID PARA_OPEN PARA_CLOSE { $$ = function_call_tc($1, callFunc); }
-      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { $$ = function_call_tc2($1, callFunc, n_para); }
+      | ID PARA_OPEN {n_para = 0; callFunc= getSymbol($1);} function_call_parameters PARA_CLOSE { $$ = function_call_tc2($1, callFunc, n_para, $4); }
       ;
 
 function_call_parameters
-     : function_call_parameters COMMA expression {n_para++;}
-     | expression { function_call_parameters_tc($1, n_para, callFunc, callFuncPara); n_para++; }
+     : function_call_parameters COMMA expression {n_para++; mergePL($1,genPL($3));}
+     | expression { function_call_parameters_tc($1, n_para, callFunc, callFuncPara); n_para++; $$=genPL($1);}
      ;
 
 %%

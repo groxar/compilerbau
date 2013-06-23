@@ -16,7 +16,7 @@ func
 	#c3 = 1
 	#c3 = i + #c3
 	i = #c3
-	callN print 1
+	callN print 1 ( i )
 	.l2
 	if #0 != 0 goto .l0
 	return sum
@@ -27,9 +27,9 @@ main
 	#c6 = 5
 	#c5 = #c5 + #c6
 	#c7 = 5
-	callN func 3
+	callN func 3 ( a , #c5 , #c7 )
 	return #3
 	call scan
-	callN print 1
+	callN print 1 ( #4 )
 	#c8 = 0
-	callN exit 1
+	callN exit 1 ( #c8 )

@@ -17,6 +17,6 @@ void return_tc2(scope_list_t* crntFunc);
 
 scope_list_t* function_call_tc(char* id, scope_list_t* callFunc);
 
-scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para);
+scope_list_t* function_call_tc2(char* id, scope_list_t* callFunc, int n_para, para_list_t* pl);
 
 void function_call_parameters_tc(scope_list_t* func_call_para, int n_para, scope_list_t* callFunc, scope_list_t* callFuncPara);
