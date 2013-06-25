@@ -11,15 +11,6 @@ ir_code_t* pos_crnt = (ir_code_t*) 0;
 
 void printIR();
 
-/**
- * \brief Writes the log into a file and cleans the old log
- */
-void initIR()
-{
-    FILE* file = fopen("ir.log","w");
-    fprintf(file,"intermediate code log");
-    fclose(file);
-}
 
 /**
  * \brief Adds the quadruples to the list
