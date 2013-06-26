@@ -20,7 +20,7 @@ void fprintGlobalVar()
             fprintf(file, "%s:\n",entry->name);
             
             if(entry->size == 1)
-                fprintf(file, "  .word 0\n");
+                fprintf(file, "  .word %d\n", entry->var.value);
             else
                 fprintf(file, "  .word 0 : %d\n", entry->size);
             fprintf(file, "  .align 4\n");
@@ -29,13 +29,7 @@ void fprintGlobalVar()
     fprintf(file,"\n");
 }
 
-void fprintGlobalFunc()
-{
-    ir_code_t*
-    for()
-}
-tf(file,"\t%s = %d", entry->firstPara->name, entry->firstPara->var.value);break;
-            case OP_ASS:    fprint
+
 void fprintFunc(ir_code_t* funcIr)
 {
     fprintf(file, "%s:\n", funcIr->firstPara->name);
@@ -72,16 +66,28 @@ void fprintFunc(ir_code_t* funcIr)
             case OP_GO:     fprintf(file,"\tgoto %s", (entry->firstPara?entry->firstPara->name:"?"));break;
             case OP_GOT:    fprintf(file,"\tif %s != 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
             case OP_GOF:    fprintf(file,"\tif %s == 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
-            case OP_RET:    fprintf(file,"\treturn");break;
-            case OP_RETN:   fprintf(file,"\treturn %s", entry->firstPara->name);break;
+            case OP_RET:    fprintf(file,"\treturn\n");return;break;
+            case OP_RETN:   fprintf(file,"\treturn %s\n", entry->firstPara->name);return;break;
             case OP_CAL:    fprintf(file,"\tcall %s", entry->firstPara->name);break;
-            case OP_CALN:   fprintf(file,"\tcallN ");
+            case OP_CALN:   fprintf(file,"\tcallN ");break;
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;
             case LABEL:     entry->firstPara->name[0]!='.'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
         }
         fprintf(file,"\n");
+    }
+}
+
+void fprintGlobalFunc()
+{
+    ir_code_t* entry = ir;
+    for(;entry != NULL; entry = entry->next)
+    {
+        if(entry->opcode == LABEL && entry->firstPara->name[0]!='.')
+        {
+            fprintFunc( entry);
+        }
     }
 }
 
@@ -94,7 +100,7 @@ int genAssembly( char const * const _file_name)
     
     fprintGlobalVar();
 
-    fprintf(file, "_start:\n  JAL main\n\n");
+    fprintf(file, ".text\n\n_start:\n  JAL main\n\n");
 
     fprintGlobalFunc();
 
