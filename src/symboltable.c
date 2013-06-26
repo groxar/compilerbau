@@ -10,12 +10,6 @@ static int            next_address = 0;
 
 void printTable();
 
-void initSymboltable()
-{
-    FILE* file = fopen("symboltable.log","w");
-    fprintf(file,"Symboltable log");
-    fclose(file);
-}
 /**
  * \brief Searches for a symbol in a specified scope
  * \param _scope The name of the scope (global or a specified funtion-scope)
@@ -221,6 +215,12 @@ int endFunction(char* _name, int _decl)
     crnt_scope = &global_scope;
     return 0;
 }
+
+scope_list_t* getSymbolTable()
+{
+    return global_scope;
+}
+
 /**
  * \brief Prints the whole symboltable into a file symboltable.log for debugging
  */
@@ -232,12 +232,12 @@ void printTable()
     const char* string_type [] = {"Function","Variable","Constant"};
     const char* string_var []  = {"int","void"};
 
-    fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS, Value\n");
+    fprintf(file,"\n\nTYP, VAR_TYPE, NAME, ADDRESS, Value, Size\n");
     
     while(entry != 0)
     {
         if(entry->type==VAR || entry->type == CONST)
-            fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.value);
+            fprintf(file,"%s, %s, %s, %d, %d %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.value, entry->size);
         else            
             fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.func_ptr->n_para);
         

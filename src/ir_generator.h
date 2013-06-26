@@ -73,4 +73,4 @@ para_list_t* mergePL(para_list_t* _head, para_list_t* _tail);
 ir_code_t* trackLabel(struct scope_list* label);
 ir_code_t* trackUnsetGoto();
 
-
+ir_code_t* getQuadList();

@@ -40,8 +40,6 @@ extern scope_list_t** crnt_pos;
 */
 
 //Functions
-void initSymboltable();
-
 scope_list_t* getSymbol( char* _name);
 
 int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size);
@@ -51,3 +49,5 @@ int beginFunction(int _ret_val, char* _name);
 int setN_Para(char* _name, int _n_para);
 
 int endFunction(char* _name, int _decl);
+
+scope_list_t* getSymbolTable();

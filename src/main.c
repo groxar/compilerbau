@@ -8,6 +8,7 @@
 #include "main.h"
 #include "symboltable.h"
 #include "ir_generator.h"
+#include "as_generator.h"
 
 extern FILE* yyin;
 int yyparse();
@@ -270,10 +271,18 @@ int main (int argc, char *argv[]) {
   printf("Output: %s\n", cc_options.output_file);
   printf("IR: %s\n", cc_options.ir_file);
   yyin = fopen(cc_options.input_file,"r");
+  if (process_options(argc, argv) == 1) {
+    rm_cleanup_resources(&resource_mgr);
+    exit(EXIT_FAILURE);
+  }
+
+
   yyparse();
 
   if(cc_options.print_ir)
       printIR(cc_options.ir_file);
+
+  genAssembly(cc_options.output_file);    
 
   rm_cleanup_resources(&resource_mgr);
   return 0;

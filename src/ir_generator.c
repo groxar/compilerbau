@@ -289,6 +289,11 @@ char* pltos(para_list_t* pl)
     return s;
 }
 
+ir_code_t* getQuadList()
+{
+    return global;
+}
+
 /**
  * \brief Prints the IR code to the file ir.log
  */
@@ -297,7 +302,7 @@ void printIR(char const * const _file_name)
     ir_code_t* entry = global;
     FILE* file       = fopen(_file_name,"w");
     
-    while(entry != 0)
+    for(;entry != NULL; entry=entry->next)
     {
         
         switch(entry->opcode)
@@ -333,8 +338,6 @@ void printIR(char const * const _file_name)
             case LABEL:     entry->firstPara->name[0]!='.'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
         }
         fprintf(file,"\n");
-
-        entry = entry->next;
     }
 
  
