@@ -8,6 +8,11 @@ FILE* file;
 ir_code_t* ir;
 scope_list_t* st;
 
+void assignAs(ir_code_t* _entry)
+{
+    fprintf(file,"  SUBI $sp, $sp, 4\n  LI $5, %d\n  SW $5, 0($sp)", entry->firstPara->var.value);
+}
+
 void fprintGlobalVar()
 {
     fprintf(file,".data\n");
@@ -32,12 +37,13 @@ void fprintGlobalVar()
 
 void fprintFunc(ir_code_t* funcIr)
 {
+    int fp = 0;
+
     fprintf(file, "%s:\n", funcIr->firstPara->name);
-    fprintf(file, "  ADDI $sp, $sp, -8\n"); 
-    fprintf(file, "  LI $5, 0\n"); 
-    fprintf(file, "  SW $5, 4($sp)\n"); 
-    fprintf(file, "  LI $5, 0\n"); 
-    fprintf(file, "  SW $5, 0($sp)\n"); 
+    fprintf(file, "  SUBI $sp, $sp, 8\n"); 
+    fprintf(file, "  SW $31, 4($sp)\n"); 
+    fprintf(file, "  SW $fp, 0($sp)\n"); 
+    fprintf(file, "  MOVE $fp, $sp\n\n"); 
 
     ir_code_t* entry = funcIr->next;
 
@@ -45,24 +51,24 @@ void fprintFunc(ir_code_t* funcIr)
     {
         switch(entry->opcode)
         {
-            case OP_ASSC:   fprintf(file,"\t%s = %d", entry->firstPara->name, entry->firstPara->var.value);break;
-            case OP_ASS:    fprintf(file,"\t%s = %s", entry->firstPara->name, entry->secondPara->name);break;
-            case OP_ADD:    fprintf(file,"\t%s = %s + %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_SUB:    fprintf(file,"\t%s = %s - %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_MUL:    fprintf(file,"\t%s = %s * %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_DIV:    fprintf(file,"\t%s = %s / %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_MOD:    fprintf(file,"\t%s = %s %% %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_LOR:    fprintf(file,"\t%s = %s | %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_LAND:   fprintf(file,"\t%s = %s & %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_SL:     fprintf(file,"\t%s = %s << %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_SR:     fprintf(file,"\t%s = %s >> %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_NEG:    fprintf(file,"\t%s = -%s", entry->firstPara->name, entry->secondPara->name);break; 
-            case OP_EQ:     fprintf(file,"\t%s = %s == %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_NE:     fprintf(file,"\t%s = %s != %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_GT:     fprintf(file,"\t%s = %s > %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_GE:     fprintf(file,"\t%s = %s >= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_LT:     fprintf(file,"\t%s = %s < %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
-            case OP_LE:     fprintf(file,"\t%s = %s <= %s", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
+            case OP_ASSC:break;
+            case OP_ASS: break;    
+            case OP_ADD:    
+            case OP_SUB:    
+            case OP_MUL:    
+            case OP_DIV:    
+            case OP_MOD:    
+            case OP_LOR:    
+            case OP_LAND:   
+            case OP_SL:     
+            case OP_SR:     
+            case OP_NEG:    
+            case OP_EQ:     
+            case OP_NE:     
+            case OP_GT:     
+            case OP_GE:     
+            case OP_LT:     
+            case OP_LE:     fprintf(file,"OP");break;
             case OP_GO:     fprintf(file,"\tgoto %s", (entry->firstPara?entry->firstPara->name:"?"));break;
             case OP_GOT:    fprintf(file,"\tif %s != 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
             case OP_GOF:    fprintf(file,"\tif %s == 0 goto %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;

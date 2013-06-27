@@ -12,43 +12,59 @@ _start:
   JAL main
 
 func:
-  ADDI $sp, $sp, -8
-  LI $5, 0
-  SW $5, 4($sp)
+  SUBI $sp, $sp, 8
+  SW $31, 4($sp)
+  SW $fp, 0($sp)
+  MOVE $fp, $sp
+
+  SUBI $sp, $sp, 4
   LI $5, 0
   SW $5, 0($sp)
-	#c0 = 0
-	i = #c0
-	#c1 = 0
-	sum = #c1
-	#0 = i < len
+OP
+  SUBI $sp, $sp, 4
+  LI $5, 0
+  SW $5, 0($sp)
+OP
+OP
 	if #0 == 0 goto .l2
 	.l0
 	#1 = arr[ i ]
-	#1 = #1 <= threshold
+OP
 	if #1 == 0 goto .l1
-	#c2 = 1
-	#c2 = sum + #c2
-	sum = #c2
+  SUBI $sp, $sp, 4
+  LI $5, 1
+  SW $5, 0($sp)
+OP
+OP
 	.l1
-	#c3 = 1
-	#c3 = i + #c3
-	i = #c3
+  SUBI $sp, $sp, 4
+  LI $5, 1
+  SW $5, 0($sp)
+OP
+OP
 	callN 
 	.l2
 	if #0 != 0 goto .l0
 	return sum
 main:
-  ADDI $sp, $sp, -8
-  LI $5, 0
-  SW $5, 4($sp)
-  LI $5, 0
+  SUBI $sp, $sp, 8
+  SW $31, 4($sp)
+  SW $fp, 0($sp)
+  MOVE $fp, $sp
+
+  SUBI $sp, $sp, 4
+  LI $5, 1
   SW $5, 0($sp)
-	#c4 = 1
-	global = #c4
-	#c5 = 5
-	#c6 = 5
-	#c5 = #c5 + #c6
-	#c7 = 5
+OP
+  SUBI $sp, $sp, 4
+  LI $5, 5
+  SW $5, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $5, 5
+  SW $5, 0($sp)
+OP
+  SUBI $sp, $sp, 4
+  LI $5, 5
+  SW $5, 0($sp)
 	callN 
 	return #3

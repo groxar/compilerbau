@@ -6,7 +6,6 @@
 static scope_list_t*  global_scope = (scope_list_t*) 0;
 static scope_list_t** crnt_scope   = &global_scope; //crnt_scope zeigt auf den aktuellen scope
 static scope_list_t** crnt_pos     = &global_scope; //crnt_pos zeigt auf nächste freie Stelle
-static int            next_address = 0;
 
 void printTable();
 
@@ -69,7 +68,6 @@ scope_list_t* getSymbol(char* _name)
 }
 
 /**
- * \brief Inserts a symbol into the current scope
  * \param _type The type of the symbol (FUNC/VAR)
  * \param _var_type The type of the variable (if it is a variable)
  * \param _name The name of the variable
@@ -92,7 +90,7 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     new_variable->type     = _type;
     new_variable->var_type = _var_type;
     new_variable->name     = (char*) malloc(name_length + 1);
-    new_variable->address  = next_address;
+    new_variable->address  = -1;
     new_variable->size     = _size;
     new_variable->next     = (scope_list_t*) 0;
 
@@ -108,8 +106,6 @@ int insertSymbol(int _type, int _var_type, char* _name, int _value, int _size)
     //setzt den aktuellen Scope eins weiter
     *crnt_pos = new_variable;
     crnt_pos  = &((**crnt_pos).next);
-
-    next_address += _size;
 
     printTable();    
     return 0; 
