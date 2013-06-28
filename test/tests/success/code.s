@@ -43,33 +43,9 @@ func:
   LI $t0, 1         # #5
   ADD $t0, $t4, $t0
   MOVE $t4, $t0     # i = #5
-  MOVE $a0, $t4 #para 0
-  SUBI $sp, $sp, 4
-  SW $t0, 0($sp)  #push #5 in memory
-  SUBI $sp, $sp, 4
-  SW $t1, 0($sp)  #push len in memory
-  SUBI $sp, $sp, 4
-  SW $t2, 0($sp)  #push threshold in memory
-  SUBI $sp, $sp, 4
-  SW $t3, 0($sp)  #push #0 in memory
-  SUBI $sp, $sp, 4
-  SW $t4, 0($sp)  #push i in memory
-  SUBI $sp, $sp, 4
-  SW $t5, 0($sp)  #push #1 in memory
-  SUBI $sp, $sp, 4
-  SW $t6, 0($sp)  #push sum in memory
-  SUBI $sp, $sp, 4
-  SW $t7, 0($sp)  #push #2 in memory
-  SUBI $sp, $sp, 4
-  SW $t8, 0($sp)  #push #3 in memory
-  SUBI $sp, $sp, 4
-  SW $t9, 0($sp)  #push #4 in memory
-  JAL print
 .l2:
-  LW $t1, 8($sp)  #load #2 from memory in reg
-  BNEZ $t1, .l0
-  LW $t2, 12($sp)  #load sum from memory in reg
-  MOVE $v0, $t2
+  BNEZ $t7, .l0
+  MOVE $v0, $t6
   LW $fp, 0($sp)
   LW $ra, 4($sp)
   ADDI $sp, $sp, 8
@@ -82,34 +58,52 @@ main:
   SW $fp, 0($sp)
   MOVE $fp, $sp
 
-  LI $t3, 1         # #7
-  LA $t4, global
-  MOVE $t4, $t3     # global = #7
-  LI $t5, 5         # #8
-  LI $t6, 5         # #9
-  ADD $t5, $t5, $t6
-  LI $t7, 5         # #10
-  LA $t8, a
-  MOVE $a0, $t8 #para 0
-  MOVE $a1, $t5 #para 1
-  MOVE $a2, $t7 #para 2
-  SW $t1, 8($sp) #store #2 in memory
-  SW $t2, 12($sp) #store sum in memory
+  SUBI $sp, $sp, 4
+  SW $t1, 0($sp)  #push len in memory
+  LI $t1, 1         # #6
+  LA $t2, global
+  SUBI $sp, $sp, 4
+  SW $t2, 0($sp)  #push threshold in memory
+  MOVE $t2, $t1     # global = #6
+  SUBI $sp, $sp, 4
+  SW $t3, 0($sp)  #push #0 in memory
+  LI $t3, 5         # #7
+  SUBI $sp, $sp, 4
+  SW $t4, 0($sp)  #push i in memory
+  LI $t4, 5         # #8
+  ADD $t3, $t3, $t4
+  SUBI $sp, $sp, 4
+  SW $t5, 0($sp)  #push #1 in memory
+  LI $t5, 5         # #9
+  LA $t6, a
+  SUBI $sp, $sp, 4
+  SW $t6, 0($sp)  #push sum in memory
+  MOVE $a0, $t6 #para 0
+  MOVE $a1, $t3 #para 1
+  MOVE $a2, $t5 #para 2
+  SUBI $sp, $sp, 4
+  SW $t0, 0($sp)  #push #5 in memory
+  SUBI $sp, $sp, 4
+  SW $t1, 0($sp)  #push #6 in memory
+  SUBI $sp, $sp, 4
+  SW $t2, 0($sp)  #push global in memory
   SUBI $sp, $sp, 4
   SW $t3, 0($sp)  #push #7 in memory
   SUBI $sp, $sp, 4
-  SW $t4, 0($sp)  #push global in memory
+  SW $t4, 0($sp)  #push #8 in memory
   SUBI $sp, $sp, 4
-  SW $t5, 0($sp)  #push #8 in memory
+  SW $t5, 0($sp)  #push #9 in memory
   SUBI $sp, $sp, 4
-  SW $t6, 0($sp)  #push #9 in memory
+  SW $t6, 0($sp)  #push a in memory
   SUBI $sp, $sp, 4
-  SW $t7, 0($sp)  #push #10 in memory
+  SW $t7, 0($sp)  #push #2 in memory
   SUBI $sp, $sp, 4
-  SW $t8, 0($sp)  #push a in memory
+  SW $t8, 0($sp)  #push #3 in memory
+  SUBI $sp, $sp, 4
+  SW $t9, 0($sp)  #push #4 in memory
   JAL func
-  MOVE $t9, $v0 #return value
-  MOVE $v0, $t9
+  MOVE $t7, $v0 #return value
+  MOVE $v0, $t7
   LI $v0, 10
   SYSCALL
 

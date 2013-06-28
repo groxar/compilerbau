@@ -1,0 +1,30 @@
+func
+	#0 = 0
+	i = #0
+	#1 = 0
+	sum = #1
+	#2 = i < len
+	if #2 == 0 goto .l2
+	.l0
+	#3 = arr[ i ]
+	#3 = #3 <= threshold
+	if #3 == 0 goto .l1
+	#4 = 1
+	#4 = sum + #4
+	sum = #4
+	.l1
+	#5 = 1
+	#5 = i + #5
+	i = #5
+	.l2
+	if #2 != 0 goto .l0
+	return sum
+main
+	#6 = 1
+	global = #6
+	#7 = 5
+	#8 = 5
+	#7 = #7 + #8
+	#9 = 5
+	callN func 3 ( a , #7 , #9 )
+	return #10

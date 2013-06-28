@@ -1,11 +1,11 @@
-int b;
+int tz[20];
 
 int foo(int a,int b, int c, int d);
 
 void main()
 {
-    int a;
-    a = 2+foo(1,1,1,1);
+    tz[2]=23;
+    2+tz[2];
 }
 
 int foo(int a, int b, int c, int d)
