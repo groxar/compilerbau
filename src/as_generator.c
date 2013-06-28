@@ -62,15 +62,16 @@ int getRegNum(scope_list_t* sym)
     loadSymInReg(sym,shift);
     return shift;
 }
-/*
-void assignASSC(scope_list_t* _entry)
+
+void fprintFuncPara(para_list_t* pl)
 {
-    int reg = getRegNum(_entry);
-    fprintf(file,"  SUBI $sp, $sp, 4\n  LI $a%d, %d\n  SW $a%d, 0($sp)", reg, _entry->var.value, reg);
-    _entry->address = sp;
-    sp+=4;
+    while(pl!=NULL)
+    {
+        getRegNum(pl->para);
+
+        pl=pl->next;
+    }
 }
-*/
 
 void fprintGlobalVar()
 {
@@ -122,23 +123,29 @@ void fprintFunc(ir_code_t* funcIr)
             case OP_SL:     fprintf(file,"  SLL $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
             case OP_SR:     fprintf(file,"  SRL $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
             case OP_NEG:    fprintf(file,"  SUB $a%d, $zero, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara));break;    
-            case OP_EQ:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
-            case OP_NE:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
-            case OP_GT:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
-            case OP_GE:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
-            case OP_LT:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
-            case OP_LE:     fprintf(file,"\tADD $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;    
+            case OP_EQ:     fprintf(file,"  SEQ $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
+            case OP_NE:     fprintf(file,"  SNE $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
+            case OP_GT:     fprintf(file,"  SGT $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
+            case OP_GE:     fprintf(file,"  SGE $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
+            case OP_LT:     fprintf(file,"  SLT $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;     
+            case OP_LE:     fprintf(file,"  SLE $a%d, $a%d, $a%d",getRegNum(entry->firstPara),getRegNum(entry->secondPara),getRegNum(entry->thirdPara));break;    
             case OP_GO:     fprintf(file,"  B %s", (entry->firstPara?entry->firstPara->name:"?"));break;
-            case OP_GOT:    fprintf(file,"  BNEQ %s, $zero, %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
-            case OP_GOF:    fprintf(file,"  BEQZ %s, %s", (entry->secondPara?entry->secondPara->name:"?\0"), (entry->firstPara?entry->firstPara->name:"?\0"));break;
-            case OP_RET:    fprintf(file,"  JR $ra");return;break;
-            case OP_RETN:   fprintf(file,"  JR $ra");return;break;//return value
-            case OP_CAL:    fprintf(file,"  BAL %s", entry->firstPara->name);break;
-            case OP_CALN:   fprintf(file,"  BAL %s", entry->firstPara->name);break;//parameter
+            case OP_GOT:    fprintf(file,"  BNEZ $a%d, %s", getRegNum(entry->secondPara),entry->firstPara->name);break;
+            case OP_GOF:    fprintf(file,"  BEQZ $a%d, %s", getRegNum(entry->secondPara),entry->firstPara->name);break;
+            case OP_RET:    fprintf(file,"  JR $ra\n\n");return;break;
+            case OP_RETN:   fprintf(file,"  MOVE $v0, $%d\n  JR $ra\n\n",getRegNum(entry->firstPara));return;break;
+            case OP_CAL:    fprintf(file,"  JAL %s", entry->firstPara->name);break;
+            case OP_CALN:   fprintFuncPara(entry->paraList);fprintf(file,"  JAL %s", entry->firstPara->name);break;
             case OP_AL:     fprintf(file,"\t%s = %s[ %s ]", entry->firstPara->name, entry->secondPara->name, entry->thirdPara->name);break;
             case OP_AS:     fprintf(file,"\t%s[ %s] = %s", entry->secondPara->name, entry->thirdPara->name, entry->firstPara->name);break;
             case OP_LNOT:   fprintf(file,"\t%s = !%s", entry->firstPara->name, entry->secondPara->name);break;
-            case LABEL:     entry->firstPara->name[0]!='.'?fprintf(file, "%s", entry->firstPara->name):fprintf(file,"\t%s",entry->firstPara->name);
+            case LABEL:     if(entry->firstPara->name[0]=='.')
+                                fprintf(file," %s",entry->firstPara->name);
+                            else
+                            {
+                                fprintf(file,"\n");
+                                return;
+                            }
         }
         fprintf(file,"\n");
     }
