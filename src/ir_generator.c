@@ -158,7 +158,7 @@ scope_list_t* arrayLoadIR( struct scope_list *secondPara, struct scope_list *thi
  */
 scope_list_t* calcIR(enum opcodes opcode, struct scope_list *secondPara, struct scope_list *thirdPara){
 
-    scope_list_t* firstPara = secondPara->name[0]=='#'?secondPara :thirdPara->name[0]=='#'?thirdPara:genTemp(V_INT,0) ; 
+    scope_list_t* firstPara = secondPara->name[0]=='#' ? secondPara : thirdPara->name[0]=='#' ? thirdPara : genTemp(V_INT,0) ; 
 
     quadList(opcode, firstPara, secondPara, thirdPara);
     
@@ -233,14 +233,7 @@ scope_list_t* genLabel(){
 //add error handle if name already obtained 
 scope_list_t* genConst(int var_type, int value){
 
-    char buffer[16];
-    scope_list_t* cnst;
-    
-    sprintf(buffer, "#c%d", cns_counter);
-    insertSymbol(CONST, var_type, buffer, value, 1);
-    cns_counter++;
-
-    cnst = getSymbol(buffer);
+    scope_list_t* cnst = getTemp(var_type,value);
     quadList(OP_ASSC,cnst,NULL,NULL);
 
     return cnst;

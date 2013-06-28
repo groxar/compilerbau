@@ -1,7 +1,7 @@
 #pragma once
 //ENUMS
 enum type{
-    FUNC, VAR, CONST
+    FUNC, VAR
 };
 
 enum var_type{
@@ -51,3 +51,5 @@ int setN_Para(char* _name, int _n_para);
 int endFunction(char* _name, int _decl);
 
 scope_list_t* getSymbolTable();
+
+scope_list_t* getSymbolInScope(scope_list_t* _scope, char* _name);

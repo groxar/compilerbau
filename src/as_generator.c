@@ -8,9 +8,17 @@ FILE* file;
 ir_code_t* ir;
 scope_list_t* st;
 
-void assignAs(ir_code_t* _entry)
+int nextReg()
 {
-    fprintf(file,"  SUBI $sp, $sp, 4\n  LI $5, %d\n  SW $5, 0($sp)", entry->firstPara->var.value);
+    static int reg = -1;
+    reg++;
+    return reg<4?reg:!(reg=0); 
+}
+
+void assignASSC(ir_code_t* _entry,int _address, int _reg )
+{
+    fprintf(file,"  SUBI $sp, $sp, 4\n  LI $5, %d\n  SW $5, 0($sp)", _entry->firstPara->var.value);
+    _entry->firstPara->address = _address;
 }
 
 void fprintGlobalVar()
@@ -37,7 +45,9 @@ void fprintGlobalVar()
 
 void fprintFunc(ir_code_t* funcIr)
 {
-    int fp = 0;
+    int             fp = 0;
+    ir_code_t*      entry = funcIr->next;
+    scope_list_t*   symTb = funcIr->firstPara->var.func_ptr->scope;
 
     fprintf(file, "%s:\n", funcIr->firstPara->name);
     fprintf(file, "  SUBI $sp, $sp, 8\n"); 
@@ -45,13 +55,13 @@ void fprintFunc(ir_code_t* funcIr)
     fprintf(file, "  SW $fp, 0($sp)\n"); 
     fprintf(file, "  MOVE $fp, $sp\n\n"); 
 
-    ir_code_t* entry = funcIr->next;
 
     for(;entry != NULL; entry=entry->next)
     {
         switch(entry->opcode)
         {
-            case OP_ASSC:break;
+            case OP_ASSC: assignASS(entry, fp,); 
+                          fp+=4;break;
             case OP_ASS: break;    
             case OP_ADD:    
             case OP_SUB:    

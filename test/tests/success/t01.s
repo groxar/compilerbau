@@ -20,11 +20,11 @@ func:
   SUBI $sp, $sp, 4
   LI $5, 0
   SW $5, 0($sp)
-OP
+
   SUBI $sp, $sp, 4
   LI $5, 0
   SW $5, 0($sp)
-OP
+
 OP
 	if #0 == 0 goto .l2
 	.l0
@@ -35,13 +35,13 @@ OP
   LI $5, 1
   SW $5, 0($sp)
 OP
-OP
+
 	.l1
   SUBI $sp, $sp, 4
   LI $5, 1
   SW $5, 0($sp)
 OP
-OP
+
 	callN 
 	.l2
 	if #0 != 0 goto .l0
@@ -55,7 +55,7 @@ main:
   SUBI $sp, $sp, 4
   LI $5, 1
   SW $5, 0($sp)
-OP
+
   SUBI $sp, $sp, 4
   LI $5, 5
   SW $5, 0($sp)
@@ -67,4 +67,4 @@ OP
   LI $5, 5
   SW $5, 0($sp)
 	callN 
-	return #3
+	return #6

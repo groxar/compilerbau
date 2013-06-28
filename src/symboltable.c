@@ -232,7 +232,7 @@ void printTable()
     
     while(entry != 0)
     {
-        if(entry->type==VAR || entry->type == CONST)
+        if(entry->type==VAR )
             fprintf(file,"%s, %s, %s, %d, %d %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.value, entry->size);
         else            
             fprintf(file,"%s, %s, %s, %d, %d\n",string_type[(int)entry->type],string_var[(int)entry->var_type],entry->name,entry->address,entry->var.func_ptr->n_para);
