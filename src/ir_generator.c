@@ -124,16 +124,20 @@ void gotoIR(enum opcodes opcode, struct scope_list* label, struct scope_list* te
  */
 scope_list_t* callFuncIR(struct scope_list* func, para_list_t* pl){
 
+    scope_list_t* returnVar = genTemp(func->var_type,0);
+
+    
     if(func->var.func_ptr->n_para)
     {
-        quadList(OP_CALN, func, NULL, NULL);
+        quadList(OP_CALN, func, returnVar, NULL);
         pos_crnt->paraList=pl;
     }
     else
-        quadList(OP_CAL, func, NULL, NULL);
+        quadList(OP_CAL, func, returnVar, NULL);
    
 
-    return genTemp(func->var_type,0);
+
+    return returnVar;
 }
 
 /**

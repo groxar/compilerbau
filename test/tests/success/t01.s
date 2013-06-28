@@ -12,7 +12,8 @@ _start:
   JAL main
 
 func:
-#Function Prolog  SUBI $sp, $sp, 8
+#Function Prolog
+  SUBI $sp, $sp, 8
   SW $ra, 4($sp)
   SW $fp, 0($sp)
   MOVE $fp, $sp
@@ -40,7 +41,7 @@ func:
   LI $a0, 1
   SUBI $sp, $sp, 4
   SW $a1, 0($sp)  #push reg in memory
-  LW $a1, 4($sp) #load variable from mem in reg
+  LW $a1, 4($sp)  #load variable from mem in reg
   ADD $a0, $a1, $a0
   MOVE $a1, $a0
  .l1
@@ -49,20 +50,21 @@ func:
   LI $a2, 1
   SUBI $sp, $sp, 4
   SW $a3, 0($sp)  #push reg in memory
-  LW $a3, 4($sp) #load variable from mem in reg
+  LW $a3, 4($sp)  #load variable from mem in reg
   ADD $a2, $a3, $a2
   MOVE $a3, $a2
   JAL print
  .l2
   SUBI $sp, $sp, 4
   SW $a0, 0($sp)  #push reg in memory
-  LW $a0, 4($sp) #load variable from mem in reg
+  LW $a0, 4($sp)  #load variable from mem in reg
   BNEZ $a0, .l0
   MOVE $v0, $1
   JR $ra
 
 main:
-#Function Prolog  SUBI $sp, $sp, 8
+#Function Prolog
+  SUBI $sp, $sp, 8
   SW $ra, 4($sp)
   SW $fp, 0($sp)
   MOVE $fp, $sp

@@ -1,9 +1,15 @@
 int b;
 
+int foo(int a,int b, int c, int d);
+
 void main()
 {
-    b= 4;
     int a;
-    a=12;
-    a=b;
+    a = 2+foo(1,1,1,1);
+}
+
+int foo(int a, int b, int c, int d)
+{
+    b=a+b+c+d;
+    return b;
 }
