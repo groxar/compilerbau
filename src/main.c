@@ -278,12 +278,16 @@ int main (int argc, char *argv[]) {
 
 
   yyparse();
-
+  
+  
+  
+  
   if(cc_options.print_ir)
       printIR(cc_options.ir_file);
 
   genAssembly(cc_options.output_file);    
 
+  printTable();
   rm_cleanup_resources(&resource_mgr);
   return 0;
 }

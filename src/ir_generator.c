@@ -233,7 +233,7 @@ scope_list_t* genLabel(){
 //add error handle if name already obtained 
 scope_list_t* genConst(int var_type, int value){
 
-    scope_list_t* cnst = getTemp(var_type,value);
+    scope_list_t* cnst = genTemp(var_type,value);
     quadList(OP_ASSC,cnst,NULL,NULL);
 
     return cnst;

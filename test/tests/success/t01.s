@@ -18,33 +18,39 @@ func:
   MOVE $fp, $sp
 
   SUBI $sp, $sp, 4
-  LI $5, 0
-  SW $5, 0($sp)
+  LI $a3, 0
+  SW $a3, 0($sp)
 
   SUBI $sp, $sp, 4
-  LI $5, 0
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 0
+  SW $a3, 0($sp)
 
 OP
-	if #0 == 0 goto .l2
+	if #2 == 0 goto .l2
 	.l0
-	#1 = arr[ i ]
+	#3 = arr[ i ]
 OP
-	if #1 == 0 goto .l1
+	if #3 == 0 goto .l1
   SUBI $sp, $sp, 4
-  LI $5, 1
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 1
+  SW $a3, 0($sp)
 OP
 
 	.l1
   SUBI $sp, $sp, 4
-  LI $5, 1
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 1
+  SW $a3, 0($sp)
 OP
 
 	callN 
 	.l2
-	if #0 != 0 goto .l0
+	if #2 != 0 goto .l0
 	return sum
 main:
   SUBI $sp, $sp, 8
@@ -53,18 +59,26 @@ main:
   MOVE $fp, $sp
 
   SUBI $sp, $sp, 4
-  LI $5, 1
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 1
+  SW $a3, 0($sp)
 
   SUBI $sp, $sp, 4
-  LI $5, 5
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
   SUBI $sp, $sp, 4
-  LI $5, 5
-  SW $5, 0($sp)
+  LI $a3, 5
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 5
+  SW $a3, 0($sp)
 OP
   SUBI $sp, $sp, 4
-  LI $5, 5
-  SW $5, 0($sp)
+  SW $a3, 0($sp)
+  SUBI $sp, $sp, 4
+  LI $a3, 5
+  SW $a3, 0($sp)
 	callN 
-	return #6
+	return #11
