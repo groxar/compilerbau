@@ -218,6 +218,7 @@ scope_list_t* getSymbolTable()
 }
 
 /**
+Error in /home/estamm/Gits/compilerbau/test/tests/success/t21.s line 20 column 3: "GT" is not a recognized operator
  * \brief Prints the whole symboltable into a file symboltable.log for debugging
  */
 void printTable()

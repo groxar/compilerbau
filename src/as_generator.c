@@ -15,14 +15,15 @@ void storeRegInMem(int reg)
 {
     if(aReg[reg]->address == -1)
     {
-        fprintf(file,"  SUBI $sp, $sp, 4\n  SW $a%d, 0($sp)\n", reg);
+        fprintf(file,"  SUBI $sp, $sp, 4\n  SW $a%d, 0($sp)  #push reg in memory\n", reg);
         aReg[reg]->address = sp;
         sp+=4;
     }
     else
     {
         int memPos = sp - (aReg[reg]->address);
-        fprintf(file,"  ADDI $sp, $sp, %d\n  SW $a%d, 0($sp)\n  SUBI $sp, $sp, %d\n",memPos, reg, memPos);
+        fprintf(file,"  SW $a%d, %d($sp) #store changes in memory\n", reg, memPos);
+        //fprintf(file,"  ADDI $sp, $sp, %d\n  SW $a%d, 0($sp)\n  SUBI $sp, $sp, %d\n",memPos, reg, memPos);
     //optimize to one SW
     }
 
@@ -38,7 +39,8 @@ void loadSymInReg(scope_list_t* sym, int reg)
     if(sym->address!=-1)
     {
         int memPos = sp - (aReg[reg]->address);
-        fprintf(file,"  ADDI $sp, $sp, %d\n  LW $a%d, 0($sp)\n  SUBI $sp, $sp, %d\n",memPos, reg, memPos);
+        fprintf(file,"  LW $a%d, %d($sp)  #load variable from mem in reg\n", reg, memPos);
+        //fprintf(file,"  ADDI $sp, $sp, %d\n  LW $a%d, %d($sp)\n  SUBI $sp, $sp, %d\n",memPos, reg, memPos);
     }
     aReg[reg]=sym;
 }
@@ -47,8 +49,6 @@ void loadSymInReg(scope_list_t* sym, int reg)
 int getRegNum(scope_list_t* sym)
 {
     static int shift = -1;
-    shift++;
-    shift=(shift)%4;
 
     //fifo
     for(int i = 0; i<4 ; i++ )
@@ -58,6 +58,9 @@ int getRegNum(scope_list_t* sym)
             return i;
         }
     }
+
+    shift++;
+    shift=(shift)%4;
 
     loadSymInReg(sym,shift);
     return shift;
@@ -101,6 +104,7 @@ void fprintFunc(ir_code_t* funcIr)
     scope_list_t*   symTb = funcIr->firstPara->var.func_ptr->scope;
 
     fprintf(file, "%s:\n", funcIr->firstPara->name);
+    fprintf(file, "#Function Prolog"); 
     fprintf(file, "  SUBI $sp, $sp, 8\n"); 
     fprintf(file, "  SW $ra, 4($sp)\n"); 
     fprintf(file, "  SW $fp, 0($sp)\n"); 
